@@ -6,12 +6,12 @@ useDefault = true
 [allowlist]
 description = "Global allow list"
 stopwords = [
-    '''keyEntities''',
-    '''shiftKey''',
-    '''duplicated''',
+  '''keyEntities''',
+  '''shiftKey''',
+  '''duplicated''',
 ]
 paths = [
-    '''gitleaks\.toml''',
-    '''label_studio\/feature_flags\.json''',
-    '''docs/.*'''
+  '''gitleaks\.toml''',
+  '''label_studio\/feature_flags\.json''',
+  '''docs/.*'''
 ]

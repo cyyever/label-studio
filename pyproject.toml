@@ -2,17 +2,17 @@
 name = "label-studio"
 version = "1.23.0.dev0"
 description = "Label Studio annotation tool"
-authors = [
-    { name = "HumanSignal", email = "support@humansignal.com" },
-]
 readme = "README.md"
-license = "Apache-2.0"
-classifiers = [
-    "License :: OSI Approved :: Apache Software License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-]
 requires-python = ">=3.10,<4"
+license = "Apache-2.0"
+authors = [
+  { name = "HumanSignal", email = "support@humansignal.com" },
+]
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+]
 dependencies = [
     "wheel (>=0.38.1,<=0.40.0)",
     "appdirs (>=1.4.3)",
@@ -85,80 +85,15 @@ Repository = "https://github.com/HumanSignal/label-studio"
 label-studio = "label_studio.server:main"
 
 [project.optional-dependencies]
-uwsgi = ['pyuwsgi (==2.0.28.post1)', 'uwsgitop (==0.12)']
+uwsgi = ["pyuwsgi", "uwsgitop"]
 
-[tool.ruff]
-# Assume Python 3.10 at a minimum
-target-version = "py310"
-
-# Same as Blue.
-line-length = 119
-
-[tool.ruff.lint]
-# Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
-# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
-# McCabe complexity (`C901`) by default.
-select = [
-    # Pyflakes
-    "F",
-    # Pycodestyle
-    "E",
-    # isort
-    "I001"
-]
-ignore = [
-    "E501",
-    "E402", # ignores: Module level import not at top of file.  (isort takes care of this and if not, there is usually a good reason)
-]
-
-
-
-# Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["ALL"]
-unfixable = []
-
-# Exclude a variety of commonly ignored directories.
-exclude = [
-    ".bzr",
-    ".direnv",
-    ".eggs",
-    ".git",
-    ".git-rewrite",
-    ".hg",
-    ".mypy_cache",
-    ".nox",
-    ".pants.d",
-    ".pytype",
-    ".ruff_cache",
-    ".svn",
-    ".tox",
-    ".venv",
-    "__pypackages__",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "node_modules",
-    "venv",
-    "**/migrations/*.py",
-]
-
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-[tool.ruff.lint.per-file-ignores]
-# Ignore deleting imports in __init__.py files as they're actually being used.
-"__init__.py" = ["F401"]
-"**/settings/label_studio.py" = ["F405"]
-"test*.py" = ["F811"]
-
+[build-system]
+requires = ["poetry-core (>=2.0.0,<3.0.0)"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.blue]
-
 line-length = 119
-
 include = 'label_studio/.*\.py$'
-
 # Exclude a variety of commonly ignored directories, as well as all migrations files.
 force-exclude = '''
 /(
@@ -188,60 +123,111 @@ force-exclude = '''
   | __pycache__
 )/
 '''
-
-target-version = ['py310']
+target-version = ["py310"]
 
 [tool.poetry]
-
 packages = [
-    { include = "label_studio" },
+  { include = "label_studio" },
 ]
 include = [
-    { path = "web/dist/libs/datamanager/**/*", format = ["sdist", "wheel"] },
-    { path = "web/dist/libs/editor/**/*", format = ["sdist", "wheel"] },
-    { path = "web/dist/apps/labelstudio/**/*", format = ["sdist", "wheel"] },
-    { path = "label_studio/annotation_templates/**/*", format = ["sdist", "wheel"] },
-    { path = "label_studio/core/static/**/*", format = ["sdist", "wheel"] },
-    { path = "label_studio/core/static_build/**/*", format = ["sdist", "wheel"] },
-    { path = "label_studio/core/utils/schema/*.json", format = ["sdist", "wheel"] },
-    { path = "label_studio/core/templatetags/*.py", format = ["sdist", "wheel"] },
-    { path = "label_studio/core/version_.py", format = ["sdist", "wheel"] },
-    { path = "label_studio/core/all_urls.json", format = ["sdist", "wheel"] },
-    { path = "label_studio/io_storages/**/*.yml", format = ["sdist", "wheel"] },
+  { path = "web/dist/libs/datamanager/**/*", format = ["sdist", "wheel"] },
+  { path = "web/dist/libs/editor/**/*", format = ["sdist", "wheel"] },
+  { path = "web/dist/apps/labelstudio/**/*", format = ["sdist", "wheel"] },
+  { path = "label_studio/annotation_templates/**/*", format = ["sdist", "wheel"] },
+  { path = "label_studio/core/static/**/*", format = ["sdist", "wheel"] },
+  { path = "label_studio/core/static_build/**/*", format = ["sdist", "wheel"] },
+  { path = "label_studio/core/utils/schema/*.json", format = ["sdist", "wheel"] },
+  { path = "label_studio/core/templatetags/*.py", format = ["sdist", "wheel"] },
+  { path = "label_studio/core/version_.py", format = ["sdist", "wheel"] },
+  { path = "label_studio/core/all_urls.json", format = ["sdist", "wheel"] },
+  { path = "label_studio/io_storages/**/*.yml", format = ["sdist", "wheel"] },
 ]
-
 exclude = [
-    { path = "label_studio/frontend", format = ["sdist", "wheel"] },
+  { path = "label_studio/frontend", format = ["sdist", "wheel"] },
 ]
-
-requires-poetry = '>=2.0.0,<3.0.0'
+requires-poetry = ">=2.0.0,<3.0.0"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4"
 
+[tool.poetry.group.build.dependencies]
+packaging = ">=24.2"
+twine = ">=6.1.0"
+
 [tool.poetry.group.test.dependencies]
+factory-boy = "^3.3.3"
+fakeredis = "~=2.26.1"
+freezegun = "~=1.5.1"
+mock = ">=5.1.0"
+moto = ">=4.2.6"
+pre-commit = "3.3.3"
+psutil = "7.0.0"
 pytest = "7.2.2"
 pytest-cov = "5.0.0"
 pytest-django = "4.9.0"
-pytest-mock = "3.14.0"
-tavern = "2.3.0"
-fakeredis = "~=2.26.1"
 pytest-env = "0.6.2"
-responses = "0.13.0"
+pytest-mock = "3.14.0"
 pytest-xdist = "3.6.1"
-psutil = "7.0.0"
-freezegun = "~=1.5.1"
-pre-commit = "3.3.3"
-s3transfer = "0.13.0"
-mock = ">=5.1.0"
-moto = ">=4.2.6"
 requests-mock = "1.12.1"
-factory-boy = "^3.3.3"
+responses = "0.13.0"
+s3transfer = "0.13.0"
+tavern = "2.3.0"
 
-[tool.poetry.group.build.dependencies]
-twine = ">=6.1.0"
-packaging = ">=24.2"
+[tool.ruff]
+# Assume Python 3.10 at a minimum
+target-version = "py310"
+# Same as Blue.
+line-length = 119
 
-[build-system]
-requires = ['poetry-core (>=2.0.0,<3.0.0)']
-build-backend = "poetry.core.masonry.api"
+[tool.ruff.lint]
+# Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+select = [
+  # Pyflakes
+  "F",
+  # Pycodestyle
+  "E",
+  # isort
+  "I001"
+]
+ignore = [
+  "E501",
+  "E402",  # ignores: Module level import not at top of file.  (isort takes care of this and if not, there is usually a good reason)
+]
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+# Exclude a variety of commonly ignored directories.
+exclude = [
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".git-rewrite",
+  ".hg",
+  ".mypy_cache",
+  ".nox",
+  ".pants.d",
+  ".pytype",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "node_modules",
+  "venv",
+  "**/migrations/*.py",
+]
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore deleting imports in __init__.py files as they're actually being used.
+"__init__.py" = ["F401"]
+"**/settings/label_studio.py" = ["F405"]
+"test*.py" = ["F811"]
