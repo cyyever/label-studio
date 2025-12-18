@@ -320,7 +320,7 @@ class GCS:
         if glob_pattern:
             pattern = fnmatch.translate(pattern)
         regex = re.compile(str(pattern))
-        for index, blob in enumerate(blob_iter):
+        for blob in blob_iter:
             # skip directories
             if blob.name == (prefix.rstrip('/') + '/'):
                 continue

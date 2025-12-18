@@ -148,7 +148,7 @@ class AnnotationSerializer(FlexFieldsModelSerializer):
                 'UNIQUE constraint failed: task_completion.unique_id',
                 'duplicate key value violates unique constraint "task_completion_unique_id_key"',
             ]
-            if any([error in str(e) for error in errors]):
+            if any(error in str(e) for error in errors):
                 raise AnnotationDuplicateError()
             raise
 

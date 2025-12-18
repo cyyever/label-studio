@@ -103,7 +103,7 @@ def get_storage_by_url(url: str | list | dict, storage_objects: Iterable[ImportS
             return storage_object
 
     # url is list or dict
-    if isinstance(url, dict) or isinstance(url, list):
+    if isinstance(url, (dict, list)):
         for storage_object in storage_objects:
             if storage_object.can_resolve_url(url):
                 # note: only first found storage_object will be used for link resolving

@@ -831,7 +831,7 @@ class PreparedTaskManager(models.Manager):
         project = None if first_task is None else first_task.project
 
         # db annotations applied only if we need them in ordering or filters
-        for field in annotations_map.keys():
+        for field in annotations_map:
             # Include field if it's explicitly requested or all_fields=True, but exclude if it's in the exclusion list
             if (field in fields_for_evaluation or all_fields) and field not in excluded_fields_for_evaluation:
                 queryset.project = project
