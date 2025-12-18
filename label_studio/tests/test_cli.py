@@ -8,7 +8,7 @@ from label_studio.core.argparser import parse_input_args
 
 
 @pytest.mark.django_db
-def test_create_user():
+def test_create_user() -> None:
     input_args = parse_input_args(['init', 'test', '--username', 'default@localhost', '--password', '12345678'])
     config = {}
     user = _create_user(input_args, config)
@@ -16,7 +16,7 @@ def test_create_user():
 
 
 @pytest.mark.django_db
-def test_user_active_organization_counters():
+def test_user_active_organization_counters() -> None:
     input_args = parse_input_args(['init', 'test', '--username', 'default@localhost', '--password', '12345678'])
     user = _create_user(input_args, {})
 

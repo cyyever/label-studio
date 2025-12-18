@@ -28,6 +28,7 @@ from core.current_request import CurrentContext
 from core.feature_flags import flag_set
 from fsm.state_manager import StateManager
 from rest_framework import serializers
+from typing import NoReturn
 
 
 class FSMStateField(serializers.ReadOnlyField):
@@ -115,7 +116,7 @@ class FSMStateField(serializers.ReadOnlyField):
             # If FSM is disabled or state model not found, return None
             return None
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data) -> NoReturn:
         """
         This field is read-only, so this should never be called.
         """

@@ -14,7 +14,7 @@ class TestExportConvertAPI(APITestCase):
         cls.user = cls.project.created_by
         cls.export = Export.objects.create(project=cls.project)
 
-    def test_convert_export(self, mock_start_job_async_or_sync):
+    def test_convert_export(self, mock_start_job_async_or_sync) -> None:
         self.client.force_authenticate(user=self.user)
 
         assert ConvertedFormat.objects.count() == 0
@@ -36,7 +36,7 @@ class TestExportConvertAPI(APITestCase):
             on_failure=ANY,
         )
 
-    def test_convert_export_already_started(self, mock_start_job_async_or_sync):
+    def test_convert_export_already_started(self, mock_start_job_async_or_sync) -> None:
         self.client.force_authenticate(user=self.user)
 
         ConvertedFormat.objects.create(export=self.export, export_type='CSV', status=ConvertedFormat.Status.CREATED)
@@ -49,7 +49,7 @@ class TestExportConvertAPI(APITestCase):
         assert response.json()['validation_errors']['non_field_errors'] == ['Conversion to CSV already started']
         mock_start_job_async_or_sync.assert_not_called()
 
-    def test_convert_export_previous_failed(self, mock_start_job_async_or_sync):
+    def test_convert_export_previous_failed(self, mock_start_job_async_or_sync) -> None:
         self.client.force_authenticate(user=self.user)
 
         ConvertedFormat.objects.create(export=self.export, export_type='CSV', status=ConvertedFormat.Status.FAILED)

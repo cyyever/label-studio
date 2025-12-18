@@ -33,7 +33,7 @@ class TestPredictionValidation:
     """Test cases for prediction validation functionality using LabelInterface."""
 
     @pytest.fixture(autouse=True)
-    def setup(self, django_db_setup, django_db_blocker):
+    def setup(self, django_db_setup, django_db_blocker) -> None:
         """Set up test data using factories."""
         with django_db_blocker.unblock():
             self.user = UserFactory()
@@ -62,7 +62,7 @@ class TestPredictionValidation:
             # Create a task
             self.task = TaskFactory(project=self.project, data={'text': 'This is a test text.'})
 
-    def test_valid_prediction_creation(self):
+    def test_valid_prediction_creation(self) -> None:
         """Test that valid predictions are created successfully."""
         tasks = [
             {
@@ -95,7 +95,7 @@ class TestPredictionValidation:
         assert prediction.score == 0.95
         assert prediction.model_version == 'v1.0'
 
-    def test_invalid_prediction_missing_result(self):
+    def test_invalid_prediction_missing_result(self) -> None:
         """Test validation fails when prediction is missing result field."""
         tasks = [
             {
@@ -115,7 +115,7 @@ class TestPredictionValidation:
         assert not serializer.is_valid()
         assert serializer.errors
 
-    def test_invalid_prediction_none_result(self):
+    def test_invalid_prediction_none_result(self) -> None:
         """Test validation fails when prediction result is None."""
         tasks = [
             {'data': {'text': 'Test text'}, 'predictions': [{'result': None, 'score': 0.95, 'model_version': 'v1.0'}]}
@@ -127,7 +127,7 @@ class TestPredictionValidation:
             serializer.save(project_id=self.project.id)
         assert 'predictions' in exc_info.value.detail
 
-    def test_valid_score_range(self):
+    def test_valid_score_range(self) -> None:
         """Test that valid scores within 0.00-1.00 range are accepted."""
         tasks = [
             {
@@ -157,7 +157,7 @@ class TestPredictionValidation:
         prediction = created_tasks[0].predictions.first()
         assert prediction.score == 0.75  # Score should be preserved
 
-    def test_valid_score_boundary_values(self):
+    def test_valid_score_boundary_values(self) -> None:
         """Test that boundary values 0.00 and 1.00 are accepted."""
         tasks = [
             {
@@ -204,7 +204,7 @@ class TestPredictionValidation:
         assert created_tasks[0].predictions.first().score == 0.0
         assert created_tasks[1].predictions.first().score == 1.0
 
-    def test_invalid_score_range(self):
+    def test_invalid_score_range(self) -> None:
         """Test validation fails when score is outside valid range."""
         tasks = [
             {
@@ -236,7 +236,7 @@ class TestPredictionValidation:
         error_text = str(exc_info.value.detail)
         assert 'Score must be between 0.00 and 1.00' in error_text
 
-    def test_invalid_score_type(self):
+    def test_invalid_score_type(self) -> None:
         """Test validation fails when score is not a number."""
         tasks = [
             {
@@ -268,7 +268,7 @@ class TestPredictionValidation:
         error_text = str(exc_info.value.detail)
         assert 'Score must be a valid number' in error_text
 
-    def test_invalid_model_version_type(self):
+    def test_invalid_model_version_type(self) -> None:
         """Test validation fails when model_version is not a string."""
         tasks = [
             {
@@ -298,7 +298,7 @@ class TestPredictionValidation:
         prediction = created_tasks[0].predictions.first()
         assert prediction.model_version == '123'  # Converted to string
 
-    def test_invalid_model_version_length(self):
+    def test_invalid_model_version_length(self) -> None:
         """Test validation fails when model_version is too long."""
         tasks = [
             {
@@ -329,7 +329,7 @@ class TestPredictionValidation:
         # Long model version is truncated or handled gracefully
         assert prediction.model_version is not None
 
-    def test_invalid_result_missing_required_fields(self):
+    def test_invalid_result_missing_required_fields(self) -> None:
         """Test validation fails when result items are missing required fields."""
         tasks = [
             {
@@ -355,7 +355,7 @@ class TestPredictionValidation:
             serializer.save(project_id=self.project.id)
         assert 'predictions' in exc_info.value.detail
 
-    def test_invalid_result_from_name_not_in_config(self):
+    def test_invalid_result_from_name_not_in_config(self) -> None:
         """Test validation fails when from_name doesn't exist in project config."""
         tasks = [
             {
@@ -383,7 +383,7 @@ class TestPredictionValidation:
             serializer.save(project_id=self.project.id)
         assert 'predictions' in exc_info.value.detail
 
-    def test_invalid_result_type_mismatch(self):
+    def test_invalid_result_type_mismatch(self) -> None:
         """Test validation fails when result type doesn't match project config."""
         tasks = [
             {
@@ -411,7 +411,7 @@ class TestPredictionValidation:
             serializer.save(project_id=self.project.id)
         assert 'predictions' in exc_info.value.detail
 
-    def test_invalid_result_to_name_mismatch(self):
+    def test_invalid_result_to_name_mismatch(self) -> None:
         """Test validation fails when to_name doesn't match project config."""
         tasks = [
             {
@@ -439,7 +439,7 @@ class TestPredictionValidation:
             serializer.save(project_id=self.project.id)
         assert 'predictions' in exc_info.value.detail
 
-    def test_label_interface_detailed_error_reporting(self):
+    def test_label_interface_detailed_error_reporting(self) -> None:
         """Test that LabelInterface provides detailed error messages."""
         from label_studio_sdk.label_interface import LabelInterface
 
@@ -462,7 +462,7 @@ class TestPredictionValidation:
         error_text = ' '.join(errors)
         assert 'Missing required field' in error_text or 'missing' in error_text.lower()
 
-    def test_label_interface_invalid_from_name(self):
+    def test_label_interface_invalid_from_name(self) -> None:
         """Test LabelInterface reports invalid from_name errors."""
         from label_studio_sdk.label_interface import LabelInterface
 
@@ -485,7 +485,7 @@ class TestPredictionValidation:
         error_text = ' '.join(errors)
         assert 'not found' in error_text
 
-    def test_label_interface_invalid_type(self):
+    def test_label_interface_invalid_type(self) -> None:
         """Test LabelInterface reports invalid type errors."""
         from label_studio_sdk.label_interface import LabelInterface
 
@@ -508,7 +508,7 @@ class TestPredictionValidation:
         error_text = ' '.join(errors)
         assert 'does not match expected type' in error_text or 'type' in error_text.lower()
 
-    def test_label_interface_invalid_to_name(self):
+    def test_label_interface_invalid_to_name(self) -> None:
         """Test LabelInterface reports invalid to_name errors."""
         from label_studio_sdk.label_interface import LabelInterface
 
@@ -531,7 +531,7 @@ class TestPredictionValidation:
         error_text = ' '.join(errors)
         assert 'not found' in error_text
 
-    def test_preannotated_fields_validation(self):
+    def test_preannotated_fields_validation(self) -> None:
         """Test validation of predictions created from preannotated fields."""
         tasks = [{'text': 'Test text 1', 'sentiment': 'positive'}, {'text': 'Test text 2', 'sentiment': 'negative'}]
 
@@ -545,7 +545,7 @@ class TestPredictionValidation:
         assert 'predictions' in reformatted_tasks[0]
         assert len(reformatted_tasks[0]['predictions']) == 1
 
-    def test_preannotated_fields_missing_field(self):
+    def test_preannotated_fields_missing_field(self) -> None:
         """Test validation fails when preannotated field is missing."""
         tasks = [
             {'text': 'Test text 1'},  # Missing 'sentiment' field
@@ -558,7 +558,7 @@ class TestPredictionValidation:
         with pytest.raises(ValidationError):
             reformat_predictions(tasks, preannotated_fields, raise_errors=True)
 
-    def test_multiple_validation_errors(self):
+    def test_multiple_validation_errors(self) -> None:
         """Test that multiple validation errors are collected and reported."""
         tasks = [
             {
@@ -587,7 +587,7 @@ class TestPredictionValidation:
             serializer.save(project_id=self.project.id)
         assert 'predictions' in exc_info.value.detail
 
-    def test_project_without_label_config(self):
+    def test_project_without_label_config(self) -> None:
         """Test validation fails when project has no label configuration."""
         # Create project with minimal but valid label config
         project_no_config = ProjectFactory(
@@ -623,7 +623,7 @@ class TestPredictionValidation:
             serializer.save(project_id=project_no_config.id)
         assert 'predictions' in exc_info.value.detail
 
-    def test_prediction_creation_with_exception_handling(self):
+    def test_prediction_creation_with_exception_handling(self) -> None:
         """Test that exceptions during prediction creation are properly handled."""
         tasks = [
             {
@@ -653,7 +653,7 @@ class TestPredictionValidation:
                 serializer.save(project_id=self.project.id)
             assert 'predictions' in exc_info.value.detail
 
-    def test_label_interface_backward_compatibility(self):
+    def test_label_interface_backward_compatibility(self) -> None:
         """Test that LabelInterface.validate_prediction maintains backward compatibility."""
         from label_studio_sdk.label_interface import LabelInterface
 
@@ -685,7 +685,7 @@ class TestPredictionValidation:
         result = li.validate_prediction(invalid_prediction)
         assert result is False
 
-    def test_atomic_transaction_rollback_on_prediction_validation_failure(self):
+    def test_atomic_transaction_rollback_on_prediction_validation_failure(self) -> None:
         """Test that when prediction validation fails, the entire transaction is rolled back.
 
         This ensures that no tasks or annotations are saved to the database when
@@ -790,7 +790,7 @@ class TestPredictionValidation:
         assert 'invalid_choice' in error_message
         assert 'positive' in error_message or 'negative' in error_message or 'neutral' in error_message
 
-    def test_import_predictions_with_default_and_changed_configs(self):
+    def test_import_predictions_with_default_and_changed_configs(self) -> None:
         """End-to-end: importing predictions before and after setting label config.
 
         1) With default config (empty View), predictions should not be validated and import succeeds.
@@ -861,7 +861,7 @@ class TestPredictionValidation:
         assert 'predictions' in exc_info.value.detail
 
     @pytest.mark.django_db
-    def test_import_api_skip_then_validate(self, client):
+    def test_import_api_skip_then_validate(self, client) -> None:
         """Exercise the HTTP ImportAPI to verify validation skip with default config and enforcement later.
 
         - POST /api/projects/{id}/import?commit_to_project=false with default config should succeed (skip validation)
@@ -934,7 +934,7 @@ class TestPredictionValidation:
         data = resp3.json() or {}
         assert ('predictions' in data) or (data.get('detail') == 'Validation error')
 
-    def test_taxonomy_prediction_validation(self):
+    def test_taxonomy_prediction_validation(self) -> None:
         """Taxonomy predictions with nested paths should validate using flattened labels subset check."""
         # Create a project with Taxonomy tag and labels covering both paths
         project = ProjectFactory(

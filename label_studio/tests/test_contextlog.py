@@ -6,7 +6,7 @@ import responses
 
 @responses.activate
 @pytest.mark.django_db
-def test_contextlog(business_client, contextlog_test_config):
+def test_contextlog(business_client, contextlog_test_config) -> None:
     responses.add(
         responses.POST,
         'https://tele.labelstud.io',

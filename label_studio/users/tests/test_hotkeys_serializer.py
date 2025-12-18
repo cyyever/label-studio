@@ -4,7 +4,7 @@ from users.serializers import HotkeysSerializer
 class TestHotkeysSerializer:
     """Tests for the HotkeysSerializer"""
 
-    def test_valid_data(self):
+    def test_valid_data(self) -> None:
         """
         Test serializer accepts valid hotkeys data.
 
@@ -23,7 +23,7 @@ class TestHotkeysSerializer:
 
         assert serializer.is_valid()
 
-    def test_invalid_format_not_dict(self):
+    def test_invalid_format_not_dict(self) -> None:
         """
         Test serializer rejects non-dictionary custom_hotkeys.
 
@@ -36,7 +36,7 @@ class TestHotkeysSerializer:
         assert not serializer.is_valid()
         assert 'custom_hotkeys' in serializer.errors
 
-    def test_invalid_action_key_format(self):
+    def test_invalid_action_key_format(self) -> None:
         """
         Test serializer rejects action keys without proper format.
 
@@ -49,7 +49,7 @@ class TestHotkeysSerializer:
         assert not serializer.is_valid()
         assert 'custom_hotkeys' in serializer.errors
 
-    def test_empty_action_key(self):
+    def test_empty_action_key(self) -> None:
         """
         Test serializer rejects empty action keys.
 
@@ -62,7 +62,7 @@ class TestHotkeysSerializer:
         assert not serializer.is_valid()
         assert 'custom_hotkeys' in serializer.errors
 
-    def test_missing_key_in_hotkey_data(self):
+    def test_missing_key_in_hotkey_data(self) -> None:
         """
         Test serializer rejects hotkey data without required 'key' field.
 
@@ -75,7 +75,7 @@ class TestHotkeysSerializer:
         assert not serializer.is_valid()
         assert 'custom_hotkeys' in serializer.errors
 
-    def test_invalid_key_value(self):
+    def test_invalid_key_value(self) -> None:
         """
         Test serializer rejects invalid key values.
 
@@ -88,7 +88,7 @@ class TestHotkeysSerializer:
         assert not serializer.is_valid()
         assert 'custom_hotkeys' in serializer.errors
 
-    def test_invalid_active_flag(self):
+    def test_invalid_active_flag(self) -> None:
         """
         Test serializer rejects non-boolean active flags.
 

@@ -158,7 +158,7 @@ def test_predictions(
     model_version_in_request,
     use_ground_truth,
     mocker,
-):
+) -> None:
 
     # create project with predefined task set
     project = make_project(project_config, business_client.user)
@@ -644,7 +644,7 @@ def test_predictions_with_partially_predicted_tasks(
     num_ground_truth_in_stats,
     num_ground_truth_fit_predictions,
     mocker,
-):
+) -> None:
     project = make_project(project_config, business_client.user)
     ml_backend = MLBackend.objects.get(url='http://localhost:8999')
     ml_backend.model_version = project_config['model_version']
@@ -695,7 +695,7 @@ def test_predictions_with_partially_predicted_tasks(
 
 
 @pytest.mark.django_db
-def test_interactive_annotating(business_client, configured_project):
+def test_interactive_annotating(business_client, configured_project) -> None:
     # create project with predefined task set
     ml_backend = configured_project.ml_backends.first()
     ml_backend.is_interactive = True
@@ -726,7 +726,7 @@ def test_interactive_annotating(business_client, configured_project):
 
 
 @pytest.mark.django_db
-def test_interactive_annotating_failing(business_client, configured_project):
+def test_interactive_annotating_failing(business_client, configured_project) -> None:
     # create project with predefined task set
     ml_backend = configured_project.ml_backends.first()
     ml_backend.is_interactive = True
@@ -773,7 +773,7 @@ def test_interactive_annotating_failing(business_client, configured_project):
 
 
 @pytest.mark.django_db
-def test_interactive_annotating_with_drafts(business_client, configured_project):
+def test_interactive_annotating_with_drafts(business_client, configured_project) -> None:
     """
     Test interactive annotating with drafts
     :param business_client:
@@ -821,7 +821,7 @@ def test_interactive_annotating_with_drafts(business_client, configured_project)
 
 
 @pytest.mark.django_db
-def test_predictions_meta(business_client, configured_project):
+def test_predictions_meta(business_client, configured_project) -> None:
     from tasks.models import FailedPrediction, Prediction, PredictionMeta
 
     task = configured_project.tasks.first()

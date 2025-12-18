@@ -12,7 +12,7 @@ class TestTaskAPI(APITestCase):
         cls.project = ProjectFactory(organization=cls.organization)
         cls.user = cls.organization.created_by
 
-    def test_get_task(self):
+    def test_get_task(self) -> None:
         task = TaskFactory(project=self.project, data={'text': 'test'})
 
         self.client.force_authenticate(user=self.user)
@@ -54,7 +54,7 @@ class TestTaskAPI(APITestCase):
             'allow_skip': True,
         }
 
-    def test_patch_task(self):
+    def test_patch_task(self) -> None:
         task = TaskFactory(project=self.project, data={'text': 'test'})
 
         payload = {
@@ -97,7 +97,7 @@ class TestTaskAPI(APITestCase):
             'allow_skip': True,
         }
 
-    def test_create_task_without_project_id_fails(self):
+    def test_create_task_without_project_id_fails(self) -> None:
         """Test that creating a task without project ID fails with appropriate error message"""
         payload = {
             'data': {'text': 'test task'},
@@ -111,7 +111,7 @@ class TestTaskAPI(APITestCase):
         response_data = response.json()
         assert response_data['validation_errors']['project'] == ['This field is required.']
 
-    def test_create_task_with_project_id_succeeds(self):
+    def test_create_task_with_project_id_succeeds(self) -> None:
         """Test that creating a task with valid project ID succeeds"""
         payload = {
             'project': self.project.id,
@@ -127,7 +127,7 @@ class TestTaskAPI(APITestCase):
         assert response_data['project'] == self.project.id
         assert response_data['data'] == {'text': 'test task'}
 
-    def test_get_task_includes_allow_skip(self):
+    def test_get_task_includes_allow_skip(self) -> None:
         """Test that GET task API includes allow_skip field"""
         task = TaskFactory(project=self.project, allow_skip=False)
 
@@ -138,7 +138,7 @@ class TestTaskAPI(APITestCase):
         assert 'allow_skip' in response_data
         assert response_data['allow_skip'] is False
 
-    def test_create_task_with_allow_skip(self):
+    def test_create_task_with_allow_skip(self) -> None:
         """Test that creating a task with allow_skip field succeeds"""
         payload = {
             'project': self.project.id,
@@ -156,7 +156,7 @@ class TestTaskAPI(APITestCase):
         task = Task.objects.get(id=response_data['id'])
         assert task.allow_skip is False
 
-    def test_skip_unskippable_task_fails(self):
+    def test_skip_unskippable_task_fails(self) -> None:
         """Test that skipping a task with allow_skip=False fails"""
         task = TaskFactory(project=self.project, allow_skip=False)
 
@@ -169,7 +169,7 @@ class TestTaskAPI(APITestCase):
         response_data = response.json()
         assert 'cannot be skipped' in str(response_data).lower()
 
-    def test_skip_skippable_task_succeeds(self):
+    def test_skip_skippable_task_succeeds(self) -> None:
         """Test that skipping a task with allow_skip=True succeeds"""
         task = TaskFactory(project=self.project, allow_skip=True)
 
@@ -180,7 +180,7 @@ class TestTaskAPI(APITestCase):
 
         assert response.status_code == 201
 
-    def test_skip_task_with_default_allow_skip_succeeds(self):
+    def test_skip_task_with_default_allow_skip_succeeds(self) -> None:
         """Test that skipping a task without explicit allow_skip (defaults to True) succeeds"""
         task = TaskFactory(project=self.project)  # allow_skip defaults to True
 

@@ -7,7 +7,7 @@ pytestmark = pytest.mark.django_db
 from label_studio_sdk import Client
 
 
-def test_add_user(django_live_url, business_client):
+def test_add_user(django_live_url, business_client) -> None:
     ls = Client(url=django_live_url, api_key=business_client.api_key)
     ls.start_project(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 

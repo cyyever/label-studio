@@ -14,7 +14,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
     @factory.post_generation
-    def active_organization(self, create, extracted, **kwargs):
+    def active_organization(self, create, extracted, **kwargs) -> None:
         if not create or not extracted:
             return
         self.active_organization = extracted

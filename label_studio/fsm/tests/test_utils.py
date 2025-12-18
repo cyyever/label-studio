@@ -34,7 +34,7 @@ from pydantic import Field
 class TestUUID7Utils(TestCase):
     """Test UUID7 utility functions"""
 
-    def test_generate_uuid7(self):
+    def test_generate_uuid7(self) -> None:
         """Test UUID7 generation"""
         uuid7_id = generate_uuid7()
 
@@ -47,7 +47,7 @@ class TestUUID7Utils(TestCase):
         # Check that it validates as UUID7
         assert validate_uuid7(uuid7_id)
 
-    def test_uuid7_ordering(self):
+    def test_uuid7_ordering(self) -> None:
         """Test that UUID7s have natural time ordering"""
         uuid1 = generate_uuid7()
         uuid2 = generate_uuid7()
@@ -55,7 +55,7 @@ class TestUUID7Utils(TestCase):
         # UUID7s should be ordered by generation time
         assert uuid1.int < uuid2.int
 
-    def test_timestamp_extraction(self):
+    def test_timestamp_extraction(self) -> None:
         """Test timestamp extraction from UUID7"""
         before = datetime.now(timezone.utc)
         uuid7_id = generate_uuid7()
@@ -71,7 +71,7 @@ class TestUUID7Utils(TestCase):
         assert time_diff_before < 1.0  # Within 1 second of before
         assert time_diff_after < 1.0   # Within 1 second of after
 
-    def test_uuid7_from_timestamp(self):
+    def test_uuid7_from_timestamp(self) -> None:
         """Test creating UUID7 from specific timestamp"""
         test_time = datetime(2024, 1, 15, 12, 0, 0, tzinfo=timezone.utc)
         uuid7_id = uuid7_from_timestamp(test_time)
@@ -84,7 +84,7 @@ class TestUUID7Utils(TestCase):
         time_diff = abs((extracted - test_time).total_seconds())
         assert time_diff < 0.001  # Within 1ms
 
-    def test_uuid7_time_range(self):
+    def test_uuid7_time_range(self) -> None:
         """Test UUID7 time range generation"""
         start_time = datetime(2024, 1, 15, 12, 0, 0, tzinfo=timezone.utc)
         end_time = datetime(2024, 1, 15, 13, 0, 0, tzinfo=timezone.utc)
@@ -106,7 +106,7 @@ class TestUUID7Utils(TestCase):
         assert abs((start_extracted - start_time).total_seconds()) < 0.002
         assert abs((end_extracted - end_time).total_seconds()) < 0.002
 
-    def test_uuid7_time_range_default_end(self):
+    def test_uuid7_time_range_default_end(self) -> None:
         """Test UUID7 time range with default end time (now)"""
         start_time = datetime.now(timezone.utc) - timedelta(hours=1)
         before_call = datetime.now(timezone.utc)
@@ -123,7 +123,7 @@ class TestUUID7Utils(TestCase):
         assert time_diff_before < 1.0  # Within 1 second of before_call
         assert time_diff_after < 1.0   # Within 1 second of after_call
 
-    def test_validate_uuid7_with_other_versions(self):
+    def test_validate_uuid7_with_other_versions(self) -> None:
         """Test UUID7 validation with other UUID versions"""
         # Test with UUID4
         uuid4_id = uuid.uuid4()
@@ -137,14 +137,14 @@ class TestUUID7Utils(TestCase):
 class TestUUID7Generator(TestCase):
     """Test UUID7Generator class"""
 
-    def test_generator_basic(self):
+    def test_generator_basic(self) -> None:
         """Test basic UUID7 generator functionality"""
         generator = UUID7Generator()
 
         uuid7_id = generator.generate()
         assert validate_uuid7(uuid7_id)
 
-    def test_generator_with_base_timestamp(self):
+    def test_generator_with_base_timestamp(self) -> None:
         """Test generator with custom base timestamp"""
         base_time = datetime(2024, 1, 15, 12, 0, 0, tzinfo=timezone.utc)
         generator = UUID7Generator(base_timestamp=base_time)
@@ -156,7 +156,7 @@ class TestUUID7Generator(TestCase):
         time_diff = abs((extracted - base_time).total_seconds())
         assert time_diff < 0.001
 
-    def test_generator_with_offset(self):
+    def test_generator_with_offset(self) -> None:
         """Test generator with timestamp offset"""
         base_time = datetime(2024, 1, 15, 12, 0, 0, tzinfo=timezone.utc)
         generator = UUID7Generator(base_timestamp=base_time)
@@ -169,7 +169,7 @@ class TestUUID7Generator(TestCase):
         time_diff = abs((extracted - expected_time).total_seconds())
         assert time_diff < 0.001
 
-    def test_generator_monotonic(self):
+    def test_generator_monotonic(self) -> None:
         """Test that generator produces monotonic UUIDs"""
         base_time = datetime(2024, 1, 15, 12, 0, 0, tzinfo=timezone.utc)
         generator = UUID7Generator(base_timestamp=base_time)
@@ -199,10 +199,10 @@ class MockEntity:
 class TransitionUtilsTests(TestCase):
     """Tests for transition_utils module edge cases and error handling"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.entity = MockEntity()
 
-    def test_transition_utils_unexpected_validation_error(self):
+    def test_transition_utils_unexpected_validation_error(self) -> None:
         """Test unexpected error during transition validation in get_available_transitions"""
 
         class BrokenTransition(BaseTransition):
@@ -231,7 +231,7 @@ class TransitionUtilsTests(TestCase):
             mock_logger.warning.assert_called_once()
             assert 'Unexpected error validating transition' in mock_logger.warning.call_args[0][0]
 
-    def test_transition_utils_validation_error_handling(self):
+    def test_transition_utils_validation_error_handling(self) -> None:
         """Test TransitionValidationError handling in get_available_transitions"""
 
         class ValidatingTransition(BaseTransition):
@@ -259,7 +259,7 @@ class TransitionUtilsTests(TestCase):
             # Should not log for expected validation errors
             mock_logger.warning.assert_not_called()
 
-    def test_transition_utils_create_from_dict_error(self):
+    def test_transition_utils_create_from_dict_error(self) -> None:
         """Test create_transition_from_dict error handling"""
 
         class StrictTransition(BaseTransition):
@@ -279,7 +279,7 @@ class TransitionUtilsTests(TestCase):
 
         assert 'Failed to create StrictTransition' in str(exc_info.value)
 
-    def test_transition_utils_validate_transition_data_errors(self):
+    def test_transition_utils_validate_transition_data_errors(self) -> None:
         """Test validate_transition_data with various error cases"""
 
         class ValidationTransition(BaseTransition):
@@ -314,7 +314,7 @@ class TransitionUtilsTests(TestCase):
         errors = validate_transition_data(ValidationTransition, {'required_field': 'test', 'number_field': 5})
         assert errors == {}
 
-    def test_transition_utils_validate_with_non_pydantic_error(self):
+    def test_transition_utils_validate_with_non_pydantic_error(self) -> None:
         """Test validate_transition_data with non-Pydantic errors"""
 
         class CustomErrorTransition(BaseTransition):
@@ -336,7 +336,7 @@ class TransitionUtilsTests(TestCase):
         assert '__root__' in errors
         assert 'Custom initialization error' in errors['__root__'][0]
 
-    def test_transition_utils_entity_state_flow_errors(self):
+    def test_transition_utils_entity_state_flow_errors(self) -> None:
         """Test get_entity_state_flow with transitions that can't be instantiated"""
 
         class RequiredFieldTransition(BaseTransition):
@@ -361,7 +361,7 @@ class TransitionUtilsTests(TestCase):
 class TestUUID7FieldCoverage(TestCase):
     """Test coverage for UUID7Field utility methods"""
 
-    def test_get_latest_by_uuid7(self):
+    def test_get_latest_by_uuid7(self) -> None:
         """Test UUID7Field.get_latest_by_uuid7 utility method"""
         from fsm.utils import UUID7Field
 
@@ -374,7 +374,7 @@ class TestUUID7FieldCoverage(TestCase):
         mock_queryset.order_by.assert_called_once_with('-id')
         assert result == mock_first
 
-    def test_filter_by_time_range(self):
+    def test_filter_by_time_range(self) -> None:
         """Test UUID7Field.filter_by_time_range utility method"""
         from fsm.utils import UUID7Field
 
@@ -390,7 +390,7 @@ class TestUUID7FieldCoverage(TestCase):
         assert mock_queryset.filter.called
         assert result == mock_filtered
 
-    def test_filter_since_time(self):
+    def test_filter_since_time(self) -> None:
         """Test UUID7Field.filter_since_time utility method"""
         from fsm.utils import UUID7Field
 
@@ -409,24 +409,24 @@ class TestUUID7FieldCoverage(TestCase):
 class TestResolveOrganizationIdCoverage(TestCase):
     """Test coverage for resolve_organization_id edge cases"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         from core.current_request import CurrentContext
 
         CurrentContext.clear()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         from core.current_request import CurrentContext
 
         CurrentContext.clear()
 
-    def test_resolve_organization_id_with_none_entity(self):
+    def test_resolve_organization_id_with_none_entity(self) -> None:
         """Test resolve_organization_id when entity is None"""
         from fsm.utils import resolve_organization_id
 
         result = resolve_organization_id(entity=None, user=None)
         assert result is None
 
-    def test_resolve_organization_id_from_context(self):
+    def test_resolve_organization_id_from_context(self) -> None:
         """Test resolve_organization_id returns cached context value"""
         from core.current_request import CurrentContext
         from fsm.utils import resolve_organization_id
@@ -440,7 +440,7 @@ class TestResolveOrganizationIdCoverage(TestCase):
         result = resolve_organization_id(entity=mock_entity)
         assert result == 999
 
-    def test_resolve_organization_id_from_entity_direct(self):
+    def test_resolve_organization_id_from_entity_direct(self) -> None:
         """Test resolve_organization_id from entity.organization_id"""
         from fsm.utils import resolve_organization_id
 
@@ -450,7 +450,7 @@ class TestResolveOrganizationIdCoverage(TestCase):
         result = resolve_organization_id(entity=mock_entity)
         assert result == 456
 
-    def test_resolve_organization_id_from_project_relationship(self):
+    def test_resolve_organization_id_from_project_relationship(self) -> None:
         """Test resolve_organization_id via entity.project.organization_id"""
         from fsm.utils import resolve_organization_id
 
@@ -464,7 +464,7 @@ class TestResolveOrganizationIdCoverage(TestCase):
         result = resolve_organization_id(entity=mock_entity)
         assert result == 789
 
-    def test_resolve_organization_id_from_task_project_relationship(self):
+    def test_resolve_organization_id_from_task_project_relationship(self) -> None:
         """Test resolve_organization_id via entity.task.project.organization_id"""
         from fsm.utils import resolve_organization_id
 
@@ -482,7 +482,7 @@ class TestResolveOrganizationIdCoverage(TestCase):
         result = resolve_organization_id(entity=mock_entity)
         assert result == 321
 
-    def test_resolve_organization_id_from_user_active_organization(self):
+    def test_resolve_organization_id_from_user_active_organization(self) -> None:
         """Test resolve_organization_id from user.active_organization"""
         from fsm.utils import resolve_organization_id
 
@@ -500,7 +500,7 @@ class TestResolveOrganizationIdCoverage(TestCase):
         result = resolve_organization_id(entity=mock_entity, user=mock_user)
         assert result == 654
 
-    def test_resolve_organization_id_caches_result(self):
+    def test_resolve_organization_id_caches_result(self) -> None:
         """Test that resolve_organization_id caches the result in CurrentContext"""
         from core.current_request import CurrentContext
         from fsm.utils import resolve_organization_id
@@ -519,7 +519,7 @@ class TestResolveOrganizationIdCoverage(TestCase):
 class TestGetCurrentStateSafeCoverage(TestCase):
     """Test coverage for get_current_state_safe error handling"""
 
-    def test_get_current_state_safe_when_fsm_disabled(self):
+    def test_get_current_state_safe_when_fsm_disabled(self) -> None:
         """Test get_current_state_safe returns None when FSM is disabled"""
         from fsm.utils import get_current_state_safe
 
@@ -540,10 +540,10 @@ class TestGetOrInitializeStateParameters(TestCase):
     accepted and passed through to StateManager.execute_transition().
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.mock_entity = MockEntity()
 
-    def test_get_or_initialize_state_accepts_reason_parameter(self):
+    def test_get_or_initialize_state_accepts_reason_parameter(self) -> None:
         """Test that get_or_initialize_state accepts reason parameter.
 
         This test validates step by step:
@@ -583,7 +583,7 @@ class TestGetOrInitializeStateParameters(TestCase):
                             call_kwargs = mock_sm.execute_transition.call_args[1]
                             assert call_kwargs.get('reason') == custom_reason
 
-    def test_get_or_initialize_state_accepts_context_data_parameter(self):
+    def test_get_or_initialize_state_accepts_context_data_parameter(self) -> None:
         """Test that get_or_initialize_state accepts context_data parameter.
 
         This test validates step by step:
@@ -627,7 +627,7 @@ class TestGetOrInitializeStateParameters(TestCase):
                             call_kwargs = mock_sm.execute_transition.call_args[1]
                             assert call_kwargs.get('context_data') == custom_context_data
 
-    def test_get_or_initialize_state_with_both_reason_and_context_data(self):
+    def test_get_or_initialize_state_with_both_reason_and_context_data(self) -> None:
         """Test get_or_initialize_state with both reason and context_data.
 
         This test validates step by step:
@@ -675,7 +675,7 @@ class TestGetOrInitializeStateParameters(TestCase):
                             assert call_kwargs.get('reason') == custom_reason
                             assert call_kwargs.get('context_data') == custom_context_data
 
-    def test_get_or_initialize_state_defaults_context_data_to_empty_dict(self):
+    def test_get_or_initialize_state_defaults_context_data_to_empty_dict(self) -> None:
         """Test that get_or_initialize_state defaults context_data to empty dict.
 
         This test validates step by step:

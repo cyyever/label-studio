@@ -5,7 +5,7 @@ import pytest
 from io_storages.localfiles.functions import autodetect_local_files_root, normalize_storage_path
 
 
-def test_autodetect_local_files_root_returns_first_candidate(tmp_path, monkeypatch):
+def test_autodetect_local_files_root_returns_first_candidate(tmp_path, monkeypatch) -> None:
     project_dir = tmp_path / 'project'
     project_dir.mkdir()
     target_dir = project_dir / 'mydata'
@@ -19,7 +19,7 @@ def test_autodetect_local_files_root_returns_first_candidate(tmp_path, monkeypat
     assert detected == str(target_dir.resolve())
 
 
-def test_autodetect_local_files_root_returns_none_when_missing(tmp_path):
+def test_autodetect_local_files_root_returns_none_when_missing(tmp_path) -> None:
     base_dir = tmp_path / 'project'
     base_dir.mkdir()
 
@@ -44,11 +44,11 @@ _DATASET_DIR = os.path.join(_TMP_DIR, 'dataset')
         (_DATASET_DIR.replace(os.sep, '\\') + '\\', os.path.join(_TMP_DIR, 'dataset')),
     ],
 )
-def test_normalize_storage_path_basic_cases(raw, expected):
+def test_normalize_storage_path_basic_cases(raw, expected) -> None:
     assert normalize_storage_path(raw) == expected
 
 
-def test_normalize_storage_path_windows_drive():
+def test_normalize_storage_path_windows_drive() -> None:
     raw = 'C:\\data\\set\\'
     expected = 'C:/data/set' if os.name != 'nt' else 'C:\\data\\set'
     assert normalize_storage_path(raw) == expected

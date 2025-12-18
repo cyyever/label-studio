@@ -16,7 +16,7 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
         return Organization.create_organization(**kwargs)
 
     @factory.post_generation
-    def created_by_active_organization(self, create, extracted, **kwargs):
+    def created_by_active_organization(self, create, extracted, **kwargs) -> None:
         if not create or not self.created_by:
             return
         self.created_by.active_organization = self

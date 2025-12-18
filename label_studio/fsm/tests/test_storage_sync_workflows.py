@@ -32,7 +32,7 @@ pytestmark = pytest.mark.django_db
 class TestS3StorageSyncWorkflows:
     """Test FSM state management for S3 storage sync operations."""
 
-    def test_s3_sync_recursive_creates_tasks_with_fsm_states(self, django_live_url, business_client):
+    def test_s3_sync_recursive_creates_tasks_with_fsm_states(self, django_live_url, business_client) -> None:
         """Test S3 recursive sync creates tasks with FSM states.
 
         This test validates step by step:
@@ -69,7 +69,7 @@ class TestS3StorageSyncWorkflows:
             assert_state_exists(task_obj, 'task')
             assert_task_state(task.id, TaskStateChoices.CREATED)
 
-    def test_s3_sync_multiple_times_maintains_fsm_states(self, django_live_url, business_client):
+    def test_s3_sync_multiple_times_maintains_fsm_states(self, django_live_url, business_client) -> None:
         """Test multiple S3 syncs maintain FSM state consistency.
 
         This test validates step by step:
@@ -119,7 +119,7 @@ class TestS3StorageSyncWorkflows:
 class TestGCSStorageSyncWorkflows:
     """Test FSM state management for GCS storage sync operations."""
 
-    def test_gcs_sync_creates_tasks_with_fsm_states(self, django_live_url, business_client):
+    def test_gcs_sync_creates_tasks_with_fsm_states(self, django_live_url, business_client) -> None:
         """Test GCS storage sync creates tasks with FSM states.
 
         This test validates step by step:
@@ -157,7 +157,7 @@ class TestGCSStorageSyncWorkflows:
 class TestAzureStorageSyncWorkflows:
     """Test FSM state management for Azure storage sync operations."""
 
-    def test_azure_sync_creates_tasks_with_fsm_states(self, django_live_url, business_client):
+    def test_azure_sync_creates_tasks_with_fsm_states(self, django_live_url, business_client) -> None:
         """Test Azure storage sync creates tasks with FSM states.
 
         This test validates step by step:
@@ -202,7 +202,7 @@ class TestLocalStorageSyncWorkflows:
 
     def test_local_storage_sync_creates_tasks_with_fsm_states(
         self, django_live_url, business_client, tmp_path, settings
-    ):
+    ) -> None:
         """Test local storage sync creates tasks with FSM states.
 
         This test validates step by step:
@@ -251,7 +251,7 @@ class TestStorageSyncWithAnnotations:
 
     def test_sync_with_preannotated_tasks_including_predictions_and_annotations(
         self, django_live_url, business_client, tmp_path, settings
-    ):
+    ) -> None:
         """Test local storage sync imports tasks with predictions and annotations.
 
         This test validates step by step:

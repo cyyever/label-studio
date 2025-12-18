@@ -6,7 +6,7 @@ from io_storages.s3.utils import S3StorageError, catch_and_reraise_from_none
 
 
 @override_settings(S3_TRUSTED_STORAGE_DOMAINS=['trusted-domain.com'])
-def test_catch_and_reraise_from_none_with_untrusted_domain():
+def test_catch_and_reraise_from_none_with_untrusted_domain() -> None:
     class TestClass:
         s3_endpoint = 'http://untrusted-domain.com'
 
@@ -24,7 +24,7 @@ def test_catch_and_reraise_from_none_with_untrusted_domain():
 
 
 @override_settings(S3_TRUSTED_STORAGE_DOMAINS=['trusted-domain.com'])
-def test_catch_and_reraise_from_none_with_trusted_domain():
+def test_catch_and_reraise_from_none_with_trusted_domain() -> None:
     class TestClass:
         s3_endpoint = 'http://trusted-domain.com'
 

@@ -50,7 +50,7 @@ boto3.set_stream_logger('botocore.credentials', logging.DEBUG)
 
 
 @pytest.fixture(autouse=True)
-def set_test_password_hasher(settings):
+def set_test_password_hasher(settings) -> None:
     """
     Set the password hasher to less expensive MD5 for testing purposes.
     """
@@ -58,35 +58,35 @@ def set_test_password_hasher(settings):
 
 
 @pytest.fixture(autouse=False)
-def enable_csrf(settings):
+def enable_csrf(settings) -> None:
     settings.USE_ENFORCE_CSRF_CHECKS = True
 
 
 @pytest.fixture(autouse=False)
-def label_stream_history_limit(settings):
+def label_stream_history_limit(settings) -> None:
     settings.LABEL_STREAM_HISTORY_LIMIT = 1
 
 
 @pytest.fixture(autouse=True)
-def disable_sentry(settings):
+def disable_sentry(settings) -> None:
     settings.SENTRY_RATE = 0
     settings.SENTRY_DSN = None
 
 
 @pytest.fixture()
-def debug_modal_exceptions_false(settings):
+def debug_modal_exceptions_false(settings) -> None:
     settings.DEBUG_MODAL_EXCEPTIONS = False
 
 
 @pytest.fixture(scope='function')
-def enable_sentry():
+def enable_sentry() -> None:
     settings.SENTRY_RATE = 0
     # it's disabled key, but this is correct
     settings.SENTRY_DSN = 'https://44f7a50de5ab425ca6bc406ef69b2122@o227124.ingest.sentry.io/5820521'
 
 
 @pytest.fixture(scope='function')
-def aws_credentials():
+def aws_credentials() -> None:
     """Mocked AWS Credentials for moto."""
     os.environ['AWS_ACCESS_KEY_ID'] = 'testing'
     os.environ['AWS_SECRET_ACCESS_KEY'] = 'testing'
@@ -95,7 +95,7 @@ def aws_credentials():
 
 
 @pytest.fixture(autouse=True, scope='session')
-def azure_credentials():
+def azure_credentials() -> None:
     """Mocked Azure credentials"""
     os.environ['AZURE_BLOB_ACCOUNT_NAME'] = 'testing'
     os.environ['AZURE_BLOB_ACCOUNT_KEY'] = 'testing'
@@ -124,7 +124,7 @@ def s3_with_images(s3):
     yield s3
 
 
-def s3_remove_bucket():
+def s3_remove_bucket() -> str:
     """
     Remove pytest-s3-images
     """
@@ -267,7 +267,7 @@ def s3_export_bucket_kms(s3):
     yield s3
 
 
-def mock_put(*args, **kwargs):
+def mock_put(*args, **kwargs) -> None:
     client_error = ClientError(
         error_response={'Error': {'Code': 'AccessDenied', 'Message': 'Access Denied'}}, operation_name='PutObject'
     )
@@ -283,7 +283,7 @@ def mock_put(*args, **kwargs):
 
 
 @pytest.fixture()
-def mock_s3_resource_aes(mocker):
+def mock_s3_resource_aes(mocker) -> None:
     mock_object = MagicMock()
     mock_object.put = mock_put
 
@@ -298,7 +298,7 @@ def mock_s3_resource_aes(mocker):
 
 
 @pytest.fixture()
-def mock_s3_resource_kms(mocker):
+def mock_s3_resource_kms(mocker) -> None:
     mock_object = MagicMock()
     mock_object.put = mock_put
 
@@ -411,7 +411,7 @@ def ml_backend_1(ml_backend):
     yield ml_backend
 
 
-def pytest_configure():
+def pytest_configure() -> None:
     for q in settings.RQ_QUEUES.values():
         q['ASYNC'] = False
 
@@ -434,7 +434,7 @@ class URLS:
         self.project_create = '/api/projects/'
         self.task_bulk = None
 
-    def set_project(self, pk):
+    def set_project(self, pk) -> None:
         self.task_bulk = f'/api/projects/{pk}/tasks/bulk/'
         self.plots = f'/projects/{pk}/plots'
 
@@ -559,7 +559,7 @@ def setup_project_choices(client):
 
 
 @pytest.fixture()
-def contextlog_test_config(settings):
+def contextlog_test_config(settings) -> None:
     """
     Configure settings for contextlog tests in CI.
     Be sure that responses is activated in any testcase where this fixture is used.
@@ -701,7 +701,7 @@ def async_import_off():
 
 
 @pytest.fixture(autouse=True, scope='session')
-def set_feature_flag_envvar():
+def set_feature_flag_envvar() -> None:
     """
     Automatically set the environment variable for all tests, including Tavern tests.
     """
@@ -749,7 +749,7 @@ def ff_back_dev_4664_remove_storage_file_on_export_delete_29032023_short_on():
 
 
 @pytest.fixture(name='local_files_storage')
-def local_files_storage(settings):
+def local_files_storage(settings) -> None:
     settings.LOCAL_FILES_SERVING_ENABLED = True
     tempdir = Path(tempfile.gettempdir()) / Path('files')
     subdir = tempdir / Path('subdir')
@@ -760,13 +760,13 @@ def local_files_storage(settings):
 
 
 @pytest.fixture(name='local_files_document_root_tempdir')
-def local_files_document_root_tempdir(settings):
+def local_files_document_root_tempdir(settings) -> None:
     tempdir = Path(tempfile.gettempdir())
     settings.LOCAL_FILES_DOCUMENT_ROOT = tempdir.root
 
 
 @pytest.fixture(name='local_files_document_root_subdir')
-def local_files_document_root_subdir(settings):
+def local_files_document_root_subdir(settings) -> None:
     tempdir = Path(tempfile.gettempdir()) / Path('files')
     settings.LOCAL_FILES_DOCUMENT_ROOT = str(tempdir)
 
@@ -842,7 +842,7 @@ def freeze_datetime(response, utc_time: str) -> None:
     freezer.start()
 
 
-def pytest_collection_modifyitems(config, items):
+def pytest_collection_modifyitems(config, items) -> None:
     # This function is called by pytest after the collection of tests has been completed to modify their order
     # it is being used as a workaround for the fact the kms and aes mocks resist teardown and cause other test failures
 

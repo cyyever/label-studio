@@ -33,7 +33,7 @@ from tests.utils import verify_docs
 
 
 @pytest.mark.django_db
-def test_docs():
+def test_docs() -> None:
     organization = OrganizationFactory()
     user = organization.created_by
     client = APIClient()

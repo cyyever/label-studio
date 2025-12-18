@@ -7,7 +7,7 @@ from label_studio_sdk import Client
 from label_studio_sdk.data_manager import Column, Filters, Operator, Type
 
 
-def test_create_view(django_live_url, business_client):
+def test_create_view(django_live_url, business_client) -> None:
     ls = Client(url=django_live_url, api_key=business_client.api_key)
     p = ls.start_project(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 
@@ -32,7 +32,7 @@ def test_create_view(django_live_url, business_client):
     }
 
 
-def test_get_tasks_from_view(django_live_url, business_client):
+def test_get_tasks_from_view(django_live_url, business_client) -> None:
     ls = Client(url=django_live_url, api_key=business_client.api_key)
     p = ls.start_project(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 

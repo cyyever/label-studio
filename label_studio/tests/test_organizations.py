@@ -8,14 +8,14 @@ from users.models import User
 
 
 @pytest.mark.django_db
-def test_active_organization_filled(business_client):
+def test_active_organization_filled(business_client) -> None:
     response = business_client.get('/api/users/')
     response_data = response.json()
     assert response_data[0]['active_organization'] == business_client.organization.id
 
 
 @pytest.mark.django_db
-def test_api_list_organizations(business_client):
+def test_api_list_organizations(business_client) -> None:
     response = business_client.get('/api/organizations/')
     response_data = response.json()
     assert len(response_data) == 1
@@ -23,7 +23,7 @@ def test_api_list_organizations(business_client):
 
 
 @pytest.mark.django_db
-def test_organization_member_retrieve_same_user(business_client, configured_project):
+def test_organization_member_retrieve_same_user(business_client, configured_project) -> None:
     user = business_client.user
     organization = business_client.organization
     task = Task.objects.filter(project=configured_project).first()
@@ -37,7 +37,7 @@ def test_organization_member_retrieve_same_user(business_client, configured_proj
 
 
 @pytest.mark.django_db
-def test_organization_member_retrieve_other_user_in_org(business_client):
+def test_organization_member_retrieve_other_user_in_org(business_client) -> None:
     organization = business_client.organization
     other_user = User.objects.create(email='other_user@pytest.net')
     OrganizationMember.objects.create(user=other_user, organization=organization)
@@ -51,7 +51,7 @@ def test_organization_member_retrieve_other_user_in_org(business_client):
 
 
 @pytest.mark.django_db
-def test_organization_member_retrieve_not_active_org(business_client):
+def test_organization_member_retrieve_not_active_org(business_client) -> None:
     user = business_client.user
     other_user = User.objects.create(email='other_user@pytest.net')
     other_organization = Organization.create_organization(created_by=other_user)

@@ -40,7 +40,7 @@ class TestDeletedRow(TestCase):
         assert abs((new_created_at - original_created_at).total_seconds()) < 0.001
         assert abs((new_updated_at - original_updated_at).total_seconds()) < 0.001
 
-    def test_serialize_organization(self):
+    def test_serialize_organization(self) -> None:
         organization = OrganizationFactory()
         drow = DeletedRow.serialize_and_create(organization, reason='reason', organization_id=organization.id)
         assert drow.row_id == organization.id
@@ -54,7 +54,7 @@ class TestDeletedRow(TestCase):
         assert drow.user_id is None
         self._assert_delete_and_restore_equal(drow, organization)
 
-    def test_serialize_project(self):
+    def test_serialize_project(self) -> None:
         project = ProjectFactory()
         drow = DeletedRow.serialize_and_create(
             project, reason='reason', organization_id=project.organization.id, project_id=project.id
@@ -68,7 +68,7 @@ class TestDeletedRow(TestCase):
         assert drow.project_id == project.id
         self._assert_delete_and_restore_equal(drow, project)
 
-    def test_serialize_task(self):
+    def test_serialize_task(self) -> None:
         organization = OrganizationFactory()
         project = ProjectFactory(organization=organization)
         task = TaskFactory(project=project)
@@ -88,7 +88,7 @@ class TestDeletedRow(TestCase):
         assert drow.user_id == organization.created_by_id
         self._assert_delete_and_restore_equal(drow, task)
 
-    def test_bulk_serialize_and_create(self):
+    def test_bulk_serialize_and_create(self) -> None:
         organization_1 = OrganizationFactory()
         organization_2 = OrganizationFactory()
         drows = DeletedRow.bulk_serialize_and_create(Organization.objects.all(), reason='reason')

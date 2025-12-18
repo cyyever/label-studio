@@ -21,7 +21,7 @@ class TestExcludedFieldsLogic(TestCase):
     excluded_fields_for_evaluation parameters works correctly.
     """
 
-    def test_field_inclusion_logic(self):
+    def test_field_inclusion_logic(self) -> None:
         """Test the core field inclusion logic used in annotate_queryset.
 
         This test validates step by step:
@@ -74,7 +74,7 @@ class TestExcludedFieldsLogic(TestCase):
                     f'excluded_fields={excluded_fields}',
                 )
 
-    def test_excluded_fields_none_handling(self):
+    def test_excluded_fields_none_handling(self) -> None:
         """Test that None excluded_fields_for_evaluation is handled correctly.
 
         This test validates step by step:
@@ -98,7 +98,7 @@ class TestExcludedFieldsLogic(TestCase):
             should_include = (field in fields_for_evaluation or False) and field not in excluded_fields
             self.assertTrue(should_include, f"Field '{field}' should be included when excluded_fields is None")
 
-    def test_performance_optimization_fields(self):
+    def test_performance_optimization_fields(self) -> None:
         """Test specific performance optimization field combinations.
 
         This test validates step by step:
@@ -141,7 +141,7 @@ class TestPreparedTaskManagerBehavior(TestCase):
     controls which annotation functions are executed.
     """
 
-    def test_annotate_queryset_with_simple_functions(self):
+    def test_annotate_queryset_with_simple_functions(self) -> None:
         """Test annotate_queryset with simple trackable annotation functions.
 
         This test validates step by step:
@@ -196,7 +196,7 @@ class TestPreparedTaskManagerBehavior(TestCase):
                 'predictions_results', called_functions, "Excluded field 'predictions_results' should not be processed"
             )
 
-    def test_annotate_queryset_without_exclusions(self):
+    def test_annotate_queryset_without_exclusions(self) -> None:
         """Test annotate_queryset without any exclusions.
 
         This test validates step by step:
@@ -249,7 +249,7 @@ class TestPreparedTaskManagerBehavior(TestCase):
                 'completed_at', called_functions, "Field 'completed_at' should be processed when not excluded"
             )
 
-    def test_annotate_queryset_with_specific_fields(self):
+    def test_annotate_queryset_with_specific_fields(self) -> None:
         """Test annotate_queryset with specific fields_for_evaluation and exclusions.
 
         This test validates step by step:
@@ -317,7 +317,7 @@ class TestGetQuerysetParameterPassing(TestCase):
     and properly forwards the optimization parameters.
     """
 
-    def test_get_queryset_parameter_interface(self):
+    def test_get_queryset_parameter_interface(self) -> None:
         """Test that get_queryset accepts excluded_fields_for_evaluation parameter.
 
         This test validates step by step:
@@ -360,7 +360,7 @@ class TestGetQuerysetParameterPassing(TestCase):
                 'excluded_fields_for_evaluation should be passed to annotate_queryset',
             )
 
-    def test_get_queryset_default_parameter_handling(self):
+    def test_get_queryset_default_parameter_handling(self) -> None:
         """Test that get_queryset handles default parameter values correctly.
 
         This test validates step by step:

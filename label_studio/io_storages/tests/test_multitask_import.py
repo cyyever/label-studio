@@ -99,7 +99,7 @@ def _test_storage_import(project, storage_class, task_data, **storage_kwargs):
         assert task['data'] == expected_data['data']
 
 
-def test_import_multiple_tasks_s3(project, common_task_data):
+def test_import_multiple_tasks_s3(project, common_task_data) -> None:
     with mock_s3():
         # Setup S3 bucket and test data
         s3 = boto3.client('s3', region_name='us-east-1')
@@ -121,7 +121,7 @@ def test_import_multiple_tasks_s3(project, common_task_data):
         )
 
 
-def test_import_multiple_tasks_gcs(project, common_task_data):
+def test_import_multiple_tasks_gcs(project, common_task_data) -> None:
     # initialize mock with sample data
     with gcs_client_mock():
         _test_storage_import(
@@ -135,7 +135,7 @@ def test_import_multiple_tasks_gcs(project, common_task_data):
         )
 
 
-def test_import_multiple_tasks_azure(project, common_task_data):
+def test_import_multiple_tasks_azure(project, common_task_data) -> None:
     # initialize mock with sample data
     with azure_client_mock(sample_json_contents=common_task_data, sample_blob_names=['test.json']):
         _test_storage_import(
@@ -147,7 +147,7 @@ def test_import_multiple_tasks_azure(project, common_task_data):
         )
 
 
-def test_import_multiple_tasks_redis(project, common_task_data):
+def test_import_multiple_tasks_redis(project, common_task_data) -> None:
     with redis_client_mock() as redis:
         redis.set('test.json', json.dumps(common_task_data))
 
@@ -160,7 +160,7 @@ def test_import_multiple_tasks_redis(project, common_task_data):
         )
 
 
-def test_storagelink_fields(project, common_task_data):
+def test_storagelink_fields(project, common_task_data) -> None:
     # use an actual storage and storagelink to test this, since factories aren't connected properly
     with mock_s3():
         # Setup S3 bucket and test data
@@ -220,7 +220,7 @@ def storage():
     return project, storage
 
 
-def create_tasks(storage, params_list: list[StorageObject]):
+def create_tasks(storage, params_list: list[StorageObject]) -> None:
     project, storage = storage
     # check that no errors are raised during task creation; not checking the task itself
     for params in params_list:
@@ -275,7 +275,7 @@ annots_preds_task_list = [
 ]
 
 
-def test_bare_task(storage):
+def test_bare_task(storage) -> None:
     task_data = bare_task_list[0]
 
     blob = json.dumps(task_data).encode()
@@ -286,7 +286,7 @@ def test_bare_task(storage):
     create_tasks(storage, list(output))
 
 
-def test_data_key(storage):
+def test_data_key(storage) -> None:
     task_data = {'data': bare_task_list[0]}
 
     blob = json.dumps(task_data).encode()
@@ -297,7 +297,7 @@ def test_data_key(storage):
     create_tasks(storage, list(output))
 
 
-def test_1elem_list(storage):
+def test_1elem_list(storage) -> None:
     task_data = bare_task_list[:1]
 
     blob = json.dumps(task_data).encode()
@@ -310,7 +310,7 @@ def test_1elem_list(storage):
     create_tasks(storage, list(output))
 
 
-def test_2elem_list(storage):
+def test_2elem_list(storage) -> None:
     task_data = bare_task_list
 
     blob = json.dumps(task_data).encode()
@@ -324,7 +324,7 @@ def test_2elem_list(storage):
     create_tasks(storage, list(output))
 
 
-def test_preds_and_annots_list(storage):
+def test_preds_and_annots_list(storage) -> None:
     task_data = annots_preds_task_list
 
     blob = json.dumps(task_data).encode()
@@ -339,7 +339,7 @@ def test_preds_and_annots_list(storage):
     create_tasks(storage, list(output))
 
 
-def test_mixed_formats(storage):
+def test_mixed_formats(storage) -> None:
     task_data = [bare_task_list[0], annots_preds_task_list[0]]
 
     blob = json.dumps(task_data).encode()
@@ -355,7 +355,7 @@ def test_mixed_formats(storage):
 
 
 @mock_feature_flag('fflag_feat_root_11_support_jsonl_cloud_storage', True, 'io_storages.utils')
-def test_list_jsonl(storage):
+def test_list_jsonl(storage) -> None:
     task_data = bare_task_list
 
     blob = '\n'.join([json.dumps(task) for task in task_data]).encode()
@@ -370,7 +370,7 @@ def test_list_jsonl(storage):
 
 
 @mock_feature_flag('fflag_feat_root_11_support_jsonl_cloud_storage', True, 'io_storages.utils')
-def test_list_jsonl_with_preds_and_annots(storage):
+def test_list_jsonl_with_preds_and_annots(storage) -> None:
     task_data = annots_preds_task_list
 
     blob = '\n'.join([json.dumps(task) for task in task_data]).encode()
@@ -386,13 +386,13 @@ def test_list_jsonl_with_preds_and_annots(storage):
 
 
 @mock_feature_flag('fflag_feat_root_11_support_jsonl_cloud_storage', False, 'io_storages.utils')
-def test_ff_blocks_jsonl():
+def test_ff_blocks_jsonl() -> None:
     with pytest.raises(ValueError):
         list(load_tasks_json(b'{"text": "Test task 1"}\n{"text": "Test task 2"}', 'test.jsonl'))
 
 
 @mock_feature_flag('fflag_feat_root_11_support_jsonl_cloud_storage', True, 'io_storages.utils')
-def test_mixed_formats_jsonl(storage):
+def test_mixed_formats_jsonl(storage) -> None:
     task_data = [bare_task_list[0], annots_preds_task_list[0]]
 
     blob = '\n'.join([json.dumps(task) for task in task_data]).encode()
@@ -408,7 +408,7 @@ def test_mixed_formats_jsonl(storage):
 
 
 @mock_feature_flag('fflag_feat_root_11_support_jsonl_cloud_storage', True, 'io_storages.utils')
-def test_list_jsonl_with_datetimes(storage):
+def test_list_jsonl_with_datetimes(storage) -> None:
     task_data = [
         {'data': {'text': 'Test task 1', 'created_at': '2021-01-01T00:00:00Z'}},
         {'data': {'text': 'Test task 2', 'created_at': '2021-01-02T00:00:00Z'}},
@@ -425,7 +425,7 @@ def test_list_jsonl_with_datetimes(storage):
     create_tasks(storage, list(output))
 
 
-def test_allow_skip_false_is_saved(storage):
+def test_allow_skip_false_is_saved(storage) -> None:
     project, s3_storage = storage
     task_data = {
         'data': {'text': 'Task with disallowed skip'},

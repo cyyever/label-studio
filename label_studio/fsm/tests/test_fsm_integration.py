@@ -18,7 +18,7 @@ from users.tests.factories import UserFactory
 class TestFSMModels(TestCase):
     """Test FSM model functionality"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = UserFactory(email='test@example.com')
         self.project = ProjectFactory(created_by=self.user)
         self.task = TaskFactory(project=self.project, data={'text': 'test'})
@@ -28,7 +28,7 @@ class TestFSMModels(TestCase):
 
         cache.clear()
 
-    def test_task_state_creation(self):
+    def test_task_state_creation(self) -> None:
         """Test TaskState creation and basic functionality"""
         task_state = TaskState.objects.create(
             task=self.task,
@@ -52,7 +52,7 @@ class TestFSMModels(TestCase):
         assert 'Task' in str_repr
         assert 'CREATED' in str_repr
 
-    def test_annotation_state_creation(self):
+    def test_annotation_state_creation(self) -> None:
         """Test AnnotationState creation and basic functionality"""
         annotation = AnnotationFactory(task=self.task, completed_by=self.user, result=[])
 
@@ -84,7 +84,7 @@ class TestFSMModels(TestCase):
         )
         assert completed_state.is_terminal_state
 
-    def test_project_state_creation(self):
+    def test_project_state_creation(self) -> None:
         """Test ProjectState creation and basic functionality"""
         project_state = ProjectState.objects.create(
             project=self.project, state='CREATED', triggered_by=self.user, reason='Project created for testing'
@@ -104,7 +104,7 @@ class TestFSMModels(TestCase):
 class TestStateManager(TestCase):
     """Test StateManager functionality with mocked transaction support"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         from core.current_request import CurrentContext
 
         self.user = UserFactory(email='test@example.com')
@@ -131,19 +131,19 @@ class TestStateManager(TestCase):
         if not state_model_registry.get_model('task'):
             state_model_registry.register_model('task', TaskState)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         from core.current_request import CurrentContext
 
         CurrentContext.clear()
 
-    def test_get_current_state_empty(self):
+    def test_get_current_state_empty(self) -> None:
         """Test getting current state when task is created"""
         # With FsmHistoryStateModel, tasks automatically get a state on creation
         current_state = self.StateManager.get_current_state_value(self.task)
         assert current_state == 'CREATED'  # FsmHistoryStateModel auto-creates state
 
     @patch('fsm.state_manager.flag_set')
-    def test_transition_state(self, mock_flag_set):
+    def test_transition_state(self, mock_flag_set) -> None:
         """Test state transition functionality with immediate cache updates"""
         from django.core.cache import cache
 
@@ -182,7 +182,7 @@ class TestStateManager(TestCase):
         assert current_state == 'IN_PROGRESS'
 
     @patch('fsm.state_manager.flag_set')
-    def test_get_current_state_object(self, mock_flag_set):
+    def test_get_current_state_object(self, mock_flag_set) -> None:
         """Test getting current state object with full details"""
         from django.core.cache import cache
 
@@ -206,7 +206,7 @@ class TestStateManager(TestCase):
         assert current_state_obj.context_data == {'test': 'data'}
 
     @patch('fsm.state_manager.flag_set')
-    def test_get_state_history(self, mock_flag_set):
+    def test_get_state_history(self, mock_flag_set) -> None:
         """Test state history retrieval"""
         from django.core.cache import cache
 
@@ -237,7 +237,7 @@ class TestStateManager(TestCase):
         assert history[0].previous_state == 'IN_PROGRESS'
 
     @patch('fsm.state_manager.flag_set')
-    def test_get_states_in_time_range(self, mock_flag_set):
+    def test_get_states_in_time_range(self, mock_flag_set) -> None:
         """Test time-based state queries using StateManager"""
         from django.core.cache import cache
 
@@ -257,7 +257,7 @@ class TestStateManager(TestCase):
         assert len(states) >= 2
 
     @patch('fsm.state_manager.flag_set')
-    def test_immediate_cache_update_success_case(self, mock_flag_set):
+    def test_immediate_cache_update_success_case(self, mock_flag_set) -> None:
         """Test that cache is updated immediately on successful transitions"""
         from django.core.cache import cache
 
@@ -293,7 +293,7 @@ class TestStateManager(TestCase):
         assert current_state == 'IN_PROGRESS'
 
     @patch('fsm.state_manager.flag_set')
-    def test_transaction_on_commit_success_case(self, mock_flag_set):
+    def test_transaction_on_commit_success_case(self, mock_flag_set) -> None:
         """Test successful state transitions"""
         from django.core.cache import cache
 
@@ -315,7 +315,7 @@ class TestStateManager(TestCase):
         assert self.StateManager.get_current_state_value(self.task) == 'CREATED'
 
     @patch('fsm.state_manager.flag_set')
-    def test_transaction_on_commit_database_failure_case(self, mock_flag_set):
+    def test_transaction_on_commit_database_failure_case(self, mock_flag_set) -> None:
         """Test state transitions work correctly"""
         from django.core.cache import cache
 
@@ -337,7 +337,7 @@ class TestStateManager(TestCase):
         assert current_state == 'CREATED'
 
     @patch('fsm.state_manager.flag_set')
-    def test_immediate_cache_update_content(self, mock_flag_set):
+    def test_immediate_cache_update_content(self, mock_flag_set) -> None:
         """Test that cache is immediately updated during transition"""
         from django.core.cache import cache
 
@@ -365,7 +365,7 @@ class TestStateManager(TestCase):
         assert current_state == 'CREATED'
 
     @patch('fsm.state_manager.flag_set')
-    def test_cache_cleanup_on_transaction_rollback(self, mock_flag_set):
+    def test_cache_cleanup_on_transaction_rollback(self, mock_flag_set) -> None:
         """Test cache behavior with state transitions"""
         from django.core.cache import cache
 
@@ -389,7 +389,7 @@ class TestStateManager(TestCase):
         assert cached_state == 'CREATED'
 
     @patch('fsm.state_manager.flag_set')
-    def test_same_state_transition_prevention(self, mock_flag_set):
+    def test_same_state_transition_prevention(self, mock_flag_set) -> None:
         """Test that same-state transitions are prevented"""
         from django.core.cache import cache
 

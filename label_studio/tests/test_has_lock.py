@@ -5,7 +5,7 @@ from tests.utils import make_project
 
 
 @pytest.mark.django_db
-def test_has_lock(business_client):
+def test_has_lock(business_client) -> None:
     project = make_project({}, business_client.user, use_ml_backend=False)
 
     tasks = [

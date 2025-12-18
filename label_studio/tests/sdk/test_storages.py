@@ -7,7 +7,7 @@ from label_studio_sdk.client import LabelStudio
 
 
 @pytest.mark.parametrize('recursive_scan', [True, False])
-def test_connect_and_sync_s3(django_live_url, business_client, recursive_scan):
+def test_connect_and_sync_s3(django_live_url, business_client, recursive_scan) -> None:
     """Test S3 storage connection and sync with recursive scan parameter.
 
     This test validates step by step:

@@ -30,11 +30,11 @@ User = get_user_model()
 class TestRedisActivity(TestCase):
     """Test Redis activity functions."""
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = User.objects.create_user(email='test@example.com', username='testuser', password='testpass123')
         self.test_time = timezone.now()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         # Clean up Redis data after each test
         with patch('users.functions.last_activity.redis_connected', return_value=True):
             cleanup_redis_activity_data({self.user.id})
@@ -42,7 +42,7 @@ class TestRedisActivity(TestCase):
 
     @patch('users.functions.last_activity.redis_connected', return_value=True)
     @patch('users.functions.last_activity.get_connection')
-    def test_set_user_last_activity_success(self, mock_get_connection, mock_redis_connected):
+    def test_set_user_last_activity_success(self, mock_get_connection, mock_redis_connected) -> None:
         """Test successful setting of user activity."""
         mock_redis_client = MagicMock()
         mock_get_connection.return_value = mock_redis_client
@@ -57,14 +57,14 @@ class TestRedisActivity(TestCase):
         mock_redis_client.incr.assert_called_once()
 
     @patch('users.functions.last_activity.redis_connected', return_value=False)
-    def test_set_user_last_activity_redis_disconnected(self, mock_redis_connected):
+    def test_set_user_last_activity_redis_disconnected(self, mock_redis_connected) -> None:
         """Test setting activity when Redis is disconnected."""
         result = set_user_last_activity(self.user.id, self.test_time)
         self.assertFalse(result)
 
     @patch('users.functions.last_activity.redis_connected', return_value=True)
     @patch('users.functions.last_activity.get_connection')
-    def test_get_user_last_activity_from_redis(self, mock_get_connection, mock_redis_connected):
+    def test_get_user_last_activity_from_redis(self, mock_get_connection, mock_redis_connected) -> None:
         """Test getting user activity from Redis."""
         with patch('users.functions.last_activity._redis', MagicMock()):
             mock_redis_client = MagicMock()
@@ -78,7 +78,7 @@ class TestRedisActivity(TestCase):
 
     @patch('users.functions.last_activity.redis_connected', return_value=True)
     @patch('users.functions.last_activity.get_connection')
-    def test_get_user_last_activity_no_redis_data(self, mock_get_connection, mock_redis_connected):
+    def test_get_user_last_activity_no_redis_data(self, mock_get_connection, mock_redis_connected) -> None:
         """Test getting activity when Redis has no data (returns None)."""
         with patch('users.functions.last_activity._redis', MagicMock()):
             mock_redis_client = MagicMock()
@@ -91,7 +91,7 @@ class TestRedisActivity(TestCase):
             mock_redis_client.get.assert_called_once()
 
     @patch('users.functions.last_activity.redis_connected', return_value=False)
-    def test_get_user_last_activity_redis_disconnected(self, mock_redis_connected):
+    def test_get_user_last_activity_redis_disconnected(self, mock_redis_connected) -> None:
         """Test getting activity when Redis is disconnected (returns None)."""
         with patch('users.functions.last_activity._redis', None):
             result = get_user_last_activity(self.user.id)
@@ -100,7 +100,7 @@ class TestRedisActivity(TestCase):
 
     @patch('users.functions.last_activity.redis_connected', return_value=True)
     @patch('users.functions.last_activity.get_connection')
-    def test_increment_activity_counter(self, mock_get_connection, mock_redis_connected):
+    def test_increment_activity_counter(self, mock_get_connection, mock_redis_connected) -> None:
         """Test incrementing activity counter."""
         mock_redis_client = MagicMock()
         mock_get_connection.return_value = mock_redis_client
@@ -114,7 +114,7 @@ class TestRedisActivity(TestCase):
 
     @patch('users.functions.last_activity.redis_connected', return_value=True)
     @patch('users.functions.last_activity.get_connection')
-    def test_get_activity_counter(self, mock_get_connection, mock_redis_connected):
+    def test_get_activity_counter(self, mock_get_connection, mock_redis_connected) -> None:
         """Test getting activity counter."""
         mock_redis_client = MagicMock()
         mock_get_connection.return_value = mock_redis_client
@@ -127,7 +127,7 @@ class TestRedisActivity(TestCase):
 
     @patch('users.functions.last_activity.redis_connected', return_value=True)
     @patch('users.functions.last_activity.get_connection')
-    def test_reset_activity_counter(self, mock_get_connection, mock_redis_connected):
+    def test_reset_activity_counter(self, mock_get_connection, mock_redis_connected) -> None:
         """Test resetting activity counter."""
         mock_redis_client = MagicMock()
         mock_get_connection.return_value = mock_redis_client
@@ -140,7 +140,7 @@ class TestRedisActivity(TestCase):
 
     @patch('users.functions.last_activity.redis_connected', return_value=True)
     @patch('users.functions.last_activity.get_connection')
-    def test_get_batch_user_ids(self, mock_get_connection, mock_redis_connected):
+    def test_get_batch_user_ids(self, mock_get_connection, mock_redis_connected) -> None:
         """Test getting batch user IDs."""
         mock_redis_client = MagicMock()
         mock_get_connection.return_value = mock_redis_client
@@ -153,7 +153,7 @@ class TestRedisActivity(TestCase):
 
     @patch('users.functions.last_activity.redis_connected', return_value=True)
     @patch('users.functions.last_activity.get_connection')
-    def test_clear_batch_user_ids(self, mock_get_connection, mock_redis_connected):
+    def test_clear_batch_user_ids(self, mock_get_connection, mock_redis_connected) -> None:
         """Test clearing batch user IDs."""
         mock_redis_client = MagicMock()
         mock_get_connection.return_value = mock_redis_client
@@ -164,7 +164,7 @@ class TestRedisActivity(TestCase):
         mock_redis_client.srem.assert_called_once()
 
     @patch('users.functions.last_activity.get_activity_counter')
-    def test_should_sync_activities(self, mock_get_counter):
+    def test_should_sync_activities(self, mock_get_counter) -> None:
         """Test sync threshold check."""
         # Below threshold
         mock_get_counter.return_value = SYNC_THRESHOLD - 1
@@ -178,7 +178,7 @@ class TestRedisActivity(TestCase):
         mock_get_counter.return_value = SYNC_THRESHOLD + 1
         self.assertTrue(should_sync_activities())
 
-    def test_get_user_activity_key(self):
+    def test_get_user_activity_key(self) -> None:
         """Test Redis key generation."""
         expected_key = f'user_activity:{self.user.id}'
         result = _get_user_activity_key(self.user.id)
@@ -188,12 +188,12 @@ class TestRedisActivity(TestCase):
 class TestUserLastActivityMixin(TestCase):
     """Test UserLastActivityMixin methods."""
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = User.objects.create_user(email='test@example.com', username='testuser', password='testpass123')
 
     @patch('users.models.set_user_last_activity')
     @patch('users.models.schedule_activity_sync')
-    def test_update_last_activity_redis_success(self, mock_schedule, mock_set_activity):
+    def test_update_last_activity_redis_success(self, mock_schedule, mock_set_activity) -> None:
         """Test updating last activity with Redis success."""
         mock_set_activity.return_value = True
 
@@ -203,7 +203,7 @@ class TestUserLastActivityMixin(TestCase):
         mock_schedule.assert_called_once()
 
     @patch('users.models.set_user_last_activity')
-    def test_update_last_activity_redis_failure(self, mock_set_activity):
+    def test_update_last_activity_redis_failure(self, mock_set_activity) -> None:
         """Test updating last activity with Redis failure (fallback to DB)."""
         mock_set_activity.return_value = False
         original_activity = self.user.last_activity
@@ -216,7 +216,7 @@ class TestUserLastActivityMixin(TestCase):
         self.assertNotEqual(self.user.last_activity, original_activity)
 
     @patch('users.models.get_user_last_activity')
-    def test_get_last_activity_cached(self, mock_get_activity):
+    def test_get_last_activity_cached(self, mock_get_activity) -> None:
         """Test getting cached last activity."""
         test_time = timezone.now()
         mock_get_activity.return_value = test_time
@@ -227,7 +227,7 @@ class TestUserLastActivityMixin(TestCase):
         mock_get_activity.assert_called_once_with(self.user.id)
 
     @patch('users.models.get_user_last_activity')
-    def test_last_activity_cached_property(self, mock_get_activity):
+    def test_last_activity_cached_property(self, mock_get_activity) -> None:
         """Test last_activity_cached property."""
         test_time = timezone.now()
         mock_get_activity.return_value = test_time
@@ -241,10 +241,10 @@ class TestUserLastActivityMixin(TestCase):
 class TestSyncTasks(TestCase):
     """Test synchronization tasks."""
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = User.objects.create_user(email='test@example.com', username='testuser', password='testpass123')
 
-    def test_bulk_update_user_activities_success(self):
+    def test_bulk_update_user_activities_success(self) -> None:
         """Test bulk updating user activities."""
         test_time = timezone.now()
         activities = [{'user_id': self.user.id, 'last_activity': test_time}]
@@ -259,7 +259,7 @@ class TestSyncTasks(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.last_activity, test_time)
 
-    def test_bulk_update_user_activities_nonexistent_user(self):
+    def test_bulk_update_user_activities_nonexistent_user(self) -> None:
         """Test bulk update with non-existent user."""
         test_time = timezone.now()
         activities = [{'user_id': 99999, 'last_activity': test_time}]
@@ -270,7 +270,7 @@ class TestSyncTasks(TestCase):
         self.assertEqual(result['processed'], 0)
         self.assertEqual(result['errors'], 1)
 
-    def test_bulk_update_user_activities_outdated_activity(self):
+    def test_bulk_update_user_activities_outdated_activity(self) -> None:
         """Test bulk update with outdated activity."""
         # Set user's current activity to a future time
         future_time = timezone.now() + timedelta(hours=1)
@@ -292,7 +292,7 @@ class TestSyncTasks(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.last_activity, future_time)
 
-    def test_bulk_update_user_activities_empty_list(self):
+    def test_bulk_update_user_activities_empty_list(self) -> None:
         """Test bulk update with empty activities list."""
         result = _bulk_update_user_activities([])
 

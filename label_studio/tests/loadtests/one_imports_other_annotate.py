@@ -40,7 +40,7 @@ class Admin(HttpUser):
     weight = 1
     wait_time = constant(10)
 
-    def on_start(self):
+    def on_start(self) -> None:
         username = signup(self.client)
         with self.client.post(
             '/api/projects',
@@ -59,12 +59,12 @@ class Admin(HttpUser):
             self.import_data()
 
     @task
-    def view_data_manager(self):
+    def view_data_manager(self) -> None:
         self.client.get(f'/projects/{self.project_id}/data', name='projects/<pk>/data')
 
     # @tag('import')
     # @task
-    def import_data(self):
+    def import_data(self) -> None:
         self.client.post(
             '/api/projects/%i/import' % self.project_id,
             name='/api/projects/<pk>/import',
@@ -77,17 +77,17 @@ class Annotator(HttpUser):
     weight = int(os.environ.get('LOCUST_USERS')) - 1
     wait_time = between(1, 3)
 
-    def on_start(self):
+    def on_start(self) -> None:
         signup(self.client)
 
     @tag('select project')
     @task(1)
-    def select_project(self):
+    def select_project(self) -> None:
         self.project_id = get_project_id(self.client)
 
     @tag('labeling')
     @task(10)
-    def do_labeling(self):
+    def do_labeling(self) -> None:
         if not hasattr(self, 'project_id') or not self.project_id:
             print('No projects yet...')
             return
@@ -118,7 +118,7 @@ def randomString(stringLength):
 
 
 @events.test_start.add_listener
-def on_test_start(environment, **kwargs):
+def on_test_start(environment, **kwargs) -> None:
     rows = int(os.environ.get('IMPORTED_TASKS', 50000))
     print(f'Generating file with {rows} rows...')
     numbers = np.random.randint(low=0, high=100, size=(rows, 10)).tolist()

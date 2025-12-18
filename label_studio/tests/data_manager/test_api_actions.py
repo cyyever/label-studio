@@ -28,7 +28,7 @@ from ..utils import make_annotation, make_prediction, make_task, project_id  # n
     ],
 )
 @pytest.mark.django_db
-def test_action_delete_all_tasks(tasks_count, annotations_count, predictions_count, business_client, project_id):
+def test_action_delete_all_tasks(tasks_count, annotations_count, predictions_count, business_client, project_id) -> None:
     # create
     payload = dict(project=project_id, data={'test': 1})
     response = business_client.post(
@@ -65,7 +65,7 @@ def test_action_delete_all_tasks(tasks_count, annotations_count, predictions_cou
     ],
 )
 @pytest.mark.django_db
-def test_action_delete_all_annotations(tasks_count, annotations_count, predictions_count, business_client, project_id):
+def test_action_delete_all_annotations(tasks_count, annotations_count, predictions_count, business_client, project_id) -> None:
     # create
     payload = dict(project=project_id, data={'test': 1})
     response = business_client.post(
@@ -116,7 +116,7 @@ def test_action_delete_all_annotations(tasks_count, annotations_count, predictio
         (RedisImportStorage, RedisImportStorageLink),
     ],
 )
-def test_action_remove_duplicates(business_client, project_id, storage_model, link_model):
+def test_action_remove_duplicates(business_client, project_id, storage_model, link_model) -> None:
     # Setup
     project = Project.objects.get(pk=project_id)
     storage = storage_model.objects.create(project=project)
@@ -173,7 +173,7 @@ def test_action_remove_duplicates(business_client, project_id, storage_model, li
 
 
 @pytest.mark.django_db
-def test_action_remove_duplicates_with_annotations(business_client, project_id):
+def test_action_remove_duplicates_with_annotations(business_client, project_id) -> None:
     """This test checks that the "remove_duplicates" action works correctly
     when there are annotations distributed among multiple duplicated tasks.
     Remove duplicates should keep the task with the first task with annotations,
@@ -226,7 +226,7 @@ def test_action_remove_duplicates_with_annotations(business_client, project_id):
 
 
 @pytest.mark.django_db
-def test_action_cache_labels(business_client, project_id):
+def test_action_cache_labels(business_client, project_id) -> None:
     """This test checks that the "cache_labels" action works correctly
     when there are annotations distributed among multiple tasks.
     """

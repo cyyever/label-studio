@@ -136,7 +136,7 @@ from django.urls import reverse
     ],
 )
 @pytest.mark.django_db
-def test_validate_label_config(business_client, label_config, status_code):
+def test_validate_label_config(business_client, label_config, status_code) -> None:
     r = business_client.post(
         reverse('projects:api:label-config-validate'),
         data={'label_config': label_config},

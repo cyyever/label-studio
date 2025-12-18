@@ -8,7 +8,7 @@ class TestModelProviderConnection(TestCase):
     def setUpTestData(cls):
         cls.organization = OrganizationFactory()
 
-    def test_has_reached_budget_limit(self):
+    def test_has_reached_budget_limit(self) -> None:
         mpc = ModelProviderConnection.objects.create(
             organization=self.organization,
             created_by=self.organization.created_by,

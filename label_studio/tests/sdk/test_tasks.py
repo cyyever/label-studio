@@ -10,7 +10,7 @@ from label_studio_sdk.client import LabelStudio
 from label_studio.tests.sdk.utils import sdk_logs
 
 
-def test_task_CRUD(django_live_url, business_client):
+def test_task_CRUD(django_live_url, business_client) -> None:
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
     p = ls.projects.create(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 
@@ -36,7 +36,7 @@ def test_task_CRUD(django_live_url, business_client):
     assert len(tasks) == 0
 
 
-def test_delete_multi_tasks(django_live_url, business_client):
+def test_delete_multi_tasks(django_live_url, business_client) -> None:
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
     p = ls.projects.create(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 
@@ -79,7 +79,7 @@ def test_delete_multi_tasks(django_live_url, business_client):
     assert not any_task_found
 
 
-def test_export_tasks(django_live_url, business_client):
+def test_export_tasks(django_live_url, business_client) -> None:
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
     p = ls.projects.create(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 
@@ -111,7 +111,7 @@ def test_export_tasks(django_live_url, business_client):
     assert len(exported_tasks) == 10
 
 
-def test_upload_and_list_tasks_does_not_log_to_stderr(django_live_url, business_client, caplog):
+def test_upload_and_list_tasks_does_not_log_to_stderr(django_live_url, business_client, caplog) -> None:
     caplog.set_level(logging.ERROR)
 
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
@@ -126,7 +126,7 @@ def test_upload_and_list_tasks_does_not_log_to_stderr(django_live_url, business_
     assert not sdk_logs(caplog)
 
 
-def test_get_empty_tasks_does_not_log_to_stderr(django_live_url, business_client, caplog):
+def test_get_empty_tasks_does_not_log_to_stderr(django_live_url, business_client, caplog) -> None:
     caplog.set_level(logging.ERROR)
 
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)

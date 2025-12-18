@@ -18,7 +18,7 @@ from tasks.models import Task
 
 
 class TestResolveStorageUriAPIMixin(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.mixin = ResolveStorageUriAPIMixin()
         self.user = MagicMock()
         self.project = MagicMock()
@@ -32,14 +32,14 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
         self.storage = MagicMock()
         self.storage.presign = True
 
-    def test_resolve_with_permission_denied(self):
+    def test_resolve_with_permission_denied(self) -> None:
         self.task.has_permission.return_value = False
         result = self.mixin.resolve(self.request, 'test_fileuri', self.task)
         assert result.status_code == status.HTTP_403_FORBIDDEN
 
     @patch('io_storages.proxy_api.flag_set')
     @patch('io_storages.proxy_api.get_storage_by_url')
-    def test_resolve_with_base64_decoding(self, mock_get_storage, mock_flag_set):
+    def test_resolve_with_base64_decoding(self, mock_get_storage, mock_flag_set) -> None:
         mock_flag_set.return_value = True
         mock_get_storage.return_value = self.storage
         fileuri = base64.urlsafe_b64encode(b'test_uri').decode()
@@ -51,7 +51,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
 
     @patch('io_storages.proxy_api.flag_set')
     @patch('io_storages.proxy_api.get_storage_by_url')
-    def test_resolve_with_url_unquote_fallback(self, mock_get_storage, mock_flag_set):
+    def test_resolve_with_url_unquote_fallback(self, mock_get_storage, mock_flag_set) -> None:
         mock_flag_set.return_value = True
         mock_get_storage.return_value = self.storage
 
@@ -63,7 +63,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
 
     @patch('io_storages.proxy_api.flag_set')
     @patch('io_storages.proxy_api.get_storage_by_url')
-    def test_resolve_storage_not_found(self, mock_get_storage, mock_flag_set):
+    def test_resolve_storage_not_found(self, mock_get_storage, mock_flag_set) -> None:
         mock_flag_set.return_value = True
         mock_get_storage.return_value = None
         result = self.mixin.resolve(self.request, 'fileuri', self.task)
@@ -71,7 +71,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
 
     @patch('io_storages.proxy_api.flag_set')
     @patch('io_storages.proxy_api.get_storage_by_url')
-    def test_resolve_storage_no_presign_support(self, mock_get_storage, mock_flag_set):
+    def test_resolve_storage_no_presign_support(self, mock_get_storage, mock_flag_set) -> None:
         mock_flag_set.return_value = True
         mock_storage = MagicMock()
         delattr(mock_storage, 'presign')
@@ -81,7 +81,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
 
     @patch('io_storages.proxy_api.flag_set')
     @patch('io_storages.proxy_api.get_storage_by_url')
-    def test_resolve_with_presign_true(self, mock_get_storage, mock_flag_set):
+    def test_resolve_with_presign_true(self, mock_get_storage, mock_flag_set) -> None:
         mock_flag_set.return_value = True
         mock_storage = MagicMock()
         mock_storage.presign = True
@@ -94,7 +94,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
 
     @patch('io_storages.proxy_api.flag_set')
     @patch('io_storages.proxy_api.get_storage_by_url')
-    def test_resolve_with_presign_false(self, mock_get_storage, mock_flag_set):
+    def test_resolve_with_presign_false(self, mock_get_storage, mock_flag_set) -> None:
         mock_flag_set.return_value = True
         mock_storage = MagicMock()
         mock_storage.presign = False
@@ -106,7 +106,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             self.mixin.resolve(self.request, 'fileuri', self.task)
             mock_proxy.assert_called_once_with(self.request, 'fileuri', project, mock_storage)
 
-    def test_redirect_to_presign_url_success(self):
+    def test_redirect_to_presign_url_success(self) -> None:
         self.task.resolve_storage_uri.return_value = {'url': 'https://example.com/file.jpg', 'presign_ttl': 60}
         result = self.mixin.redirect_to_presign_url('fileuri', self.task, 'Task')
 
@@ -114,17 +114,17 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
         assert result.url == 'https://example.com/file.jpg'
         assert result.headers['Cache-Control'] == 'no-store, max-age=3600'
 
-    def test_redirect_to_presign_url_no_url(self):
+    def test_redirect_to_presign_url_no_url(self) -> None:
         self.task.resolve_storage_uri.return_value = {'url': None}
         result = self.mixin.redirect_to_presign_url('fileuri', self.task, 'Task')
         assert result.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_redirect_to_presign_url_exception(self):
+    def test_redirect_to_presign_url_exception(self) -> None:
         self.task.resolve_storage_uri.side_effect = Exception('Error resolving URL')
         result = self.mixin.redirect_to_presign_url('fileuri', self.task, 'Task')
         assert result.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_proxy_data_from_storage_success(self):
+    def test_proxy_data_from_storage_success(self) -> None:
         mock_storage = MagicMock()
         # Ensure get_bytes_stream returns a three-tuple, metadata can be empty initially
         mock_storage.get_bytes_stream.return_value = (io.BytesIO(b'test data'), 'image/jpeg', {})
@@ -182,7 +182,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             self.assertEqual(result, mock_response)
             self.assertTrue('ETag' in mock_response.headers)
 
-    def test_proxy_data_from_storage_no_data(self):
+    def test_proxy_data_from_storage_no_data(self) -> None:
         mock_storage = MagicMock()
         # Return three-tuple with empty metadata when no data is available
         mock_storage.get_bytes_stream.return_value = (None, None, {})
@@ -191,7 +191,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
         result = self.mixin.proxy_data_from_storage(self.request, 'uri', mock_project, mock_storage)
         assert result.status_code == status.HTTP_424_FAILED_DEPENDENCY
 
-    def test_proxy_data_from_storage_exception(self):
+    def test_proxy_data_from_storage_exception(self) -> None:
         mock_storage = MagicMock()
         mock_storage.get_bytes_stream.side_effect = Exception('Storage error')
         mock_project = MagicMock()
@@ -199,7 +199,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
         result = self.mixin.proxy_data_from_storage(self.request, 'uri', mock_project, mock_storage)
         assert result.status_code == status.HTTP_424_FAILED_DEPENDENCY
 
-    def test_time_limited_chunker_normal_case(self):
+    def test_time_limited_chunker_normal_case(self) -> None:
         """Test time_limited_chunker when all chunks are processed within timeout"""
         # Create a mock stream with iter_chunks method
         mock_stream = MagicMock()
@@ -222,7 +222,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             assert chunks == [b'chunk1', b'chunk2', b'chunk3']
             assert mock_stream.close.called
 
-    def test_time_limited_chunker_timeout(self):
+    def test_time_limited_chunker_timeout(self) -> None:
         """Test time_limited_chunker when timeout is reached during processing"""
         # Create a mock stream with iter_chunks method
         mock_stream = MagicMock()
@@ -245,7 +245,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             assert chunks == [b'chunk1', b'chunk2']
             assert mock_stream.close.called
 
-    def test_time_limited_chunker_exception(self):
+    def test_time_limited_chunker_exception(self) -> None:
         """Test time_limited_chunker when an exception occurs during streaming"""
         # Create a mock stream with iter_chunks method that raises an exception
         mock_stream = MagicMock()
@@ -267,13 +267,13 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             assert chunks == []
             assert mock_stream.close.called
 
-    def test_override_range_header_no_header(self):
+    def test_override_range_header_no_header(self) -> None:
         """Test override_range_header when no Range header is present"""
         self.request.headers = {}
         result = self.mixin.override_range_header(self.request)
         assert result is None
 
-    def test_override_range_header_header_probes(self):
+    def test_override_range_header_header_probes(self) -> None:
         """Test override_range_header with header probe formats"""
         # Test bytes=0-
         self.request.headers = {'Range': 'bytes=0-'}
@@ -299,7 +299,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             result = self.mixin.override_range_header(self.request)
             assert result == 'bytes=0-0'
 
-    def test_override_range_header_start_no_end(self):
+    def test_override_range_header_start_no_end(self) -> None:
         """Test override_range_header with a start position but no end"""
         # Case: bytes=100-
         self.request.headers = {'Range': 'bytes=100-'}
@@ -327,7 +327,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             # Should add MAX_RANGE_SIZE to start
             assert result == f'bytes=100-{100 + 1024*1024}'
 
-    def test_override_range_header_start_and_end(self):
+    def test_override_range_header_start_and_end(self) -> None:
         """Test override_range_header with start and end positions"""
         # Case: Range within limit
         self.request.headers = {'Range': 'bytes=100-5000'}
@@ -355,7 +355,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             # Should limit the range to MAX_RANGE_SIZE from start
             assert result == f'bytes=100-{100 + 10000}'
 
-    def test_override_range_header_negative_start(self):
+    def test_override_range_header_negative_start(self) -> None:
         """Test override_range_header with negative start position"""
         self.request.headers = {'Range': 'bytes=-1024'}
         with patch('io_storages.proxy_api.settings') as mock_settings, patch(
@@ -369,7 +369,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
             # Should reset to 0 and add MAX_RANGE_SIZE
             assert result == f'bytes=0-{10000}'
 
-    def test_override_range_header_unsupported_format(self):
+    def test_override_range_header_unsupported_format(self) -> None:
         """Test override_range_header with unsupported range format"""
         self.request.headers = {'Range': 'invalid-range-format'}
         with patch('io_storages.proxy_api.settings') as mock_settings, patch(
@@ -386,7 +386,7 @@ class TestResolveStorageUriAPIMixin(unittest.TestCase):
 
 class TestTaskResolveStorageUri:
     @pytest.fixture
-    def setup(self):
+    def setup(self) -> None:
         # Create the necessary objects for testing without database
         self.factory = APIRequestFactory()
         self.user = MagicMock()
@@ -394,7 +394,7 @@ class TestTaskResolveStorageUri:
         self.view = TaskResolveStorageUri.as_view()
 
     @patch('io_storages.proxy_api.Task.objects.get')
-    def test_get_with_missing_params(self, mock_task_get, setup):
+    def test_get_with_missing_params(self, mock_task_get, setup) -> None:
         # Mock the database query
         mock_task_get.return_value = self.task
 
@@ -411,7 +411,7 @@ class TestTaskResolveStorageUri:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     @patch('io_storages.proxy_api.Task.objects.get')
-    def test_get_task_not_found(self, mock_task_get, setup):
+    def test_get_task_not_found(self, mock_task_get, setup) -> None:
         # Mock the database query to raise DoesNotExist
         mock_task_get.side_effect = Task.DoesNotExist
 
@@ -423,7 +423,7 @@ class TestTaskResolveStorageUri:
 
     @patch('io_storages.proxy_api.Task.objects.get')
     @patch.object(ResolveStorageUriAPIMixin, 'resolve')
-    def test_get_success(self, mock_resolve, mock_task_get, setup):
+    def test_get_success(self, mock_resolve, mock_task_get, setup) -> None:
         # Mock the database query and resolve method
         mock_task_get.return_value = self.task
         mock_resolve.return_value = Response(status=status.HTTP_200_OK)
@@ -443,7 +443,7 @@ class TestTaskResolveStorageUri:
 @pytest.mark.django_db
 class TestProjectResolveStorageUri:
     @pytest.fixture
-    def setup(self):
+    def setup(self) -> None:
         # Create the necessary objects for testing without database
         self.factory = APIRequestFactory()
         self.user = MagicMock()
@@ -451,7 +451,7 @@ class TestProjectResolveStorageUri:
         self.view = ProjectResolveStorageUri.as_view()
 
     @patch('io_storages.proxy_api.Project.objects.get')
-    def test_get_with_missing_params(self, mock_project_get, setup):
+    def test_get_with_missing_params(self, mock_project_get, setup) -> None:
         # Mock the database query
         mock_project_get.return_value = self.project
 
@@ -468,7 +468,7 @@ class TestProjectResolveStorageUri:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     @patch('io_storages.proxy_api.Project.objects.get')
-    def test_get_project_not_found(self, mock_project_get, setup):
+    def test_get_project_not_found(self, mock_project_get, setup) -> None:
         # Mock the database query to raise DoesNotExist
         mock_project_get.side_effect = Project.DoesNotExist
 
@@ -480,7 +480,7 @@ class TestProjectResolveStorageUri:
 
     @patch('io_storages.proxy_api.Project.objects.get')
     @patch.object(ResolveStorageUriAPIMixin, 'resolve')
-    def test_get_success(self, mock_resolve, mock_project_get, setup):
+    def test_get_success(self, mock_resolve, mock_project_get, setup) -> None:
         # Mock the database query and resolve method
         mock_project_get.return_value = self.project
         mock_resolve.return_value = Response(status=status.HTTP_200_OK)

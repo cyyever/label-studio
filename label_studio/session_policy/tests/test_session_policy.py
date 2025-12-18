@@ -6,7 +6,7 @@ from session_policy.models import SessionTimeoutPolicy
 
 
 @pytest.mark.django_db
-def test_session_timeout_policy():
+def test_session_timeout_policy() -> None:
     organization = OrganizationFactory()
 
     client = APIClient()
@@ -35,7 +35,7 @@ def test_session_timeout_policy():
 
 
 @pytest.mark.django_db
-def test_session_policy_api():
+def test_session_policy_api() -> None:
     # Create organization and user
     organization = OrganizationFactory()
     client = APIClient()

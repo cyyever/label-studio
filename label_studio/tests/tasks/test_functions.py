@@ -46,7 +46,7 @@ class TestExportProject:
     def project(self, configured_project):
         return configured_project
 
-    def test_export_project(self, mocker, generate_export_file, project):
+    def test_export_project(self, mocker, generate_export_file, project) -> None:
         data = ExportDataSerializer(
             project.tasks.all(),
             many=True,
@@ -60,7 +60,7 @@ class TestExportProject:
 
         generate_export_file.assert_called_once_with(project, data, 'JSON', settings.CONVERTER_DOWNLOAD_RESOURCES, {})
 
-    def test_project_does_not_exist(self, mocker, generate_export_file):
+    def test_project_does_not_exist(self, mocker, generate_export_file) -> None:
         with mocker.patch('builtins.open'):
             with pytest.raises(Exception):
                 export_project(1, 'JSON', settings.EXPORT_DIR)

@@ -7,7 +7,7 @@ from projects.models import Project
 
 
 @pytest.mark.django_db
-def test_validate_connection_rejects_document_root_path(settings, tmp_path, project_id):
+def test_validate_connection_rejects_document_root_path(settings, tmp_path, project_id) -> None:
     """Ensure validate_connection fails when the storage path equals LOCAL_FILES_DOCUMENT_ROOT.
 
     This test validates step by step:
@@ -31,7 +31,7 @@ def test_validate_connection_rejects_document_root_path(settings, tmp_path, proj
 
 
 @pytest.mark.django_db
-def test_validate_connection_requires_subdirectory(settings, tmp_path, project_id):
+def test_validate_connection_requires_subdirectory(settings, tmp_path, project_id) -> None:
     """Ensure validate_connection demands that storage.path stays inside LOCAL_FILES_DOCUMENT_ROOT.
 
     Steps validated:

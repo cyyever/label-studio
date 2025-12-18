@@ -32,7 +32,7 @@ def apply_filter_and_get_view_id(business_client, project_id, filters):
 
 
 @pytest.mark.django_db
-def test_views_filters_with_undefined(business_client, project_id):
+def test_views_filters_with_undefined(business_client, project_id) -> None:
     """
     1. Import task 1: {"$undefined$": "photo1.jpg"}
     2. Filter by `data` with value `photo`

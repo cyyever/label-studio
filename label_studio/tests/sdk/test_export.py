@@ -25,7 +25,7 @@ async def test_project_async(django_live_url, business_client):
     return ls, project
 
 
-def test_export_formats(test_project):
+def test_export_formats(test_project) -> None:
     ls, project = test_project
 
     # Get available export formats
@@ -33,7 +33,7 @@ def test_export_formats(test_project):
     assert len(formats) > 0
 
 
-def test_direct_export(test_project):
+def test_direct_export(test_project) -> None:
     ls, project = test_project
 
     # Test JSON export
@@ -78,7 +78,7 @@ def test_direct_export(test_project):
 
 # TODO: support pytest-asyncio, otherwise this test will be skipped
 @pytest.mark.skip(reason='pytest-asyncio is not supported in this version of Label Studio')
-async def test_async_export(test_project_async):
+async def test_async_export(test_project_async) -> None:
     ls, project = test_project_async
 
     # Test JSON export

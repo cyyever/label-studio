@@ -12,7 +12,7 @@ from label_studio_sdk.label_interface.create import labels
 from label_studio_sdk.label_interface.objects import AnnotationValue, TaskValue
 
 
-def test_annotations_CRUD(django_live_url, business_client):
+def test_annotations_CRUD(django_live_url, business_client) -> None:
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
     li = LabelInterface(LABEL_CONFIG_AND_TASKS['label_config'])
     p = ls.projects.create(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
@@ -58,7 +58,7 @@ def test_annotations_CRUD(django_live_url, business_client):
     assert annotations[0].result[0]['value']['choices'] == ['Neutral']
 
 
-def test_annotation_marks_task_as_labeled(django_live_url, business_client):
+def test_annotation_marks_task_as_labeled(django_live_url, business_client) -> None:
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
     label_config = LabelInterface.create(

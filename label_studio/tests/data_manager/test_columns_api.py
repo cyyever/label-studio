@@ -21,7 +21,7 @@ def _get_columns(business_client, label_config=None):
     return r_json['columns']
 
 
-def test_columns_api_returns_expected_ids(business_client):
+def test_columns_api_returns_expected_ids(business_client) -> None:
     columns = _get_columns(business_client)
 
     assert [c['id'] for c in columns] == [
@@ -48,7 +48,7 @@ def test_columns_api_returns_expected_ids(business_client):
     ]
 
 
-def test_columns_api_annotates_default_columns_with_project_defined_false(business_client):
+def test_columns_api_annotates_default_columns_with_project_defined_false(business_client) -> None:
     columns = _get_columns(business_client)
 
     for c in columns:
@@ -56,7 +56,7 @@ def test_columns_api_annotates_default_columns_with_project_defined_false(busine
         assert c['project_defined'] is False
 
 
-def test_columns_api_annotates_config_defined_columns_with_project_defined_true(business_client):
+def test_columns_api_annotates_config_defined_columns_with_project_defined_true(business_client) -> None:
     config_with_text_column = """
         <View>
             <Text value="$text" name="artist" />

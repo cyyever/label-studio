@@ -13,7 +13,7 @@ from label_studio.projects.tests.factories import ProjectFactory
 pytestmark = pytest.mark.django_db
 
 
-def test_project_manager_filters_deleted():
+def test_project_manager_filters_deleted() -> None:
     """Project manager hides deleted rows by default; unfiltered manager returns all.
 
     Purpose: Verify default manager excludes soft-deleted rows and all_objects returns them.
@@ -33,7 +33,7 @@ def test_project_manager_filters_deleted():
     assert set(all_rows) >= {'active', 'deleted'}
 
 
-def test_project_manager_for_user_respects_filter():
+def test_project_manager_for_user_respects_filter() -> None:
     """for_user applies org scope and soft-delete filter.
 
     Purpose: Ensure for_user(user) scopes to user's active org and hides deleted rows.
@@ -58,7 +58,7 @@ def test_project_manager_for_user_respects_filter():
     assert 'org2-active' not in titles
 
 
-def test_visible_manager_skips_filter_without_column(monkeypatch):
+def test_visible_manager_skips_filter_without_column(monkeypatch) -> None:
     """Manager should not reference missing deleted_at during early migrations.
 
     Purpose: Avoid schema errors before column exists.
@@ -78,7 +78,7 @@ def test_visible_manager_skips_filter_without_column(monkeypatch):
     assert {'active', 'deleted'} <= titles
 
 
-def test_has_column_cached_memoization_and_clear(monkeypatch):
+def test_has_column_cached_memoization_and_clear(monkeypatch) -> None:
     """Column presence check is memoized and reset by post_migrate.
 
     Purpose: Ensure only one introspection call until cache clear.

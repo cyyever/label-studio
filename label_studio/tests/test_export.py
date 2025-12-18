@@ -180,7 +180,7 @@ def test_export(
     num_task_in_result,
     annotation_items,
     aggregated_class,
-):
+) -> None:
     if aggregator_type == 'majority_vote' and not apps.is_installed('businesses'):
         pytest.skip('Not supported aggregation for open-source version')
 
@@ -285,7 +285,7 @@ def test_export(
 @pytest.mark.django_db
 def test_export_with_predictions(
     business_client, configured_project, finished, return_task, aggregator_type, annotation_results, predictions
-):
+) -> None:
     if aggregator_type == 'majority_vote' and not apps.is_installed('businesses'):
         pytest.skip('Not supported aggregation for open-source version')
 

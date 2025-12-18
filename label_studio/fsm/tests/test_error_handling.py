@@ -65,7 +65,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
     boundary conditions, and error scenarios gracefully.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.mock_entity = Mock()
         self.mock_entity.pk = 1
         self.mock_entity._meta.model_name = 'test_entity'
@@ -78,7 +78,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         transition_registry.register('test_entity', 'edge_case', EdgeCaseTransition)
         transition_registry.register('test_entity', 'error_prone', ErrorProneTransition)
 
-    def test_none_and_empty_values_handling(self):
+    def test_none_and_empty_values_handling(self) -> None:
         """
         EDGE CASE: Handling None and empty values
 
@@ -126,7 +126,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         result = false_transition.transition(context)
         assert not result['edge_case_data']
 
-    def test_extreme_data_sizes(self):
+    def test_extreme_data_sizes(self) -> None:
         """
         EDGE CASE: Handling extremely large or small data
 
@@ -163,7 +163,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         assert len(result['edge_case_data']) == 1000
         assert result['edge_case_data'][-1] == 999
 
-    def test_unicode_and_special_characters(self):
+    def test_unicode_and_special_characters(self) -> None:
         """
         EDGE CASE: Unicode and special character handling
 
@@ -204,7 +204,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
                 result = transition.transition(context)
                 assert result['edge_case_data'] == test_string
 
-    def test_boundary_datetime_values(self):
+    def test_boundary_datetime_values(self) -> None:
         """
         EDGE CASE: Boundary datetime values
 
@@ -244,7 +244,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
                 result = transition.transition(context)
                 assert result['processed_at'] == test_datetime.isoformat()
 
-    def test_circular_reference_handling(self):
+    def test_circular_reference_handling(self) -> None:
         """
         EDGE CASE: Circular references and complex object graphs
 
@@ -281,7 +281,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         result = transition.transition(context)
         assert result['edge_case_data']['level1']['level2']['level3']['data'] == 'deep_value'
 
-    def test_memory_pressure_and_cleanup(self):
+    def test_memory_pressure_and_cleanup(self) -> None:
         """
         EDGE CASE: Memory pressure and garbage collection
 
@@ -335,7 +335,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         result = new_transition.transition(new_context)
         assert result['edge_case_data'] == 'after_cleanup'
 
-    def test_exception_during_validation(self):
+    def test_exception_during_validation(self) -> None:
         """
         ERROR HANDLING: Exceptions during validation
 
@@ -394,7 +394,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
                 with pytest.raises(exception_class):
                     transition.validate_transition(context)
 
-    def test_exception_during_transition_execution(self):
+    def test_exception_during_transition_execution(self) -> None:
         """
         ERROR HANDLING: Exceptions during transition execution
 
@@ -417,7 +417,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
             fail_transition.transition(context)
         assert 'Intentional transition failure' in str(cm.value)
 
-    def test_registry_edge_cases(self):
+    def test_registry_edge_cases(self) -> None:
         """
         EDGE CASE: Registry edge cases
 
@@ -464,7 +464,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         empty_transitions = transition_registry.get_transitions_for_entity('nonexistent_entity')
         assert empty_transitions == {}
 
-    def test_context_edge_cases(self):
+    def test_context_edge_cases(self) -> None:
         """
         EDGE CASE: TransitionContext edge cases
 
@@ -524,7 +524,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         assert empty_context.has_current_state
         assert not empty_context.is_initial_transition
 
-    def test_state_manager_edge_cases(self):
+    def test_state_manager_edge_cases(self) -> None:
         """
         EDGE CASE: StateManager edge cases
 
@@ -546,7 +546,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         transition = transition_class()
         assert transition.edge_case_data is None  # Uses default None value
 
-    def test_concurrent_error_scenarios(self):
+    def test_concurrent_error_scenarios(self) -> None:
         """
         EDGE CASE: Error handling under concurrency
 
@@ -603,7 +603,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         assert len(validation_errors) == 5  # Even worker IDs
         assert len(runtime_errors) == 5     # Odd worker IDs
 
-    def test_resource_cleanup_after_errors(self):
+    def test_resource_cleanup_after_errors(self) -> None:
         """
         EDGE CASE: Resource cleanup after errors
 

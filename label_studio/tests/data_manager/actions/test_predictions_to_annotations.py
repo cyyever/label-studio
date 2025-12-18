@@ -4,7 +4,7 @@ from projects.models import Project
 from users.models import User
 
 
-def test_predictions_to_annotations_form():
+def test_predictions_to_annotations_form() -> None:
     project = Project()
     user = User()
 

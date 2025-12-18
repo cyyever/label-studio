@@ -17,10 +17,10 @@ class TestProjectCountsListAPI(TestCase):
         Task.objects.create(project=cls.project_1, data={'text': 'Task 2'})
         Task.objects.create(project=cls.project_2, data={'text': 'Task 3'})
 
-    def get_url(self, **params):
+    def get_url(self, **params) -> str:
         return f'{reverse("projects:api:project-counts-list")}?{urlencode(params)}'
 
-    def test_get_counts(self):
+    def test_get_counts(self) -> None:
         client = APIClient()
         client.force_authenticate(user=self.project_1.created_by)
         response = client.get(self.get_url(include='id,task_number,finished_task_number,total_predictions_number'))
@@ -60,7 +60,7 @@ class TestProjectModelVersionsAPI(APITestCase):
         cls.prediction_m2.created_at = timezone.now()
         cls.prediction_m2.save()
 
-    def test_no_params(self):
+    def test_no_params(self) -> None:
         self.client.force_authenticate(user=self.user)
         response = self.client.get(f'/api/projects/{self.project.id}/model-versions')
         assert response.status_code == 200
@@ -70,7 +70,7 @@ class TestProjectModelVersionsAPI(APITestCase):
             'model_1': 2,
         }
 
-    def test_limit(self):
+    def test_limit(self) -> None:
         self.client.force_authenticate(user=self.user)
         response = self.client.get(f'/api/projects/{self.project.id}/model-versions?limit=2')
         assert response.status_code == 200
@@ -79,7 +79,7 @@ class TestProjectModelVersionsAPI(APITestCase):
             'model_3': 1,
         }
 
-    def test_extended(self):
+    def test_extended(self) -> None:
         self.client.force_authenticate(user=self.user)
         response = self.client.get(f'/api/projects/{self.project.id}/model-versions?extended=true')
         assert response.status_code == 200

@@ -17,7 +17,7 @@ class TestDeleteTasksAnnotations(TestCase):
         cls.task_1 = TaskFactory(project=cls.project)
         cls.task_2 = TaskFactory(project=cls.project)
 
-    def test_form(self):
+    def test_form(self) -> None:
         AnnotationFactory(task=self.task_1, completed_by=self.user_1)
         AnnotationDraftFactory(task=self.task_1, user=self.user_2)
 
@@ -26,14 +26,14 @@ class TestDeleteTasksAnnotations(TestCase):
         assert str(self.user_1.id) in option_ids
         assert str(self.user_2.id) in option_ids
 
-    def test_no_annotations(self):
+    def test_no_annotations(self) -> None:
         request = HttpRequest()
         request.user = self.user_1
         request.data = {'annotator': ''}
         result = delete_tasks_annotations(self.project, Task.objects.all(), request=request)
         assert result['processed_items'] == 0
 
-    def test_no_annotator(self):
+    def test_no_annotator(self) -> None:
         AnnotationFactory(task=self.task_1, completed_by=self.user_1)
         AnnotationDraftFactory(task=self.task_1, user=self.user_2)
         AnnotationFactory(task=self.task_2, completed_by=self.user_1)
@@ -48,7 +48,7 @@ class TestDeleteTasksAnnotations(TestCase):
         assert Annotation.objects.count() == 0
         assert AnnotationDraft.objects.count() == 0
 
-    def test_with_annotator(self):
+    def test_with_annotator(self) -> None:
         AnnotationFactory(task=self.task_1, completed_by=self.user_1)
         AnnotationDraftFactory(task=self.task_1, user=self.user_2)
         AnnotationFactory(task=self.task_2, completed_by=self.user_1)
@@ -65,7 +65,7 @@ class TestDeleteTasksAnnotations(TestCase):
         assert not Annotation.objects.filter(task=self.task_2, completed_by=self.user_2).exists()
         assert not AnnotationDraft.objects.filter(task=self.task_2, user=self.user_2).exists()
 
-    def test_with_annotator_and_task(self):
+    def test_with_annotator_and_task(self) -> None:
         AnnotationFactory(task=self.task_1, completed_by=self.user_1)
         AnnotationDraftFactory(task=self.task_1, user=self.user_2)
         AnnotationFactory(task=self.task_2, completed_by=self.user_1)

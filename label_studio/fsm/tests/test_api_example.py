@@ -33,7 +33,7 @@ class APIIntegrationExampleTests(TestCase):
     REST APIs, handle JSON data, validate requests, and format responses.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         from copy import deepcopy
 
         self.mock_entity = Mock()
@@ -49,11 +49,11 @@ class APIIntegrationExampleTests(TestCase):
         self._original_transitions = deepcopy(transition_registry._transitions)
         transition_registry._transitions.clear()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         # Restore original transition registry to prevent test leakage
         transition_registry._transitions = self._original_transitions
 
-    def test_rest_api_task_assignment_example(self):
+    def test_rest_api_task_assignment_example(self) -> None:
         """
         API EXAMPLE: REST endpoint for task assignment
 
@@ -189,7 +189,7 @@ class APIIntegrationExampleTests(TestCase):
         with pytest.raises(ValueError):
             APITaskAssignmentTransition(**invalid_request)
 
-    def test_json_schema_generation_for_api_docs(self):
+    def test_json_schema_generation_for_api_docs(self) -> None:
         """
         API DOCUMENTATION: JSON Schema generation
 
@@ -292,7 +292,7 @@ class APIIntegrationExampleTests(TestCase):
         assert isinstance(schema_json, str)
         assert 'confidence_score' in schema_json
 
-    def test_bulk_operations_api_pattern(self):
+    def test_bulk_operations_api_pattern(self) -> None:
         """
         API EXAMPLE: Bulk operations with transitions
 
@@ -405,7 +405,7 @@ class APIIntegrationExampleTests(TestCase):
             assert result['result']['new_status'] == 'IN_PROGRESS'
             assert result['result']['batch_id'] == 'batch_2024_001'
 
-    def test_webhook_integration_pattern(self):
+    def test_webhook_integration_pattern(self) -> None:
         """
         API EXAMPLE: Webhook integration with transitions
 
@@ -514,7 +514,7 @@ class APIIntegrationExampleTests(TestCase):
             assert payload['completion_data']['quality'] == 0.95
             assert payload['custom_data']['project_id'] == 123
 
-    def test_api_error_handling_patterns(self):
+    def test_api_error_handling_patterns(self) -> None:
         """
         API EXAMPLE: Comprehensive error handling patterns
 
@@ -695,7 +695,7 @@ class APIIntegrationExampleTests(TestCase):
         validation_errors = response.get('validation_errors', [])
         assert any('completed tasks' in error for error in validation_errors)
 
-    def test_api_versioning_and_backward_compatibility(self):
+    def test_api_versioning_and_backward_compatibility(self) -> None:
         """
         API EXAMPLE: API versioning with backward compatibility
 

@@ -7,7 +7,7 @@ from label_studio.tests.sdk.common import LABEL_CONFIG_AND_TASKS
 pytestmark = pytest.mark.django_db
 
 
-def test_project_annotators_sdk(django_live_url, business_client):
+def test_project_annotators_sdk(django_live_url, business_client) -> None:
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
     # Create project via SDK

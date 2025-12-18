@@ -6,7 +6,7 @@ from projects.tests.factories import ProjectFactory
 
 
 class TestCheckActionPermission(TestCase):
-    def test_check_action_permission(self):
+    def test_check_action_permission(self) -> None:
         project = ProjectFactory()
         user = project.created_by
         action = {

@@ -15,11 +15,11 @@ class TestOrganizationMemberListAPI(APITestCase):
         cls.user_1 = UserFactory(username='user_1', active_organization=cls.organization)
         cls.user_2 = UserFactory(username='user_2', active_organization=cls.organization)
 
-    def get_url(self, params=None):
+    def get_url(self, params=None) -> str:
         params = params or {}
         return f'/api/organizations/{self.organization.id}/memberships?{urlencode(params)}'
 
-    def test_list_organization_members(self):
+    def test_list_organization_members(self) -> None:
         self.client.force_authenticate(user=self.owner)
 
         response = self.client.get(self.get_url())
@@ -41,7 +41,7 @@ class TestOrganizationMemberListAPI(APITestCase):
         assert user_2['user']['created_projects'] is None
         assert user_2['user']['contributed_to_projects'] is None
 
-    def test_list_with_contributed_to_projects(self):
+    def test_list_with_contributed_to_projects(self) -> None:
         project_1 = ProjectFactory(created_by=self.user_1, organization=self.organization)
         project_2 = ProjectFactory(created_by=self.user_2, organization=self.organization)
 

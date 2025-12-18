@@ -17,7 +17,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
     including limit handling, timeout behavior, and error scenarios.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Set up test dependencies and mock objects for each test."""
         self.api = ImportStorageListFilesAPI(serializer_class=ImportStorageSerializer)
         self.user = MagicMock()
@@ -38,7 +38,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
         return request
 
     @patch('io_storages.functions.validate_storage_instance')
-    def test_successful_file_listing_under_limit(self, mock_validate):
+    def test_successful_file_listing_under_limit(self, mock_validate) -> None:
         """Test successful file listing when object count is under the limit.
 
         This test validates:
@@ -73,7 +73,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
         mock_validate.assert_called_once_with(request, ImportStorageSerializer)
 
     @patch('io_storages.functions.validate_storage_instance')
-    def test_file_listing_reaches_limit(self, mock_validate):
+    def test_file_listing_reaches_limit(self, mock_validate) -> None:
         """Test file listing behavior when reaching the specified limit.
 
         This test validates:
@@ -106,7 +106,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
         assert limit_marker['size'] is None
 
     @patch('io_storages.functions.validate_storage_instance')
-    def test_uses_default_limit_when_not_specified(self, mock_validate):
+    def test_uses_default_limit_when_not_specified(self, mock_validate) -> None:
         """Test that API uses DEFAULT_STORAGE_LIST_LIMIT when limit not in request.
 
         This test validates:
@@ -129,7 +129,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
 
     @patch('io_storages.api.time')
     @patch('io_storages.functions.validate_storage_instance')
-    def test_timeout_handling(self, mock_validate, mock_time):
+    def test_timeout_handling(self, mock_validate, mock_time) -> None:
         """Test timeout handling when file scanning exceeds 30 seconds.
 
         This test validates:
@@ -163,7 +163,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
         assert timeout_marker['size'] is None
 
     @patch('io_storages.functions.validate_storage_instance')
-    def test_iter_objects_exception_raises_validation_error(self, mock_validate):
+    def test_iter_objects_exception_raises_validation_error(self, mock_validate) -> None:
         """Test that exceptions during object iteration are converted to ValidationError.
 
         This test validates:
@@ -186,7 +186,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
         assert str(exc_info.value.detail[0]) == 'Failed to list storage files'
 
     @patch('io_storages.functions.validate_storage_instance')
-    def test_get_unified_metadata_exception_raises_validation_error(self, mock_validate):
+    def test_get_unified_metadata_exception_raises_validation_error(self, mock_validate) -> None:
         """Test that exceptions during metadata retrieval are converted to ValidationError.
 
         This test validates:
@@ -210,7 +210,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
         assert str(exc_info.value.detail[0]) == 'Failed to list storage files'
 
     @patch('io_storages.functions.validate_storage_instance')
-    def test_validate_storage_instance_exception_propagates(self, mock_validate):
+    def test_validate_storage_instance_exception_propagates(self, mock_validate) -> None:
         """Test that validate_storage_instance exceptions are properly propagated.
 
         This test validates:
@@ -231,7 +231,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
         # Verify it's the same exception
         assert exc_info.value == validation_error
 
-    def test_api_initialization_with_serializer_class(self):
+    def test_api_initialization_with_serializer_class(self) -> None:
         """Test API initialization with custom serializer class.
 
         This test validates:
@@ -246,7 +246,7 @@ class TestImportStorageListFilesAPI(unittest.TestCase):
         # Validate: Check serializer assignment
         assert api.serializer_class == custom_serializer
 
-    def test_api_initialization_without_serializer_class(self):
+    def test_api_initialization_without_serializer_class(self) -> None:
         """Test API initialization without serializer class (default behavior).
 
         This test validates:

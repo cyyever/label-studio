@@ -69,7 +69,7 @@ class DjangoModelIntegrationTests(TestCase):
     Django model patterns and the StateManager integration.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.task = MockDjangoTask()
         self.annotation = MockDjangoAnnotation()
         self.user = Mock()
@@ -79,7 +79,7 @@ class DjangoModelIntegrationTests(TestCase):
     @patch('fsm.registry.get_state_model_for_entity')
     @patch('fsm.state_manager.StateManager.get_current_state_object')
     @patch('fsm.state_manager.StateManager.transition_state')
-    def test_task_workflow_integration(self, mock_transition_state, mock_get_state_obj, mock_get_state_model):
+    def test_task_workflow_integration(self, mock_transition_state, mock_get_state_obj, mock_get_state_model) -> None:
         """
         INTEGRATION TEST: Complete task workflow using Django models
         Demonstrates a realistic task lifecycle from creation through completion
@@ -284,7 +284,7 @@ class DjangoModelIntegrationTests(TestCase):
         # Verify StateManager calls
         assert mock_transition_state.call_count == 0  # Not called in our test setup
 
-    def test_annotation_review_workflow_integration(self):
+    def test_annotation_review_workflow_integration(self) -> None:
         """
         INTEGRATION TEST: Annotation review workflow
         Demonstrates a realistic annotation review process using
@@ -453,7 +453,7 @@ class DjangoModelIntegrationTests(TestCase):
         assert 'Cannot approve annotation with low quality score' in str(cm.value)
 
     @patch('fsm.state_manager.StateManager.execute_transition')
-    def test_state_manager_bulk_update_integration(self, mock_execute):
+    def test_state_manager_bulk_update_integration(self, mock_execute) -> None:
         """
         INTEGRATION TEST: StateManager bulk update with Django model integration
         Shows how to use the StateManager to execute transitions with
@@ -538,7 +538,7 @@ class DjangoModelIntegrationTests(TestCase):
         # Check return value
         assert result == mock_state_record
 
-    def test_error_handling_with_django_models(self):
+    def test_error_handling_with_django_models(self) -> None:
         """
         INTEGRATION TEST: Error handling with Django model validation
         Tests comprehensive error handling scenarios that might occur
@@ -667,7 +667,7 @@ class DjangoModelIntegrationTests(TestCase):
 class TestBaseStatePropertiesCoverage(TestCase):
     """Test coverage for BaseState model properties and methods"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Set up test fixtures"""
         self.user = User.objects.create(email='test_coverage@example.com')
         self.org = Organization.objects.create(title='Test Org Coverage', created_by=self.user)
@@ -680,11 +680,11 @@ class TestBaseStatePropertiesCoverage(TestCase):
             title='Test Project Coverage', created_by=self.user, organization=self.org
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """Clean up after tests"""
         CurrentContext.clear()
 
-    def test_base_state_entity_property(self):
+    def test_base_state_entity_property(self) -> None:
         """Test BaseState.entity property retrieves related entity"""
         from fsm.state_models import ProjectState
 
@@ -696,7 +696,7 @@ class TestBaseStatePropertiesCoverage(TestCase):
         retrieved_entity = state_record.entity
         assert retrieved_entity.id == self.project.id
 
-    def test_base_state_timestamp_from_uuid(self):
+    def test_base_state_timestamp_from_uuid(self) -> None:
         """Test BaseState.timestamp_from_uuid property extracts timestamp from UUID7"""
         from fsm.state_models import ProjectState
 

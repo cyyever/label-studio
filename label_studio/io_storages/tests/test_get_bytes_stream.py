@@ -57,7 +57,7 @@ def validate_content_range(test_case, metadata, expected_start, expected_end, ex
 class TestS3StorageMixinGetBytesStream(unittest.TestCase):
     """Test the get_bytes_stream method in S3StorageMixin"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         # Create an instance of the concrete class
         self.storage = ConcreteS3Storage()
         # Setup mock client
@@ -73,7 +73,7 @@ class TestS3StorageMixinGetBytesStream(unittest.TestCase):
         self.mock_settings.RESOLVER_PROXY_MAX_RANGE_SIZE = 10 * 1024 * 1024  # 10MB
         self.addCleanup(self.mock_settings_patcher.stop)
 
-    def test_get_bytes_stream_success(self):
+    def test_get_bytes_stream_success(self) -> None:
         # Create a mock response for get_object
         mock_body = MagicMock()
         mock_body.read.return_value = b'test file content'
@@ -98,7 +98,7 @@ class TestS3StorageMixinGetBytesStream(unittest.TestCase):
         self.assertEqual(result_stream.read(), b'test file content')
         self.assertIsInstance(metadata, dict)
 
-    def test_get_bytes_stream_with_range_header(self):
+    def test_get_bytes_stream_with_range_header(self) -> None:
         """Test that range headers are properly processed and ContentRange is correctly formatted"""
         # Create a mock response for get_object with range header
         mock_body = MagicMock()
@@ -135,7 +135,7 @@ class TestS3StorageMixinGetBytesStream(unittest.TestCase):
         # Check status code is 206 (Partial Content)
         self.assertEqual(metadata['StatusCode'], 206)
 
-    def test_get_bytes_stream_large_range(self):
+    def test_get_bytes_stream_large_range(self) -> None:
         """Test behavior when requesting a range larger than MAX_RANGE_SIZE"""
         # Create a mock response for get_object with range header
         mock_body = MagicMock()
@@ -175,7 +175,7 @@ class TestS3StorageMixinGetBytesStream(unittest.TestCase):
         self.assertEqual(end, adjusted_end)
         self.assertEqual(total, max_range_size)
 
-    def test_get_bytes_stream_exception(self):
+    def test_get_bytes_stream_exception(self) -> None:
         # Set up the mock to raise an exception
         self.mock_client.get_object.side_effect = Exception('Connection error')
 
@@ -193,7 +193,7 @@ class TestS3StorageMixinGetBytesStream(unittest.TestCase):
 class TestAzureBlobStorageMixinGetBytesStream(unittest.TestCase):
     """Test the get_bytes_stream method in AzureBlobStorageMixin"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         # Create an instance of the concrete class
         self.storage = ConcreteAzureBlobStorage()
         # Setup mock client and container
@@ -212,7 +212,7 @@ class TestAzureBlobStorageMixinGetBytesStream(unittest.TestCase):
         self.mock_settings.RESOLVER_PROXY_MAX_RANGE_SIZE = 10 * 1024 * 1024  # 10MB
         self.addCleanup(self.mock_settings_patcher.stop)
 
-    def test_get_bytes_stream_success(self):
+    def test_get_bytes_stream_success(self) -> None:
         # Mock the blob client and download_blob
         mock_blob_client = MagicMock()
         self.mock_client.get_blob_client.return_value = mock_blob_client
@@ -254,7 +254,7 @@ class TestAzureBlobStorageMixinGetBytesStream(unittest.TestCase):
         # Validate ContentRange format
         self.assertIn('ContentRange', metadata)
 
-    def test_get_bytes_stream_with_range_header(self):
+    def test_get_bytes_stream_with_range_header(self) -> None:
         """Test that range headers are properly processed and ContentRange is correctly formatted"""
         # Mock the blob client
         mock_blob_client = MagicMock()
@@ -301,7 +301,7 @@ class TestAzureBlobStorageMixinGetBytesStream(unittest.TestCase):
         # Verify range size
         self.assertEqual(range_size, 5)
 
-    def test_get_bytes_stream_large_range(self):
+    def test_get_bytes_stream_large_range(self) -> None:
         """Test behavior when requesting a range larger than MAX_RANGE_SIZE"""
         # Mock the blob client
         mock_blob_client = MagicMock()
@@ -356,7 +356,7 @@ class TestAzureBlobStorageMixinGetBytesStream(unittest.TestCase):
         self.assertEqual(call_args['offset'], large_start)
         self.assertEqual(call_args['length'], large_end - large_start)
 
-    def test_get_bytes_stream_exception(self):
+    def test_get_bytes_stream_exception(self) -> None:
         # Set up mock client to raise an exception
         self.mock_client.get_blob_client.side_effect = Exception('Azure connection error')
 
@@ -369,7 +369,7 @@ class TestAzureBlobStorageMixinGetBytesStream(unittest.TestCase):
         self.assertIsNone(result_content_type)
         self.assertEqual(metadata, {})
 
-    def test_get_bytes_stream_header_probe(self):
+    def test_get_bytes_stream_header_probe(self) -> None:
         """Test browser header probe behavior with streaming optimization"""
         # Mock the blob client
         mock_blob_client = MagicMock()
@@ -434,7 +434,7 @@ class TestAzureBlobStorageMixinGetBytesStream(unittest.TestCase):
         self.assertEqual(metadata['ContentRange'], f'bytes 0-{expected_end}/{file_size}')
         self.assertEqual(metadata['ContentLength'], self.mock_settings.RESOLVER_PROXY_MAX_RANGE_SIZE)
 
-    def test_get_bytes_stream_range_handling_fix(self):
+    def test_get_bytes_stream_range_handling_fix(self) -> None:
         """Test the fix for video streaming: bytes=0-0 vs bytes=0- should behave differently.
 
         This test validates the critical fix for video streaming issues:
@@ -505,7 +505,7 @@ class TestAzureBlobStorageMixinGetBytesStream(unittest.TestCase):
 class TestGCSStorageMixinGetBytesStream(unittest.TestCase):
     """Test the get_bytes_stream method in GCSStorageMixin"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         # Create an instance of the concrete class
         self.storage = ConcreteGCSStorage()
         # Setup mock client
@@ -525,7 +525,7 @@ class TestGCSStorageMixinGetBytesStream(unittest.TestCase):
         self.mock_settings.RESOLVER_PROXY_GCS_HTTP_TIMEOUT = 30
         self.addCleanup(self.mock_settings_patcher.stop)
 
-    def test_get_bytes_stream_success(self):
+    def test_get_bytes_stream_success(self) -> None:
         # Mock bucket and blob
         mock_bucket = MagicMock()
         self.mock_client.get_bucket.return_value = mock_bucket
@@ -577,7 +577,7 @@ class TestGCSStorageMixinGetBytesStream(unittest.TestCase):
             start, end, total, range_size = validate_content_range(self, metadata, 0, 1023, 1024)
             self.assertEqual(range_size, 1024)
 
-    def test_get_bytes_stream_with_range_header(self):
+    def test_get_bytes_stream_with_range_header(self) -> None:
         """Test that range headers are properly processed and ContentRange is correctly formatted"""
         # Mock bucket and blob
         mock_bucket = MagicMock()
@@ -625,7 +625,7 @@ class TestGCSStorageMixinGetBytesStream(unittest.TestCase):
             # Check status code is 206 (Partial Content)
             self.assertEqual(metadata['StatusCode'], 206)
 
-    def test_get_bytes_stream_large_range(self):
+    def test_get_bytes_stream_large_range(self) -> None:
         """Test behavior when requesting a range larger than MAX_RANGE_SIZE"""
         # Mock bucket and blob
         mock_bucket = MagicMock()
@@ -687,7 +687,7 @@ class TestGCSStorageMixinGetBytesStream(unittest.TestCase):
             self.assertEqual(end, adjusted_end)
             self.assertEqual(total, file_size)
 
-    def test_get_bytes_stream_exception(self):
+    def test_get_bytes_stream_exception(self) -> None:
         # Set up mock client to raise an exception
         self.mock_client.get_bucket.side_effect = Exception('GCS connection error')
 
@@ -700,7 +700,7 @@ class TestGCSStorageMixinGetBytesStream(unittest.TestCase):
         self.assertIsNone(result_content_type)
         self.assertEqual(metadata, {})
 
-    def test_get_bytes_stream_with_default_content_type(self):
+    def test_get_bytes_stream_with_default_content_type(self) -> None:
         # Mock bucket and blob
         mock_bucket = MagicMock()
         self.mock_client.get_bucket.return_value = mock_bucket

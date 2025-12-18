@@ -48,7 +48,7 @@ class TestLSOFSMIntegration:
         cache.clear()
         CurrentContext.clear()
 
-    def test_project_creation_generates_state(self):
+    def test_project_creation_generates_state(self) -> None:
         """
         Test that creating a project automatically generates a state record.
 
@@ -69,7 +69,7 @@ class TestLSOFSMIntegration:
         assert history[0].state == ProjectStateChoices.CREATED
         assert history[0].transition_name == 'project_created'
 
-    def test_task_creation_generates_state(self):
+    def test_task_creation_generates_state(self) -> None:
         """
         Test that creating a task automatically generates a state record.
 
@@ -90,7 +90,7 @@ class TestLSOFSMIntegration:
         assert len(history) == 1
         assert history[0].state == TaskStateChoices.CREATED
 
-    def test_annotation_creation_generates_state(self):
+    def test_annotation_creation_generates_state(self) -> None:
         """
         Test that creating an annotation automatically generates a state record.
 
@@ -112,7 +112,7 @@ class TestLSOFSMIntegration:
         assert len(history) >= 1
         assert history[0].state == AnnotationStateChoices.SUBMITTED
 
-    def test_cache_functionality(self):
+    def test_cache_functionality(self) -> None:
         """
         Test that StateManager caching works correctly.
 
@@ -135,7 +135,7 @@ class TestLSOFSMIntegration:
         # States should match
         assert state1 == state2
 
-    def test_get_current_state_safe_with_no_state(self):
+    def test_get_current_state_safe_with_no_state(self) -> None:
         """
         Test get_current_state_safe returns None for entities without states.
 
@@ -153,7 +153,7 @@ class TestLSOFSMIntegration:
         state = get_current_state_safe(project)
         assert state is None
 
-    def test_resolve_organization_id_from_entity(self):
+    def test_resolve_organization_id_from_entity(self) -> None:
         """
         Test resolve_organization_id utility function.
 
@@ -173,7 +173,7 @@ class TestLSOFSMIntegration:
         org_id = resolve_organization_id(task)
         assert org_id == self.org.id
 
-    def test_is_fsm_enabled_in_lso(self):
+    def test_is_fsm_enabled_in_lso(self) -> None:
         """
         Test is_fsm_enabled checks feature flag correctly.
 
@@ -184,7 +184,7 @@ class TestLSOFSMIntegration:
         result = is_fsm_enabled(user=self.user)
         assert result is True
 
-    def test_state_manager_error_handling(self):
+    def test_state_manager_error_handling(self) -> None:
         """
         Test StateManager error handling for invalid entities.
 
@@ -207,7 +207,7 @@ class TestLSOFSMIntegration:
 
         assert 'No state model found' in str(exc_info.value)
 
-    def test_warm_cache_bulk_operation(self):
+    def test_warm_cache_bulk_operation(self) -> None:
         """
         Test bulk cache warming for multiple entities.
 
@@ -228,7 +228,7 @@ class TestLSOFSMIntegration:
             state = StateManager.get_current_state_value(task)
             assert state == TaskStateChoices.CREATED
 
-    def test_get_state_history(self):
+    def test_get_state_history(self) -> None:
         """
         Test retrieving state history for an entity.
 
@@ -247,7 +247,7 @@ class TestLSOFSMIntegration:
         assert history[0].state == ProjectStateChoices.CREATED
         assert history[0].transition_name == 'project_created'
 
-    def test_get_state_history_ordering(self):
+    def test_get_state_history_ordering(self) -> None:
         """
         Test that state history is returned in chronological order.
 
@@ -268,7 +268,7 @@ class TestLSOFSMIntegration:
         timestamps = [h.created_at for h in history]
         assert timestamps == sorted(timestamps)
 
-    def test_annotation_from_draft_workflow(self):
+    def test_annotation_from_draft_workflow(self) -> None:
         """
         Test annotation created from draft has correct state.
 
@@ -293,7 +293,7 @@ class TestLSOFSMIntegration:
         state = StateManager.get_current_state_value(annotation)
         assert state == AnnotationStateChoices.SUBMITTED
 
-    def test_state_manager_with_multiple_transitions(self):
+    def test_state_manager_with_multiple_transitions(self) -> None:
         """
         Test that multiple state transitions are recorded correctly.
 
@@ -340,7 +340,7 @@ class TestLSOFSMUtilities:
         cache.clear()
         CurrentContext.clear()
 
-    def test_resolve_organization_id_with_user(self):
+    def test_resolve_organization_id_with_user(self) -> None:
         """
         Test resolve_organization_id with user parameter.
 
@@ -353,7 +353,7 @@ class TestLSOFSMUtilities:
         org_id = resolve_organization_id(project, user=self.user)
         assert org_id is not None
 
-    def test_resolve_organization_id_fallback_to_context(self):
+    def test_resolve_organization_id_fallback_to_context(self) -> None:
         """
         Test resolve_organization_id falls back to CurrentContext.
 
@@ -371,7 +371,7 @@ class TestLSOFSMUtilities:
         org_id = resolve_organization_id(mock_entity)
         assert org_id == self.org.id
 
-    def test_get_current_state_safe_with_state(self):
+    def test_get_current_state_safe_with_state(self) -> None:
         """
         Test get_current_state_safe returns correct state value.
 
@@ -388,7 +388,7 @@ class TestLSOFSMUtilities:
         assert state_value is not None
         assert state_value == ProjectStateChoices.CREATED
 
-    def test_state_manager_handles_concurrent_access(self):
+    def test_state_manager_handles_concurrent_access(self) -> None:
         """
         Test StateManager handles concurrent access correctly.
 
@@ -405,7 +405,7 @@ class TestLSOFSMUtilities:
         # All should return the same state
         assert all(s == ProjectStateChoices.CREATED for s in states)
 
-    def test_get_current_state_value_when_fsm_disabled(self):
+    def test_get_current_state_value_when_fsm_disabled(self) -> None:
         """
         Test get_current_state_value returns None when FSM is disabled.
 
@@ -419,7 +419,7 @@ class TestLSOFSMUtilities:
             result = StateManager.get_current_state_value(project)
             assert result is None
 
-    def test_get_states_in_time_range(self):
+    def test_get_states_in_time_range(self) -> None:
         """
         Test get_states_in_time_range for time-based queries.
 
@@ -440,7 +440,7 @@ class TestLSOFSMUtilities:
         # Should have at least the creation state
         assert len(states) >= 1
 
-    def test_invalidate_cache(self):
+    def test_invalidate_cache(self) -> None:
         """
         Test cache invalidation for entity state.
 
@@ -461,7 +461,7 @@ class TestLSOFSMUtilities:
         state_after = StateManager.get_current_state_value(project)
         assert state_after == ProjectStateChoices.CREATED
 
-    def test_get_current_state_object(self):
+    def test_get_current_state_object(self) -> None:
         """
         Test get_current_state_object returns full state record.
 
@@ -479,7 +479,7 @@ class TestLSOFSMUtilities:
         assert hasattr(state_object, 'triggered_by')
         assert hasattr(state_object, 'transition_name')
 
-    def test_transition_state_fsm_disabled(self):
+    def test_transition_state_fsm_disabled(self) -> None:
         """
         Test transition_state returns True when FSM is disabled.
 
@@ -495,7 +495,7 @@ class TestLSOFSMUtilities:
             )
             assert result is True
 
-    def test_warm_cache_multiple_entities(self):
+    def test_warm_cache_multiple_entities(self) -> None:
         """
         Test warm_cache with multiple entities for bulk operations.
 
@@ -513,7 +513,7 @@ class TestLSOFSMUtilities:
             state = StateManager.get_current_state_value(project)
             assert state == ProjectStateChoices.CREATED
 
-    def test_fsm_disabled_via_current_context(self):
+    def test_fsm_disabled_via_current_context(self) -> None:
         """
         Test CurrentContext.set_fsm_disabled() directly.
 

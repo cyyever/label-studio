@@ -34,10 +34,10 @@ class MockEntity:
 class RegistryTests(TestCase):
     """Tests for registry functionality and edge cases"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.entity = MockEntity()
 
-    def test_registry_state_model_with_denormalizer(self):
+    def test_registry_state_model_with_denormalizer(self) -> None:
         """Test StateModelRegistry with state model that has get_denormalized_fields"""
 
         mock_state_model = Mock()
@@ -58,7 +58,7 @@ class RegistryTests(TestCase):
         result = mock_state_model.get_denormalized_fields(self.entity)
         assert result == {'custom_field': 'denormalized_1'}
 
-    def test_registry_denormalizer_error_handling(self):
+    def test_registry_denormalizer_error_handling(self) -> None:
         """Test error handling when get_denormalized_fields raises an exception"""
 
         mock_state_model = Mock()
@@ -76,7 +76,7 @@ class RegistryTests(TestCase):
 
         assert 'Denormalizer failed' in str(exc_info.value)
 
-    def test_registry_overwrite_warning(self):
+    def test_registry_overwrite_warning(self) -> None:
         """Test warning when overwriting existing registry entries"""
 
         mock_state_model1 = Mock()
@@ -104,7 +104,7 @@ class RegistryTests(TestCase):
             debug_msg = overwrite_call[0][0]
             assert 'Overwriting existing state model' in debug_msg
 
-    def test_registry_clear_methods(self):
+    def test_registry_clear_methods(self) -> None:
         """Test registry clear methods"""
 
         # Add some test data
@@ -133,7 +133,7 @@ class RegistryTests(TestCase):
         assert state_model_registry.get_model('testentity') is None
         assert transition_registry.get_transitions_for_entity('testentity') == {}
 
-    def test_registry_decorator_functions(self):
+    def test_registry_decorator_functions(self) -> None:
         """Test decorator functions for registration"""
 
         # Test state model decorator

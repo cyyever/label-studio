@@ -22,12 +22,12 @@ def ml_backend_for_test_api(ml_backend):
 
 
 @pytest.fixture
-def mock_gethostbyname(mocker):
+def mock_gethostbyname(mocker) -> None:
     mocker.patch('socket.gethostbyname', return_value='321.21.21.21')
 
 
 @pytest.mark.django_db
-def test_ml_backend_set_for_prelabeling(business_client, ml_backend_for_test_api, mock_gethostbyname):
+def test_ml_backend_set_for_prelabeling(business_client, ml_backend_for_test_api, mock_gethostbyname) -> None:
     project = make_project(
         config=dict(
             is_published=True,
@@ -55,7 +55,7 @@ def test_ml_backend_set_for_prelabeling(business_client, ml_backend_for_test_api
 
 
 @pytest.mark.django_db
-def test_ml_backend_not_set_for_prelabeling(business_client, ml_backend_for_test_api, mock_gethostbyname):
+def test_ml_backend_not_set_for_prelabeling(business_client, ml_backend_for_test_api, mock_gethostbyname) -> None:
     """We are not setting it when its already set for another name,
     for example when predictions were uploaded before"""
 
@@ -87,7 +87,7 @@ def test_ml_backend_not_set_for_prelabeling(business_client, ml_backend_for_test
 
 
 @pytest.mark.django_db
-def test_model_version_on_save(business_client, ml_backend_for_test_api, mock_gethostbyname):
+def test_model_version_on_save(business_client, ml_backend_for_test_api, mock_gethostbyname) -> None:
     project = make_project(
         config=dict(
             is_published=True,
@@ -145,7 +145,7 @@ def test_model_version_on_save(business_client, ml_backend_for_test_api, mock_ge
 
 
 @pytest.mark.django_db
-def test_model_version_on_delete(business_client, ml_backend_for_test_api, mock_gethostbyname):
+def test_model_version_on_delete(business_client, ml_backend_for_test_api, mock_gethostbyname) -> None:
     project = make_project(
         config=dict(
             is_published=True,
@@ -193,7 +193,7 @@ def test_model_version_on_delete(business_client, ml_backend_for_test_api, mock_
 
 
 @pytest.mark.django_db
-def test_security_write_only_payload(business_client, ml_backend_for_test_api, mock_gethostbyname):
+def test_security_write_only_payload(business_client, ml_backend_for_test_api, mock_gethostbyname) -> None:
     project = make_project(
         config=dict(
             is_published=True,
@@ -283,7 +283,7 @@ def test_security_write_only_payload(business_client, ml_backend_for_test_api, m
 
 
 @pytest.mark.django_db
-def test_ml_backend_predict_test_api_post_random_true(business_client):
+def test_ml_backend_predict_test_api_post_random_true(business_client) -> None:
     project = make_project(
         config=dict(
             is_published=True,

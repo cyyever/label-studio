@@ -8,6 +8,7 @@ import ujson as json
 from core.utils.io import delete_dir_content, iter_files, json_load, remove_file_or_dir
 
 from .base import BaseForm, BaseStorage, CloudStorage
+from typing import NoReturn
 
 logger = logging.getLogger(__name__)
 
@@ -40,14 +41,14 @@ class JSONStorage(BaseStorage):
     def get(self, id):
         return self.data.get(int(id))
 
-    def set(self, id, value):
+    def set(self, id, value) -> None:
         self.data[int(id)] = value
         self._save()
 
     def __contains__(self, id):
         return id in self.data
 
-    def set_many(self, ids, values):
+    def set_many(self, ids, values) -> None:
         for id, value in zip(ids, values):
             self.data[int(id)] = value
         self._save()
@@ -61,11 +62,11 @@ class JSONStorage(BaseStorage):
     def items(self):
         return self.data.items()
 
-    def remove(self, key):
+    def remove(self, key) -> None:
         self.data.pop(int(key), None)
         self._save()
 
-    def remove_all(self, ids=None):
+    def remove_all(self, ids=None) -> None:
         if ids is None:
             self.data = {}
         else:
@@ -75,11 +76,11 @@ class JSONStorage(BaseStorage):
     def empty(self):
         return len(self.data) == 0
 
-    def sync(self):
+    def sync(self) -> None:
         pass
 
 
-def already_exists_error(what, path):
+def already_exists_error(what, path) -> NoReturn:
     raise RuntimeError(
         '{path} {what} already exists. Use "--force" option to recreate it.'.format(path=path, what=what)
     )
@@ -111,13 +112,13 @@ class DirJSONsStorage(BaseStorage):
     def __contains__(self, id):
         return id in set(self.ids())
 
-    def set(self, id, value):
+    def set(self, id, value) -> None:
         filename = os.path.join(self.path, str(id) + '.json')
         with open(filename, 'w', encoding='utf8') as fout:
             json.dump(value, fout, indent=2, sort_keys=True)
         self.cache[id] = value
 
-    def set_many(self, keys, values):
+    def set_many(self, keys, values) -> NoReturn:
         self.cache.clear()
         raise NotImplementedError
 
@@ -128,7 +129,7 @@ class DirJSONsStorage(BaseStorage):
     def max_id(self):
         return max(self.ids(), default=-1)
 
-    def sync(self):
+    def sync(self) -> None:
         pass
 
     def items(self):
@@ -136,13 +137,13 @@ class DirJSONsStorage(BaseStorage):
             filename = os.path.join(self.path, str(id) + '.json')
             yield id, self.cache[id] if id in self.cache else json_load(filename)
 
-    def remove(self, id):
+    def remove(self, id) -> None:
         filename = os.path.join(self.path, str(id) + '.json')
         if os.path.exists(filename):
             os.remove(filename)
             self.cache.pop(id, None)
 
-    def remove_all(self, ids=None):
+    def remove_all(self, ids=None) -> None:
         if ids is None:
             self.cache.clear()
             delete_dir_content(self.path)
@@ -197,11 +198,11 @@ class ExternalTasksJSONStorage(CloudStorage):
     def _get_client(self):
         pass
 
-    def validate_connection(self):
+    def validate_connection(self) -> None:
         pass
 
     @property
-    def url_prefix(self):
+    def url_prefix(self) -> str:
         return ''
 
     @property
@@ -214,12 +215,12 @@ class ExternalTasksJSONStorage(CloudStorage):
     def _set_value(self, key, value):
         self.data[int(key)] = value
 
-    def set(self, id, value):
+    def set(self, id, value) -> None:
         with self.thread_lock:
             super(ExternalTasksJSONStorage, self).set(id, value)
             self._save()
 
-    def set_many(self, ids, values):
+    def set_many(self, ids, values) -> None:
         with self.thread_lock:
             for id, value in zip(ids, values):
                 super(ExternalTasksJSONStorage, self)._pre_set(id, value)
@@ -244,7 +245,7 @@ class ExternalTasksJSONStorage(CloudStorage):
         self._ids_keys_map.pop(id)
         self._keys_ids_map.pop(full_key)
 
-    def remove(self, id):
+    def remove(self, id) -> None:
         with self.thread_lock:
             id = int(id)
 
@@ -256,7 +257,7 @@ class ExternalTasksJSONStorage(CloudStorage):
             self.data.pop(id, None)
             self._save()
 
-    def remove_all(self, ids=None):
+    def remove_all(self, ids=None) -> None:
         with self.thread_lock:
             remove_ids = self.data if ids is None else ids
 

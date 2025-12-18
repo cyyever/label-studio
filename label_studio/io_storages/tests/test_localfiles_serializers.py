@@ -13,14 +13,14 @@ from projects.models import Project
 from rest_framework.exceptions import ValidationError as DRFValidationError  # type: ignore[import]
 
 
-def test_stringify_detail_handles_nested_structures():
+def test_stringify_detail_handles_nested_structures() -> None:
     """Ensure _stringify_detail flattens nested dict/list/tuple structures."""
     detail = {'path': ['bad', {'nested': ('inner', 'values')}]}
     assert _stringify_detail(detail) == {'path': ['bad', {'nested': ['inner', 'values']}]}
 
 
 @pytest.mark.django_db
-def test_import_serializer_stringifies_validation_detail(settings, tmp_path, project_id):
+def test_import_serializer_stringifies_validation_detail(settings, tmp_path, project_id) -> None:
     """LocalFilesImportStorageSerializer should normalize paths and stringify validation errors."""
     document_root = tmp_path / 'root'
     document_root.mkdir()
@@ -45,7 +45,7 @@ def test_import_serializer_stringifies_validation_detail(settings, tmp_path, pro
 
 
 @pytest.mark.django_db
-def test_export_serializer_wraps_generic_exception(settings, tmp_path, project_id):
+def test_export_serializer_wraps_generic_exception(settings, tmp_path, project_id) -> None:
     """LocalFilesExportStorageSerializer should wrap unexpected exceptions with DRFValidationError."""
     document_root = tmp_path / 'root'
     document_root.mkdir()

@@ -6,7 +6,7 @@ pytestmark = pytest.mark.django_db
 from label_studio_sdk import Client
 
 
-def test_annotation_create_and_update(django_live_url, business_client):
+def test_annotation_create_and_update(django_live_url, business_client) -> None:
     ls = Client(url=django_live_url, api_key=business_client.api_key)
     p = ls.start_project(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 
@@ -33,7 +33,7 @@ def test_annotation_create_and_update(django_live_url, business_client):
     assert updated_annotation['result'][0]['value'] == {'choices': ['Negative']}
 
 
-def test_annotation_marks_task_as_labeled(django_live_url, business_client):
+def test_annotation_marks_task_as_labeled(django_live_url, business_client) -> None:
     ls = Client(url=django_live_url, api_key=business_client.api_key)
     p = ls.start_project(
         title='New Project',

@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 from label_studio.core.redis import is_job_on_worker
 
 
-def test_is_job_on_worker_does_not_call_get_job_ids():
+def test_is_job_on_worker_does_not_call_get_job_ids() -> None:
     """Ensure membership check avoids StartedJobRegistry.get_job_ids, preventing signal usage in threads."""
     fake_connection = MagicMock()
     fake_connection.zscore.return_value = None
@@ -25,7 +25,7 @@ def test_is_job_on_worker_does_not_call_get_job_ids():
         fake_connection.zscore.assert_not_called()
 
 
-def test_is_job_on_worker_safe_from_non_main_thread(monkeypatch):
+def test_is_job_on_worker_safe_from_non_main_thread(monkeypatch) -> None:
     """Simulate the original failure: registry.get_job_ids would raise when used from non-main threads."""
     import signal
 

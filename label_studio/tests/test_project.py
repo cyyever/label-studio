@@ -7,7 +7,7 @@ from users.models import User
 
 
 @pytest.mark.django_db
-def test_update_tasks_counters_and_task_states(business_client):
+def test_update_tasks_counters_and_task_states(business_client) -> None:
     project = make_project({}, business_client.user, use_ml_backend=False)
 
     # CHECK EMPTY LIST
@@ -34,7 +34,7 @@ def test_update_tasks_counters_and_task_states(business_client):
 
 
 @pytest.mark.django_db
-def test_project_all_members(business_client):
+def test_project_all_members(business_client) -> None:
     project = make_project({}, business_client.user, use_ml_backend=False)
     members = project.all_members
 

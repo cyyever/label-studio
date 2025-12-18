@@ -11,7 +11,7 @@ import traceback as tb
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from datetime import datetime
-from typing import Any, Iterator, Union
+from typing import Any, Iterator, Union, NoReturn
 from urllib.parse import urljoin
 
 import django_rq
@@ -76,7 +76,7 @@ class StorageInfo(models.Model):
     traceback = models.TextField(null=True, blank=True, help_text='Traceback report for the last failed sync')
     meta = JSONField('meta', null=True, default=dict, help_text='Meta and debug information about storage processes')
 
-    def info_set_job(self, job_id):
+    def info_set_job(self, job_id) -> None:
         self.last_sync_job = job_id
         self.save(update_fields=['last_sync_job'])
 
@@ -91,7 +91,7 @@ class StorageInfo(models.Model):
 
         self.save(update_fields=['last_sync_job', 'last_sync', 'last_sync_count', 'status', 'meta'])
 
-    def info_set_queued(self):
+    def info_set_queued(self) -> bool:
         if settings.DJANGO_DB == settings.DJANGO_DB_SQLITE:
             self._update_queued_status()
             return True
@@ -117,7 +117,7 @@ class StorageInfo(models.Model):
             self.refresh_from_db()
             return True
 
-    def info_set_in_progress(self):
+    def info_set_in_progress(self) -> None:
         # only QUEUED => IN_PROGRESS transition is possible, because in QUEUED we reset states
         if self.status != self.Status.QUEUED:
             raise ValueError(f'Storage status ({self.status}) must be QUEUED to move it IN_PROGRESS')
@@ -136,7 +136,7 @@ class StorageInfo(models.Model):
         else:
             return datetime.fromisoformat(self.meta['time_failure'])
 
-    def info_set_completed(self, last_sync_count, **kwargs):
+    def info_set_completed(self, last_sync_count, **kwargs) -> None:
         self.status = self.Status.COMPLETED
         self.last_sync = timezone.now()
         self.last_sync_count = last_sync_count
@@ -148,7 +148,7 @@ class StorageInfo(models.Model):
         self.meta.update(kwargs)
         self.save(update_fields=['status', 'meta', 'last_sync', 'last_sync_count'])
 
-    def info_set_completed_with_errors(self, last_sync_count, validation_errors, **kwargs):
+    def info_set_completed_with_errors(self, last_sync_count, validation_errors, **kwargs) -> None:
         self.status = self.Status.COMPLETED_WITH_ERRORS
         self.last_sync = timezone.now()
         self.last_sync_count = last_sync_count
@@ -160,7 +160,7 @@ class StorageInfo(models.Model):
         self.meta.update(kwargs)
         self.save(update_fields=['status', 'meta', 'last_sync', 'last_sync_count', 'traceback'])
 
-    def info_set_failed(self):
+    def info_set_failed(self) -> None:
         self.status = self.Status.FAILED
 
         # Get the current exception info
@@ -205,7 +205,7 @@ class StorageInfo(models.Model):
         self.meta['duration'] = (time_failure - self.time_in_progress).total_seconds()
         self.save(update_fields=['status', 'traceback', 'meta'])
 
-    def info_update_progress(self, last_sync_count, **kwargs):
+    def info_update_progress(self, last_sync_count, **kwargs) -> None:
         # update db counter once per 5 seconds to avid db overloads
         now = timezone.now()
         last_ping = datetime.fromisoformat(self.meta['time_last_ping'])
@@ -229,7 +229,7 @@ class StorageInfo(models.Model):
         for storage in storages:
             storage.health_check()
 
-    def health_check(self):
+    def health_check(self) -> None:
         # get duration between last ping time and now
         now = timezone.now()
         last_ping = datetime.fromisoformat(self.meta.get('time_last_ping', str(now)))
@@ -254,7 +254,7 @@ class StorageInfo(models.Model):
                 f'because the job {self.last_sync_job} has too old ping time'
             )
 
-    def job_health_check(self):
+    def job_health_check(self) -> None:
         Status = self.Status
         if self.status not in [Status.IN_PROGRESS, Status.QUEUED]:
             return
@@ -302,7 +302,7 @@ class Storage(StorageInfo):
 
     synchronizable = models.BooleanField(_('synchronizable'), default=True, help_text='If storage can be synced')
 
-    def validate_connection(self, client=None):
+    def validate_connection(self, client=None) -> NoReturn:
         raise NotImplementedError('validate_connection is not implemented')
 
     class Meta:
@@ -337,10 +337,10 @@ class ImportStorage(Storage):
     def get_data(self, key) -> list[StorageObject]:
         raise NotImplementedError
 
-    def generate_http_url(self, url):
+    def generate_http_url(self, url) -> NoReturn:
         raise NotImplementedError
 
-    def get_bytes_stream(self, uri):
+    def get_bytes_stream(self, uri) -> NoReturn:
         """Get file bytes from storage as a stream and content type.
 
         Args:
@@ -661,11 +661,11 @@ class ImportStorage(Storage):
             # sync is finished, set completed status for storage info
             self.info_set_completed(last_sync_count=tasks_created, tasks_existed=tasks_existed)
 
-    def scan_and_create_links(self):
+    def scan_and_create_links(self) -> None:
         """This is proto method - you can override it, or just replace ImportStorageLink by your own model"""
         self._scan_and_create_links(ImportStorageLink)
 
-    def sync(self):
+    def sync(self) -> None:
         if redis_connected():
             queue_name = 'low'
             queue = django_rq.get_queue(queue_name)
@@ -713,7 +713,7 @@ class ProjectStorageMixin(models.Model):
         help_text='A unique integer value identifying this project.',
     )
 
-    def has_permission(self, user):
+    def has_permission(self, user) -> bool:
         user.project = self.project  # link for activity log
         if self.project.has_permission(user):
             return True
@@ -723,7 +723,7 @@ class ProjectStorageMixin(models.Model):
         abstract = True
 
 
-def import_sync_background(storage_class, storage_id, timeout=settings.RQ_LONG_JOB_TIMEOUT, **kwargs):
+def import_sync_background(storage_class, storage_id, timeout=settings.RQ_LONG_JOB_TIMEOUT, **kwargs) -> None:
     storage = storage_class.objects.get(id=storage_id)
     try:
         storage.scan_and_create_links()
@@ -735,17 +735,17 @@ def import_sync_background(storage_class, storage_id, timeout=settings.RQ_LONG_J
         return
 
 
-def export_sync_background(storage_class, storage_id, **kwargs):
+def export_sync_background(storage_class, storage_id, **kwargs) -> None:
     storage = storage_class.objects.get(id=storage_id)
     storage.save_all_annotations()
 
 
-def export_sync_only_new_background(storage_class, storage_id, **kwargs):
+def export_sync_only_new_background(storage_class, storage_id, **kwargs) -> None:
     storage = storage_class.objects.get(id=storage_id)
     storage.save_only_new_annotations()
 
 
-def storage_background_failure(*args, **kwargs):
+def storage_background_failure(*args, **kwargs) -> None:
     # job is used in rqworker failure, extract storage id from job arguments
     if isinstance(args[0], rq.job.Job):
         sync_job = args[0]
@@ -804,10 +804,10 @@ class ExportStorage(Storage, ProjectStorageMixin):
             # deprecated functionality - save only annotation
             return serializer_class(annotation, context={'project': self.project}).data
 
-    def save_annotation(self, annotation):
+    def save_annotation(self, annotation) -> NoReturn:
         raise NotImplementedError
 
-    def save_annotations(self, annotations: models.QuerySet[Annotation]):
+    def save_annotations(self, annotations: models.QuerySet[Annotation]) -> None:
         annotation_exported = 0
         total_annotations = annotations.count()
         self.info_set_in_progress()
@@ -840,10 +840,10 @@ class ExportStorage(Storage, ProjectStorageMixin):
 
         self.info_set_completed(last_sync_count=annotation_exported, total_annotations=total_annotations)
 
-    def save_all_annotations(self):
+    def save_all_annotations(self) -> None:
         self.save_annotations(Annotation.objects.filter(project=self.project))
 
-    def save_only_new_annotations(self):
+    def save_only_new_annotations(self) -> None:
         """Do not update existing annotations, only ensure that all annotations have an ExportStorageLink"""
         # Get the storage-specific ExportStorageLink model
         storage_link_model = self.links.model
@@ -854,7 +854,7 @@ class ExportStorage(Storage, ProjectStorageMixin):
         )
         self.save_annotations(new_annotations)
 
-    def sync(self, save_only_new_annotations: bool = False):
+    def sync(self, save_only_new_annotations: bool = False) -> None:
         if save_only_new_annotations:
             export_sync_fn = export_sync_only_new_background
         else:
@@ -960,7 +960,7 @@ class ExportStorageLink(models.Model):
             link.save()
         return link
 
-    def has_permission(self, user):
+    def has_permission(self, user) -> bool:
         user.project = self.annotation.project  # link for activity log
         if self.annotation.has_permission(user):
             return True

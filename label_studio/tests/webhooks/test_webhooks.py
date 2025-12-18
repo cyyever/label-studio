@@ -44,7 +44,7 @@ def ml_start_training_webhook(configured_project):
 
 
 @pytest.mark.django_db
-def test_run_webhook(setup_project_dialog, organization_webhook):
+def test_run_webhook(setup_project_dialog, organization_webhook) -> None:
     webhook = organization_webhook
     with requests_mock.Mocker(real_http=True) as m:
         m.register_uri('POST', webhook.url)
@@ -58,7 +58,7 @@ def test_run_webhook(setup_project_dialog, organization_webhook):
 
 
 @pytest.mark.django_db
-def test_emit_webhooks(setup_project_dialog, organization_webhook):
+def test_emit_webhooks(setup_project_dialog, organization_webhook) -> None:
     webhook = organization_webhook
     with requests_mock.Mocker(real_http=True) as m:
         m.register_uri('POST', webhook.url)
@@ -72,7 +72,7 @@ def test_emit_webhooks(setup_project_dialog, organization_webhook):
 
 
 @pytest.mark.django_db
-def test_emit_webhooks_for_instance(setup_project_dialog, organization_webhook):
+def test_emit_webhooks_for_instance(setup_project_dialog, organization_webhook) -> None:
     webhook = organization_webhook
     project_title = 'Projects 1'
     project = Project.objects.create(title=project_title)
@@ -90,7 +90,7 @@ def test_emit_webhooks_for_instance(setup_project_dialog, organization_webhook):
 
 
 @pytest.mark.django_db
-def test_exception_catch(organization_webhook):
+def test_exception_catch(organization_webhook) -> None:
     webhook = organization_webhook
     with requests_mock.Mocker(real_http=True) as m:
         m.register_uri('POST', webhook.url, exc=requests.exceptions.ConnectTimeout)
@@ -100,7 +100,7 @@ def test_exception_catch(organization_webhook):
 
 # PROJECT CREATE/UPDATE/DELETE API
 @pytest.mark.django_db
-def test_webhooks_for_projects(configured_project, business_client, organization_webhook):
+def test_webhooks_for_projects(configured_project, business_client, organization_webhook) -> None:
     webhook = organization_webhook
 
     # create/update/delete project through API
@@ -149,7 +149,7 @@ def test_webhooks_for_projects(configured_project, business_client, organization
 # TASK CREATE/DELETE API
 # WE DON'T SUPPORT UPDATE FOR TASK
 @pytest.mark.django_db
-def test_webhooks_for_tasks(configured_project, business_client, organization_webhook):
+def test_webhooks_for_tasks(configured_project, business_client, organization_webhook) -> None:
     webhook = organization_webhook
     # CREATE
     with requests_mock.Mocker(real_http=True) as m:
@@ -190,7 +190,7 @@ def test_webhooks_for_tasks(configured_project, business_client, organization_we
 
 # TASK CREATE on IMPORT
 @pytest.mark.django_db
-def test_webhooks_for_tasks_import(configured_project, business_client, organization_webhook):
+def test_webhooks_for_tasks_import(configured_project, business_client, organization_webhook) -> None:
     from django.core.files.uploadedfile import SimpleUploadedFile
 
     webhook = organization_webhook
@@ -220,7 +220,7 @@ def test_webhooks_for_tasks_import(configured_project, business_client, organiza
 
 # ANNOTATION CREATE/UPDATE/DELETE
 @pytest.mark.django_db
-def test_webhooks_for_annotation(configured_project, business_client, organization_webhook):
+def test_webhooks_for_annotation(configured_project, business_client, organization_webhook) -> None:
 
     webhook = organization_webhook
     task = configured_project.tasks.all().first()
@@ -318,7 +318,7 @@ def test_webhooks_for_annotation(configured_project, business_client, organizati
 
 # ACTION: DELETE ANNOTATIONS
 @pytest.mark.django_db
-def test_webhooks_for_action_delete_tasks_annotations(configured_project, business_client, organization_webhook):
+def test_webhooks_for_action_delete_tasks_annotations(configured_project, business_client, organization_webhook) -> None:
     webhook = organization_webhook
 
     # create annotations for tasks
@@ -352,7 +352,7 @@ def test_webhooks_for_action_delete_tasks_annotations(configured_project, busine
 
 # ACTION: DELETE TASKS
 @pytest.mark.django_db
-def test_webhooks_for_action_delete_tasks(configured_project, business_client, organization_webhook):
+def test_webhooks_for_action_delete_tasks(configured_project, business_client, organization_webhook) -> None:
     webhook = organization_webhook
     with requests_mock.Mocker(real_http=True) as m:
         m.register_uri('POST', webhook.url)
@@ -375,7 +375,7 @@ def test_webhooks_for_action_delete_tasks(configured_project, business_client, o
 
 # CREATE TASKS FROM STORAGES
 @pytest.mark.django_db
-def test_webhooks_for_tasks_from_storages(configured_project, business_client, organization_webhook):
+def test_webhooks_for_tasks_from_storages(configured_project, business_client, organization_webhook) -> None:
     webhook = organization_webhook
     # CREATE
     with requests_mock.Mocker(real_http=True) as m:
@@ -404,7 +404,7 @@ def test_webhooks_for_tasks_from_storages(configured_project, business_client, o
 
 
 @pytest.mark.django_db
-def test_start_training_webhook(setup_project_dialog, ml_start_training_webhook, business_client):
+def test_start_training_webhook(setup_project_dialog, ml_start_training_webhook, business_client) -> None:
     """
     1. Setup: The test uses the project_webhook fixture, which assumes that a webhook
     is already configured for the project.
@@ -443,7 +443,7 @@ def test_start_training_webhook(setup_project_dialog, ml_start_training_webhook,
 
 
 @pytest.mark.django_db
-def test_webhook_batching_with_feature_flag(configured_project, organization_webhook):
+def test_webhook_batching_with_feature_flag(configured_project, organization_webhook) -> None:
     """Test that webhooks are sent in batches when feature flag is enabled."""
     from unittest.mock import patch
 
@@ -498,7 +498,7 @@ def test_webhook_batching_with_feature_flag(configured_project, organization_web
 
 
 @pytest.mark.django_db
-def test_webhook_no_batching_without_feature_flag(configured_project, organization_webhook):
+def test_webhook_no_batching_without_feature_flag(configured_project, organization_webhook) -> None:
     """Test that webhooks are sent in single request when feature flag is disabled."""
     from unittest.mock import patch
 

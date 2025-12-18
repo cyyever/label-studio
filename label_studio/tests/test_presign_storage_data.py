@@ -39,7 +39,7 @@ class TestTaskResolveStorageUri:
         user = User.objects.create_user(username='testuser', email='testuser@email.com', password='testpassword')
         return user
 
-    def test_missing_parameters(self, view, user):
+    def test_missing_parameters(self, view, user) -> None:
         request = APIRequestFactory().get(reverse('storages:task-storage-data-resolve', kwargs={'task_id': 1}))
 
         request.user = user
@@ -48,7 +48,7 @@ class TestTaskResolveStorageUri:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_task_not_found(self, view, user):
+    def test_task_not_found(self, view, user) -> None:
         # Test case where task doesn't exist in database
         request = APIRequestFactory().get(
             reverse('storages:task-storage-data-resolve', kwargs={'task_id': 2}) + '?fileuri=fileuri'
@@ -59,7 +59,7 @@ class TestTaskResolveStorageUri:
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_task_resolve_returns_none(self, view, task, project, user, monkeypatch):
+    def test_task_resolve_returns_none(self, view, task, project, user, monkeypatch) -> None:
         # Test case where task exists but resolve_storage_uri returns None
         task.resolve_storage_uri.return_value = None
         task.has_permission.return_value = True
@@ -94,7 +94,7 @@ class TestTaskResolveStorageUri:
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_storage_resolution_fails(self, view, task, project, user, monkeypatch):
+    def test_storage_resolution_fails(self, view, task, project, user, monkeypatch) -> None:
         task.resolve_storage_uri.return_value = None
         task.has_permission.return_value = True
         project.get_all_import_storage_objects = []
@@ -121,7 +121,7 @@ class TestTaskResolveStorageUri:
         assert response.status_code == status.HTTP_404_NOT_FOUND
         task.resolve_storage_uri.assert_not_called()
 
-    def test_file_uri_not_hashed(self, view, task, project, user, monkeypatch):
+    def test_file_uri_not_hashed(self, view, task, project, user, monkeypatch) -> None:
         task.has_permission.return_value = True
         project.get_all_import_storage_objects = []
         task.project = project
@@ -147,7 +147,7 @@ class TestTaskResolveStorageUri:
         assert response.status_code == status.HTTP_404_NOT_FOUND
         task.resolve_storage_uri.assert_not_called()
 
-    def test_successful_request(self, view, task, project, user, monkeypatch):
+    def test_successful_request(self, view, task, project, user, monkeypatch) -> None:
         valid_decoded_uri = "s3://hypertext-bucket/file with /spaces and' / ' / quotes.jpg"
         encoded_fileuri = base64.urlsafe_b64encode(valid_decoded_uri.encode()).decode()
 
@@ -191,7 +191,7 @@ class TestTaskResolveStorageUri:
         mock_storage.can_resolve_url.assert_called_with(valid_decoded_uri)
         task.resolve_storage_uri.assert_called_once_with(valid_decoded_uri)
 
-    def test_successful_request_with_long_fileuri(self, view, task, project, user, monkeypatch):
+    def test_successful_request_with_long_fileuri(self, view, task, project, user, monkeypatch) -> None:
         longest_allowable_cloud_storage_path = 'is/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/long/path/that/needs/to/be/1024/characters.png'
         longest_uri = f'aaaaa-bbbb://{longest_allowable_cloud_storage_path}'
         base64_encoded_uri = base64.urlsafe_b64encode(longest_uri.encode()).decode()
@@ -272,7 +272,7 @@ class TestProjectResolveStorageUri:
         user = User.objects.create_user(username='testuser', email='testuser@email.com', password='testpassword')
         return user
 
-    def test_missing_parameters(self, view, user):
+    def test_missing_parameters(self, view, user) -> None:
         request = APIRequestFactory().get(reverse('storages:project-storage-data-resolve', kwargs={'project_id': 1}))
 
         request.user = user
@@ -281,7 +281,7 @@ class TestProjectResolveStorageUri:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_project_not_found(self, view, user):
+    def test_project_not_found(self, view, user) -> None:
         # Test case where project doesn't exist in database
         request = APIRequestFactory().get(
             reverse('storages:project-storage-data-resolve', kwargs={'project_id': 2}) + '?fileuri=fileuri'
@@ -292,7 +292,7 @@ class TestProjectResolveStorageUri:
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_project_resolve_returns_none(self, view, project, user, monkeypatch):
+    def test_project_resolve_returns_none(self, view, project, user, monkeypatch) -> None:
         # Test case where project exists but resolve_storage_uri returns None
         project.resolve_storage_uri.return_value = None
         project.has_permission.return_value = True
@@ -326,7 +326,7 @@ class TestProjectResolveStorageUri:
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_storage_resolution_fails(self, view, project, user, monkeypatch):
+    def test_storage_resolution_fails(self, view, project, user, monkeypatch) -> None:
         project.resolve_storage_uri.return_value = None
         project.has_permission.return_value = True
 
@@ -351,7 +351,7 @@ class TestProjectResolveStorageUri:
         assert response.status_code == status.HTTP_404_NOT_FOUND
         project.resolve_storage_uri.assert_not_called()
 
-    def test_file_uri_not_hashed(self, view, project, user, monkeypatch):
+    def test_file_uri_not_hashed(self, view, project, user, monkeypatch) -> None:
         project.has_permission.return_value = True
 
         def mock_project_get(*args, **kwargs):
@@ -375,7 +375,7 @@ class TestProjectResolveStorageUri:
         assert response.status_code == status.HTTP_404_NOT_FOUND
         project.resolve_storage_uri.assert_not_called()
 
-    def test_successful_request(self, view, project, user, monkeypatch):
+    def test_successful_request(self, view, project, user, monkeypatch) -> None:
         valid_decoded_uri = "s3://hypertext-bucket/file with /spaces and' / ' / quotes.jpg"
         encoded_fileuri = base64.urlsafe_b64encode(valid_decoded_uri.encode()).decode()
 
@@ -417,7 +417,7 @@ class TestProjectResolveStorageUri:
         mock_storage.can_resolve_url.assert_called_with(valid_decoded_uri)
         project.resolve_storage_uri.assert_called_once_with(valid_decoded_uri)
 
-    def test_successful_request_with_long_fileuri(self, view, project, user, monkeypatch):
+    def test_successful_request_with_long_fileuri(self, view, project, user, monkeypatch) -> None:
         longest_allowable_cloud_storage_path = 'is/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/a/long/path/that/needs/to/be/1024/characters/long/so/that/it/gets/hashedis/long/path/that/needs/to/be/1024/characters.png'
         longest_uri = f'aaaaa-bbbb://{longest_allowable_cloud_storage_path}'
         base64_encoded_uri = base64.urlsafe_b64encode(longest_uri.encode()).decode()

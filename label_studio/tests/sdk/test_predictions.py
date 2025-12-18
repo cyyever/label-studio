@@ -8,7 +8,7 @@ from label_studio_sdk.label_interface import LabelInterface
 from label_studio_sdk.label_interface.objects import PredictionValue, TaskValue
 
 
-def test_predictions_CRUD(django_live_url, business_client):
+def test_predictions_CRUD(django_live_url, business_client) -> None:
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
     li = LabelInterface(LABEL_CONFIG_AND_TASKS['label_config'])
     p = ls.projects.create(title='New Project', label_config=li.config)
@@ -55,7 +55,7 @@ def test_predictions_CRUD(django_live_url, business_client):
     assert predictions[0].id == another_prediction.id
 
 
-def test_create_predictions_with_import(django_live_url, business_client):
+def test_create_predictions_with_import(django_live_url, business_client) -> None:
     ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
     li = LabelInterface(LABEL_CONFIG_AND_TASKS['label_config'])
     p = ls.projects.create(title='New Project', label_config=li.config)
@@ -130,7 +130,7 @@ def test_create_predictions_with_import(django_live_url, business_client):
     assert e.value.body['validation_errors']['model_version'][0].startswith("Model version doesn't exist")
 
 
-def test_projects_import_predictions(django_live_url, business_client):
+def test_projects_import_predictions(django_live_url, business_client) -> None:
     """Import multiple predictions via projects.import_predictions
 
     Purpose:

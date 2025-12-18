@@ -34,7 +34,7 @@ def test_localfiles_data_allows_trailing_slash_in_storage_path(
     project_id,
     settings,
     tmp_path,
-):
+) -> None:
     """Ensure /data/local-files/ works when LocalFilesImportStorage.path has a trailing slash.
 
     This test validates step by step:
@@ -75,7 +75,7 @@ def test_localfiles_data_allows_backslash_paths(
     project_id,
     settings,
     tmp_path,
-):
+) -> None:
     """Ensure storages saved with Windows-style separators keep working."""
     settings.LOCAL_FILES_SERVING_ENABLED = True
     settings.LOCAL_FILES_DOCUMENT_ROOT = str(tmp_path)
@@ -104,7 +104,7 @@ def test_localfiles_data_sets_weak_etag_header(
     project_id,
     settings,
     tmp_path,
-):
+) -> None:
     """Verify first download emits weak ETag along with file payload.
 
     This test validates step by step:
@@ -144,7 +144,7 @@ def test_localfiles_data_returns_not_modified_for_matching_etag(
     project_id,
     settings,
     tmp_path,
-):
+) -> None:
     """Ensure cached clients receive 304 when sending a matching If-None-Match.
 
     This test validates step by step:

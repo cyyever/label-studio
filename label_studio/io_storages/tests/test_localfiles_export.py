@@ -7,7 +7,7 @@ from tasks.tests.factories import AnnotationFactory, TaskFactory
 
 
 @pytest.mark.django_db
-def test_annotation_delete_removes_local_file_when_allowed(settings, tmp_path):
+def test_annotation_delete_removes_local_file_when_allowed(settings, tmp_path) -> None:
     """Ensure annotation deletion removes local export artifacts when permitted.
 
     Steps validated:
@@ -49,7 +49,7 @@ def test_annotation_delete_removes_local_file_when_allowed(settings, tmp_path):
 
 
 @pytest.mark.django_db
-def test_annotation_delete_respects_can_delete_flag(settings, tmp_path):
+def test_annotation_delete_respects_can_delete_flag(settings, tmp_path) -> None:
     """Ensure can_delete_objects=False leaves exported files intact.
 
     Steps validated:

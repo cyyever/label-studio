@@ -378,7 +378,7 @@ def restore_objects(project):
     return task_db, annotation_db
 
 
-def check_urls(urls, runner, match_statuses, project):
+def check_urls(urls, runner, match_statuses, project) -> None:
     statuses = {}
     for url in urls:
         print('-->', url)
@@ -410,7 +410,7 @@ def check_urls(urls, runner, match_statuses, project):
     # print(statuses)  # use this to collect urls -> statuses dict
 
 
-def run(owner, runner):
+def run(owner, runner) -> None:
     """Get all urls from Django and GET/POST/PUT/DELETE them"""
     owner.task_db, owner.annotation_db = restore_objects(owner.project)
     urls = build_urls(owner.project.id, owner.task_db.id, owner.annotation_db.id)
@@ -419,7 +419,7 @@ def run(owner, runner):
 
 
 @pytest.mark.django_db
-def test_all_urls_owner(setup_project_choices):
+def test_all_urls_owner(setup_project_choices) -> None:
     runner = owner = setup_project_choices
     runner.statuses = owner_statuses
     runner.statuses_name = 'owner_statuses'
@@ -427,14 +427,14 @@ def test_all_urls_owner(setup_project_choices):
 
 
 @pytest.mark.django_db
-def test_all_urls_other_business(setup_project_choices, business_client):
+def test_all_urls_other_business(setup_project_choices, business_client) -> None:
     business_client.statuses = other_business_statuses
     business_client.statuses_name = 'other_business_statuses'
     run(setup_project_choices, business_client)
 
 
 @pytest.mark.django_db
-def test_urls_mismatch_with_registered(tmpdir):
+def test_urls_mismatch_with_registered(tmpdir) -> None:
     from core.utils.io import find_file
 
     all_urls_file = find_file('all_urls.json')

@@ -21,7 +21,7 @@ from tasks.models import Annotation, Prediction, Task
         ('predictions', 'ALL', 'Yes', 'cache_predictions_all', True),
     ],
 )
-def test_cache_labels_job(source, control_tag, with_counters, expected_cache_column, use_predictions):
+def test_cache_labels_job(source, control_tag, with_counters, expected_cache_column, use_predictions) -> None:
     # Initialize a test user and project
     User = get_user_model()
     test_user = User.objects.create(username='test_user')

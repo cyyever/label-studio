@@ -112,7 +112,7 @@ _project_for_text_choices_onto_A_B_classes = dict(
     ],
 )
 @pytest.mark.django_db
-def test_next_task(business_client, any_client, project_config, tasks, status_code, expected_response_value_set):
+def test_next_task(business_client, any_client, project_config, tasks, status_code, expected_response_value_set) -> None:
     project = make_project(project_config, business_client.user)
     if _client_is_annotator(any_client):
         invite_client_to_project(any_client, project)
@@ -454,7 +454,7 @@ def test_next_task_with_active_learning(
     num_annotators,
     status_code,
     prelabeling_result,
-):
+) -> None:
 
     project = make_project(project_config, business_client.user, use_ml_backend=False)
     if _client_is_annotator(any_client):
@@ -482,7 +482,7 @@ def test_next_task_with_active_learning(
 
 
 @pytest.mark.django_db
-def test_active_learning_with_uploaded_predictions(business_client):
+def test_active_learning_with_uploaded_predictions(business_client) -> None:
     config = dict(
         title='Test',
         is_published=True,
@@ -536,7 +536,7 @@ def test_active_learning_with_uploaded_predictions(business_client):
 @pytest.mark.skipif(not redis_healthcheck(), reason='Multi user locks only supported with redis enabled')
 @pytest.mark.parametrize('sampling', (Project.UNIFORM, Project.UNCERTAINTY, Project.SEQUENCE))
 @pytest.mark.django_db
-def test_label_races(configured_project, business_client, sampling):
+def test_label_races(configured_project, business_client, sampling) -> None:
     config = dict(
         title='test_label_races',
         is_published=True,
@@ -576,7 +576,7 @@ def test_label_races(configured_project, business_client, sampling):
 @pytest.mark.skipif(not redis_healthcheck(), reason='Multi user locks only supported with redis enabled')
 @pytest.mark.parametrize('sampling', (Project.UNIFORM, Project.UNCERTAINTY, Project.SEQUENCE))
 @pytest.mark.django_db
-def test_label_races_after_all_taken(configured_project, business_client, sampling):
+def test_label_races_after_all_taken(configured_project, business_client, sampling) -> None:
     config = dict(
         title='test_label_races',
         is_published=True,
@@ -625,7 +625,7 @@ def test_label_races_after_all_taken(configured_project, business_client, sampli
 
 
 @pytest.mark.django_db
-def test_breadth_first_simple(business_client):
+def test_breadth_first_simple(business_client) -> None:
     config = dict(
         title='test_label_races',
         is_published=True,
@@ -680,7 +680,7 @@ def test_breadth_first_simple(business_client):
 
 
 @pytest.mark.django_db
-def test_breadth_first_overlap_3(business_client):
+def test_breadth_first_overlap_3(business_client) -> None:
     config = dict(
         title='test_label_races',
         is_published=True,
@@ -731,7 +731,7 @@ def test_breadth_first_overlap_3(business_client):
 
 @pytest.mark.skipif(not redis_healthcheck(), reason='Multi user locks only supported with redis enabled')
 @pytest.mark.django_db
-def test_try_take_last_task_at_the_same_time(business_client):
+def test_try_take_last_task_at_the_same_time(business_client) -> None:
     config = dict(
         title='test_try_take_last_task_at_the_same_time',
         is_published=True,
@@ -784,7 +784,7 @@ def test_try_take_last_task_at_the_same_time(business_client):
 
 @pytest.mark.skipif(not redis_healthcheck(), reason='Multi user locks only supported with redis enabled')
 @pytest.mark.django_db
-def test_breadth_first_with_label_race(configured_project, business_client):
+def test_breadth_first_with_label_race(configured_project, business_client) -> None:
     config = dict(
         title='test_label_races',
         is_published=True,
@@ -849,7 +849,7 @@ def test_breadth_first_with_label_race(configured_project, business_client):
 
 @pytest.mark.skipif(not redis_healthcheck(), reason='Multi user locks only supported with redis enabled')
 @pytest.mark.django_db
-def test_label_race_with_overlap(configured_project, business_client):
+def test_label_race_with_overlap(configured_project, business_client) -> None:
     """
     2 annotators takes and finish annotations one by one
     depending on project settings overlap
@@ -948,7 +948,7 @@ def test_label_race_with_overlap(configured_project, business_client):
 
 @pytest.mark.skipif(not redis_healthcheck(), reason='Multi user locks only supported with redis enabled')
 @pytest.mark.django_db
-def test_label_w_drafts_race_with_overlap(configured_project, business_client):
+def test_label_w_drafts_race_with_overlap(configured_project, business_client) -> None:
     """
     2 annotators takes and leaves with draft annotations one by one
     depending on project settings overlap
@@ -1062,7 +1062,7 @@ def test_label_w_drafts_race_with_overlap(configured_project, business_client):
 
 
 @pytest.mark.django_db
-def test_fetch_final_taken_task(business_client):
+def test_fetch_final_taken_task(business_client) -> None:
     config = dict(
         title='test_label_races',
         is_published=True,
@@ -1123,7 +1123,7 @@ def test_fetch_final_taken_task(business_client):
 
 @pytest.mark.skipif(not redis_healthcheck(), reason='Multi user locks only supported with redis enabled')
 @pytest.mark.django_db
-def test_with_bad_annotation_result(business_client):
+def test_with_bad_annotation_result(business_client) -> None:
     config = dict(
         title='test_with_failed_matching_score',
         is_published=True,
@@ -1243,7 +1243,7 @@ def test_with_bad_annotation_result(business_client):
 @pytest.mark.parametrize('setup_before_upload', (False, True))
 @pytest.mark.parametrize('show_overlap_first', (False, True))
 @pytest.mark.django_db
-def test_overlap_first(business_client, setup_before_upload, show_overlap_first):
+def test_overlap_first(business_client, setup_before_upload, show_overlap_first) -> None:
     c = business_client
     config = dict(
         title='test_overlap_first',

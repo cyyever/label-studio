@@ -13,7 +13,7 @@ class TestSDKPredictionValidation:
     """Comprehensive tests for prediction validation using Label Studio SDK"""
 
     @pytest.fixture(autouse=True)
-    def setup(self, django_db_setup, django_db_blocker):
+    def setup(self, django_db_setup, django_db_blocker) -> None:
         """Set up test environment with user, organization, project, and task using factories"""
         with django_db_blocker.unblock():
             self.user = UserFactory()
@@ -54,7 +54,7 @@ class TestSDKPredictionValidation:
             # Create a task
             self.task = TaskFactory(project=self.project, data={'text': 'John Smith works at Microsoft in Seattle.'})
 
-    def test_valid_prediction_choices(self, django_live_url, business_client):
+    def test_valid_prediction_choices(self, django_live_url, business_client) -> None:
         """Test creating a valid prediction with choices using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -75,7 +75,7 @@ class TestSDKPredictionValidation:
         assert prediction.task == self.task.id
         assert prediction.result == prediction_data['result']
 
-    def test_valid_prediction_labels(self, django_live_url, business_client):
+    def test_valid_prediction_labels(self, django_live_url, business_client) -> None:
         """Test creating a valid prediction with labels using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -99,7 +99,7 @@ class TestSDKPredictionValidation:
         assert prediction.task == self.task.id
         assert prediction.result == prediction_data['result']
 
-    def test_valid_prediction_rating(self, django_live_url, business_client):
+    def test_valid_prediction_rating(self, django_live_url, business_client) -> None:
         """Test creating a valid prediction with rating using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -116,7 +116,7 @@ class TestSDKPredictionValidation:
         assert prediction.task == self.task.id
         assert prediction.result == prediction_data['result']
 
-    def test_valid_prediction_textarea(self, django_live_url, business_client):
+    def test_valid_prediction_textarea(self, django_live_url, business_client) -> None:
         """Test creating a valid prediction with textarea using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -140,7 +140,7 @@ class TestSDKPredictionValidation:
         assert prediction.task == self.task.id
         assert prediction.result == prediction_data['result']
 
-    def test_missing_required_fields(self, django_live_url, business_client):
+    def test_missing_required_fields(self, django_live_url, business_client) -> None:
         """Test prediction with missing required fields using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -160,7 +160,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_invalid_from_name(self, django_live_url, business_client):
+    def test_invalid_from_name(self, django_live_url, business_client) -> None:
         """Test prediction with non-existent from_name using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -182,7 +182,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_invalid_to_name(self, django_live_url, business_client):
+    def test_invalid_to_name(self, django_live_url, business_client) -> None:
         """Test prediction with non-existent to_name using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -204,7 +204,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_type_mismatch(self, django_live_url, business_client):
+    def test_type_mismatch(self, django_live_url, business_client) -> None:
         """Test prediction with type mismatch using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -226,7 +226,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_invalid_choice_value(self, django_live_url, business_client):
+    def test_invalid_choice_value(self, django_live_url, business_client) -> None:
         """Test prediction with invalid choice value using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -248,7 +248,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_invalid_rating_value(self, django_live_url, business_client):
+    def test_invalid_rating_value(self, django_live_url, business_client) -> None:
         """Test prediction with invalid rating value using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -270,7 +270,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_invalid_labels_value(self, django_live_url, business_client):
+    def test_invalid_labels_value(self, django_live_url, business_client) -> None:
         """Test prediction with invalid labels value using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -297,7 +297,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_missing_value_field(self, django_live_url, business_client):
+    def test_missing_value_field(self, django_live_url, business_client) -> None:
         """Test prediction with missing value field using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -319,7 +319,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_empty_result_array(self, django_live_url, business_client):
+    def test_empty_result_array(self, django_live_url, business_client) -> None:
         """Test prediction with empty result array using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -330,7 +330,7 @@ class TestSDKPredictionValidation:
         assert prediction.task == self.task.id
         assert prediction.result == prediction_data['result']
 
-    def test_multiple_regions_mixed_validity(self, django_live_url, business_client):
+    def test_multiple_regions_mixed_validity(self, django_live_url, business_client) -> None:
         """Test prediction with multiple regions where some are valid and some are invalid using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -359,7 +359,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_complex_valid_prediction(self, django_live_url, business_client):
+    def test_complex_valid_prediction(self, django_live_url, business_client) -> None:
         """Test a complex valid prediction with multiple regions using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -397,7 +397,7 @@ class TestSDKPredictionValidation:
         assert prediction.task == self.task.id
         assert prediction.result == prediction_data['result']
 
-    def test_invalid_textarea_value(self, django_live_url, business_client):
+    def test_invalid_textarea_value(self, django_live_url, business_client) -> None:
         """Test prediction with invalid textarea value structure using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -419,7 +419,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_invalid_labels_structure(self, django_live_url, business_client):
+    def test_invalid_labels_structure(self, django_live_url, business_client) -> None:
         """Test prediction with invalid labels structure using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -446,7 +446,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_missing_text_in_labels(self, django_live_url, business_client):
+    def test_missing_text_in_labels(self, django_live_url, business_client) -> None:
         """Test prediction with missing text field in labels using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -473,7 +473,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_invalid_start_end_positions(self, django_live_url, business_client):
+    def test_invalid_start_end_positions(self, django_live_url, business_client) -> None:
         """Test prediction with invalid start/end positions using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
@@ -500,7 +500,7 @@ class TestSDKPredictionValidation:
         with pytest.raises(Exception):
             ls.predictions.create(**prediction_data)
 
-    def test_end_before_start(self, django_live_url, business_client):
+    def test_end_before_start(self, django_live_url, business_client) -> None:
         """Test prediction with end position before start position using SDK"""
         ls = LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 

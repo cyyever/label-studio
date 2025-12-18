@@ -44,7 +44,7 @@ def configured_project_min_annotations_1(configured_project):
 )
 def test_create_annotation(
     caplog, any_client, configured_project_min_annotations_1, result, logtext, ml_upload_called
-):
+) -> None:
     task = Task.objects.first()
     if _client_is_annotator(any_client):
         assert invite_client_to_project(any_client, task.project).status_code == 200
@@ -79,7 +79,7 @@ def test_create_annotation(
 
 
 @pytest.mark.django_db
-def test_create_annotation_with_ground_truth(caplog, any_client, configured_project_min_annotations_1):
+def test_create_annotation_with_ground_truth(caplog, any_client, configured_project_min_annotations_1) -> None:
 
     task = Task.objects.first()
     client_is_annotator = _client_is_annotator(any_client)
@@ -123,7 +123,7 @@ def test_create_annotation_with_ground_truth(caplog, any_client, configured_proj
 
 
 @pytest.mark.django_db
-def test_delete_annotation(business_client, configured_project):
+def test_delete_annotation(business_client, configured_project) -> None:
     task = Task.objects.first()
     annotation = Annotation.objects.create(task=task, project=configured_project, result=[])
     assert task.annotations.count() == 1
@@ -167,7 +167,7 @@ def annotations():
 
 
 @pytest.fixture
-def project_with_max_annotations_2(configured_project):
+def project_with_max_annotations_2(configured_project) -> None:
     configured_project.maximum_annotations = 2
     # configured_project.agreement_method = Project.SINGLE
     configured_project.save()
@@ -200,7 +200,7 @@ def test_accuracy(
     annotations_sequence,
     accuracy,
     is_labeled,
-):
+) -> None:
     client = {'business': business_client, 'annotator': annotator_client}
     task_id = next(iter(annotations.values()))['task']
     task = Task.objects.get(id=task_id)
@@ -216,7 +216,7 @@ def test_accuracy(
 
 
 @pytest.mark.django_db
-def test_accuracy_on_delete(business_client, annotator_client, project_with_max_annotations_2, annotations):
+def test_accuracy_on_delete(business_client, annotator_client, project_with_max_annotations_2, annotations) -> None:
     task_id = next(iter(annotations.values()))['task']
     task = Task.objects.get(id=task_id)
     invite_client_to_project(annotator_client, task.project)

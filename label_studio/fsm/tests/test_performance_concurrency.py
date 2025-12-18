@@ -92,7 +92,7 @@ class PerformanceTests(TestCase):
     and scalability characteristics.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.mock_entity = Mock()
         self.mock_entity.pk = 1
         self.mock_entity._meta.model_name = 'test_entity'
@@ -104,7 +104,7 @@ class PerformanceTests(TestCase):
         transition_registry._transitions.clear()
         transition_registry.register('test_entity', 'performance_test', PerformanceTestTransition)
 
-    def test_single_transition_performance(self):
+    def test_single_transition_performance(self) -> None:
         """
         PERFORMANCE TEST: Measure single transition execution time
 
@@ -145,7 +145,7 @@ class PerformanceTests(TestCase):
 
         assert total_time < 0.005  # Total should be under 5ms
 
-    def test_batch_transition_performance(self):
+    def test_batch_transition_performance(self) -> None:
         """
         PERFORMANCE TEST: Measure batch transition creation and validation
 
@@ -187,7 +187,7 @@ class PerformanceTests(TestCase):
         assert validation_time_per_item < 0.001  # Under 1ms per validation
         assert validation_time < 0.5  # Total batch under 500ms
 
-    def test_registry_performance(self):
+    def test_registry_performance(self) -> None:
         """
         PERFORMANCE TEST: Registry operations under load
 
@@ -227,7 +227,7 @@ class PerformanceTests(TestCase):
         test_class = transition_registry.get_transition('entity_500', 'transition_500')
         assert test_class == PerformanceTestTransition
 
-    def test_pydantic_validation_performance(self):
+    def test_pydantic_validation_performance(self) -> None:
         """
         PERFORMANCE TEST: Pydantic validation performance
 
@@ -267,7 +267,7 @@ class PerformanceTests(TestCase):
         assert len(errors) == error_count
         assert error_time_per_item < 0.01  # Under 10ms per error (errors are slower)
 
-    def test_memory_usage_patterns(self):
+    def test_memory_usage_patterns(self) -> None:
         """
         PERFORMANCE TEST: Memory usage analysis
 
@@ -321,7 +321,7 @@ class ConcurrencyTests(TransactionTestCase):
     that are critical for production systems.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.mock_entity = Mock()
         self.mock_entity.pk = 1
         self.mock_entity._meta.model_name = 'test_entity'
@@ -333,7 +333,7 @@ class ConcurrencyTests(TransactionTestCase):
         transition_registry._transitions.clear()
         transition_registry.register('test_entity', 'concurrency_test', ConcurrencyTestTransition)
 
-    def test_concurrent_transition_creation(self):
+    def test_concurrent_transition_creation(self) -> None:
         """
         CONCURRENCY TEST: Thread-safe transition instance creation
 
@@ -382,7 +382,7 @@ class ConcurrencyTests(TransactionTestCase):
             thread_transitions = [t for t in all_transitions if t.thread_id == thread_id]
             assert len(thread_transitions) == transitions_per_thread
 
-    def test_concurrent_transition_execution(self):
+    def test_concurrent_transition_execution(self) -> None:
         """
         CONCURRENCY TEST: Concurrent transition execution
 
@@ -444,7 +444,7 @@ class ConcurrencyTests(TransactionTestCase):
         thread_ids = [r['transition_data']['thread_id'] for r in execution_results]
         assert set(thread_ids) == set(range(thread_count))
 
-    def test_registry_thread_safety(self):
+    def test_registry_thread_safety(self) -> None:
         """
         CONCURRENCY TEST: Registry thread safety
 
@@ -511,7 +511,7 @@ class ConcurrencyTests(TransactionTestCase):
         assert isinstance(entities, list)
         assert len(entities) > thread_count  # Should have entities from all threads
 
-    def test_context_isolation(self):
+    def test_context_isolation(self) -> None:
         """
         CONCURRENCY TEST: Context isolation between threads
 
@@ -597,7 +597,7 @@ class ConcurrencyTests(TransactionTestCase):
                         != other_result['original_metadata']['thread_specific_id']
                     )
 
-    def test_stress_test_mixed_operations(self):
+    def test_stress_test_mixed_operations(self) -> None:
         """
         STRESS TEST: Mixed operations under load
 

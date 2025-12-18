@@ -10,7 +10,7 @@ from ..utils import project_id  # noqa
 pytestmark = pytest.mark.django_db
 
 
-def test_views_api(business_client, project_id):
+def test_views_api(business_client, project_id) -> None:
     # create
     payload = dict(project=project_id, data={'test': 1})
     response = business_client.post(
@@ -59,7 +59,7 @@ def test_views_api(business_client, project_id):
     assert response.json() == []
 
 
-def test_views_api_filter_project(business_client):
+def test_views_api_filter_project(business_client) -> None:
     # create project
     response = business_client.post(
         '/api/projects/',
@@ -109,7 +109,7 @@ def test_views_api_filter_project(business_client):
     assert response.json()[0]['project'] == project2_id
 
 
-def test_views_api_filters(business_client, project_id):
+def test_views_api_filters(business_client, project_id) -> None:
     # create
     payload = dict(
         project=project_id,
@@ -190,7 +190,7 @@ def test_views_api_filters(business_client, project_id):
     assert response.json()['data'] == updated_payload['data']
 
 
-def test_views_api_nested_filters(business_client, project_id):
+def test_views_api_nested_filters(business_client, project_id) -> None:
     """Test creating views with nested filters using child filters.
 
     This test validates the nested filter structure where a parent filter
@@ -379,7 +379,7 @@ def test_views_api_nested_filters(business_client, project_id):
     assert task3['id'] in task_ids
 
 
-def test_views_api_patch_add_child_filter(business_client, project_id):
+def test_views_api_patch_add_child_filter(business_client, project_id) -> None:
     """Test creating a view with a non-nested filter, then PATCHing it to add a child filter.
 
     This test validates the behavior of updating a view's filter structure by adding
@@ -618,7 +618,7 @@ def test_views_api_patch_add_child_filter(business_client, project_id):
     assert task3['id'] not in task_ids
 
 
-def test_views_ordered_by_id(business_client, project_id):
+def test_views_ordered_by_id(business_client, project_id) -> None:
     views = [{'view_data': 1}, {'view_data': 2}, {'view_data': 3}]
 
     for view in views:
@@ -638,7 +638,7 @@ def test_views_ordered_by_id(business_client, project_id):
     assert ids == sorted(ids)
 
 
-def test_update_views_order(business_client, project_id):
+def test_update_views_order(business_client, project_id) -> None:
     # Create views
     views = [{'view_data': 1}, {'view_data': 2}, {'view_data': 3}]
 

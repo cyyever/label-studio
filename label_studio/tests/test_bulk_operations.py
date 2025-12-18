@@ -12,7 +12,7 @@ from label_studio.tests.test_data.gen_tasks_and_annotations import gen_tasks
 
 
 @pytest.mark.django_db
-def test_load_tasks_and_annotations(business_client, annotator_client, configured_project):
+def test_load_tasks_and_annotations(business_client, annotator_client, configured_project) -> None:
     """
         this test loads tasks_and_annotations.json
         with 1000 tasks and 5000 annotations and recalc accuracy

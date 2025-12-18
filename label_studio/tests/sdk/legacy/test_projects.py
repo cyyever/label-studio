@@ -6,7 +6,7 @@ pytestmark = pytest.mark.django_db
 from label_studio_sdk import Client
 
 
-def test_start_and_get_project(django_live_url, business_client):
+def test_start_and_get_project(django_live_url, business_client) -> None:
     ls = Client(url=django_live_url, api_key=business_client.api_key)
     p = ls.start_project(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 
@@ -15,7 +15,7 @@ def test_start_and_get_project(django_live_url, business_client):
     assert project.title == 'New Project'
 
 
-def test_delete_project(django_live_url, business_client):
+def test_delete_project(django_live_url, business_client) -> None:
     ls = Client(url=django_live_url, api_key=business_client.api_key)
     p = ls.start_project(title='New Project', label_config=LABEL_CONFIG_AND_TASKS['label_config'])
 

@@ -43,7 +43,7 @@ def create_sdk_client(django_live_url: str, business_client) -> LabelStudio:
     return LabelStudio(base_url=django_live_url, api_key=business_client.api_key)
 
 
-def setup_fsm_context(user):
+def setup_fsm_context(user) -> None:
     """
     Set up CurrentContext for FSM operations.
 
@@ -68,7 +68,7 @@ def setup_fsm_context(user):
 # ============================================================================
 
 
-def assert_task_state(task_id: int, expected_state: str, msg: Optional[str] = None):
+def assert_task_state(task_id: int, expected_state: str, msg: Optional[str] = None) -> None:
     """
     Assert that a task has the expected FSM state.
 
@@ -102,7 +102,7 @@ def assert_task_state(task_id: int, expected_state: str, msg: Optional[str] = No
     )
 
 
-def assert_annotation_state(annotation_id: int, expected_state: str, msg: Optional[str] = None):
+def assert_annotation_state(annotation_id: int, expected_state: str, msg: Optional[str] = None) -> None:
     """
     Assert that an annotation has the expected FSM state.
 
@@ -136,7 +136,7 @@ def assert_annotation_state(annotation_id: int, expected_state: str, msg: Option
     )
 
 
-def assert_draft_state(draft_id: int, expected_state: str, msg: Optional[str] = None):
+def assert_draft_state(draft_id: int, expected_state: str, msg: Optional[str] = None) -> None:
     """
     Assert that a draft has the expected FSM state.
 
@@ -170,7 +170,7 @@ def assert_draft_state(draft_id: int, expected_state: str, msg: Optional[str] = 
     )
 
 
-def assert_project_state(project_id: int, expected_state: str, msg: Optional[str] = None):
+def assert_project_state(project_id: int, expected_state: str, msg: Optional[str] = None) -> None:
     """
     Assert that a project has the expected FSM state.
 
@@ -204,7 +204,7 @@ def assert_project_state(project_id: int, expected_state: str, msg: Optional[str
     )
 
 
-def assert_state_exists(entity, entity_type: str = None):
+def assert_state_exists(entity, entity_type: str = None) -> None:
     """
     Assert that an entity has an FSM state record.
 
@@ -235,7 +235,7 @@ def assert_state_exists(entity, entity_type: str = None):
     )
 
 
-def assert_state_not_exists(entity, entity_type: str = None):
+def assert_state_not_exists(entity, entity_type: str = None) -> None:
     """
     Assert that an entity does NOT have an FSM state record.
 

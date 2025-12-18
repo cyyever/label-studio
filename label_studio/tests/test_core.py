@@ -24,7 +24,7 @@ from rest_framework.exceptions import ValidationError
     ],
 )
 @pytest.mark.django_db
-def test_core_bool_from_request(param, result):
+def test_core_bool_from_request(param, result) -> None:
     params = {'test': param} if param is not None else {}
 
     # incorrect param should call exception
@@ -44,7 +44,7 @@ def test_core_bool_from_request(param, result):
 
 @pytest.mark.parametrize('param, result', [('', None), ('0', 0), ('1', 1), ('10', 10), ('test', None), (None, None)])
 @pytest.mark.django_db
-def test_core_int_from_request(param, result):
+def test_core_int_from_request(param, result) -> None:
     params = {'test': param}
 
     # incorrect param should call exception
@@ -63,7 +63,7 @@ def test_core_int_from_request(param, result):
 
 
 @pytest.mark.django_db
-def test_user_info(business_client):
+def test_user_info(business_client) -> None:
     from label_studio.server import _create_user, _get_user_info
 
     user_data = _get_user_info(business_client.admin.email)
@@ -94,7 +94,7 @@ def test_user_info(business_client):
     ],
 )
 @pytest.mark.django_db
-def test_main(mocker, command_line, result):
+def test_main(mocker, command_line, result) -> None:
     from server import main
 
     mocker.patch('sys.argv', command_line)
@@ -103,7 +103,7 @@ def test_main(mocker, command_line, result):
     assert output == result
 
 
-def test_string_is_url():
+def test_string_is_url() -> None:
     from label_studio.core.utils.common import string_is_url
 
     assert string_is_url('http://test.com') is True
@@ -111,7 +111,7 @@ def test_string_is_url():
     assert string_is_url('xyz') is False
 
 
-def test_get_client_ip():
+def test_get_client_ip() -> None:
     from label_studio.core.utils.common import get_client_ip
 
     ip = get_client_ip(types.SimpleNamespace(META={'HTTP_X_FORWARDED_FOR': '127.0.0.1'}))
@@ -121,14 +121,14 @@ def test_get_client_ip():
     assert ip == '127.0.0.2'
 
 
-def test_timestamp_now():
+def test_timestamp_now() -> None:
     from label_studio.core.utils.common import timestamp_now
 
     t = timestamp_now()
     assert t is not None
 
 
-def test_start_browser():
+def test_start_browser() -> None:
     from label_studio.core.utils.common import start_browser
 
     assert start_browser('http://localhost:8080', True) is None
@@ -177,7 +177,7 @@ def test_start_browser():
     ],
 )
 @pytest.mark.django_db
-def test_core_validate_upload_url(url, block_local_urls, raises_exc):
+def test_core_validate_upload_url(url, block_local_urls, raises_exc) -> None:
 
     if raises_exc is None:
         assert validate_upload_url(url, block_local_urls=block_local_urls) is None

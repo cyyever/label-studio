@@ -9,7 +9,7 @@ from tasks.tests.factories import TaskFactory
 
 @pytest.mark.django_db
 class TestBatchUpdateWithRetry:
-    def test_batch_update_success_without_deadlock(self):
+    def test_batch_update_success_without_deadlock(self) -> None:
         project = ProjectFactory(overlap_cohort_percentage=50, maximum_annotations=3)
 
         tasks = TaskFactory.create_batch(10, project=project)
@@ -21,7 +21,7 @@ class TestBatchUpdateWithRetry:
         updated_tasks = Task.objects.filter(id__in=task_ids, overlap=2)
         assert updated_tasks.count() == 10
 
-    def test_batch_update_with_deadlock_retry(self):
+    def test_batch_update_with_deadlock_retry(self) -> None:
         project = ProjectFactory(overlap_cohort_percentage=50, maximum_annotations=3)
 
         tasks = TaskFactory.create_batch(5, project=project)
@@ -54,7 +54,7 @@ class TestBatchUpdateWithRetry:
         updated_tasks = Task.objects.filter(id__in=task_ids, overlap=2)
         assert updated_tasks.count() == 5
 
-    def test_batch_update_with_multiple_batches(self):
+    def test_batch_update_with_multiple_batches(self) -> None:
         project = ProjectFactory(overlap_cohort_percentage=50, maximum_annotations=3)
 
         tasks = TaskFactory.create_batch(15, project=project)
@@ -66,7 +66,7 @@ class TestBatchUpdateWithRetry:
         updated_tasks = Task.objects.filter(id__in=task_ids, overlap=3, is_labeled=True)
         assert updated_tasks.count() == 15
 
-    def test_batch_update_exceeds_max_retries(self):
+    def test_batch_update_exceeds_max_retries(self) -> None:
         project = ProjectFactory(overlap_cohort_percentage=50, maximum_annotations=3)
 
         tasks = TaskFactory.create_batch(5, project=project)

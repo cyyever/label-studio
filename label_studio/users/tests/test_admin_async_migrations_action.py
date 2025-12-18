@@ -8,7 +8,7 @@ from users.admin import AsyncMigrationStatusAdmin
 
 
 class TestAdminRunScheduledMigrations(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.factory = RequestFactory()
         self.request = self.factory.get('/')
         # Avoid Django messages in tests
@@ -16,7 +16,7 @@ class TestAdminRunScheduledMigrations(TestCase):
         self.admin.message_user = lambda *args, **kwargs: None
 
     @patch('core.redis.start_job_async_or_sync')
-    def test_success_dispatches_job_and_updates_status(self, mock_start):
+    def test_success_dispatches_job_and_updates_status(self, mock_start) -> None:
         m = AsyncMigrationStatus.objects.create(
             name='label_studio.tasks.migrations.0059_task_completion_id_updated_at_idx_async',
             status=AsyncMigrationStatus.STATUS_SCHEDULED,
@@ -37,7 +37,7 @@ class TestAdminRunScheduledMigrations(TestCase):
         assert kwargs.get('reverse') is False
 
     @patch('core.redis.start_job_async_or_sync')
-    def test_invalid_path_marks_error(self, mock_start):
+    def test_invalid_path_marks_error(self, mock_start) -> None:
         m = AsyncMigrationStatus.objects.create(
             name='0059_task_completion_id_updated_at_idx_async',
             status=AsyncMigrationStatus.STATUS_SCHEDULED,
@@ -52,7 +52,7 @@ class TestAdminRunScheduledMigrations(TestCase):
         mock_start.assert_not_called()
 
     @patch('core.redis.start_job_async_or_sync')
-    def test_import_error_marks_error(self, mock_start):
+    def test_import_error_marks_error(self, mock_start) -> None:
         m = AsyncMigrationStatus.objects.create(
             name='label_studio.nonexistentapp.migrations.nonexistent_migration',
             status=AsyncMigrationStatus.STATUS_SCHEDULED,

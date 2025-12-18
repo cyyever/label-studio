@@ -20,7 +20,7 @@ class MockedRequest:
         self.url = url
 
     @property
-    def content_type(self):
+    def content_type(self) -> str:
         return 'application/x-www-form-urlencoded'
 
     @property
@@ -28,7 +28,7 @@ class MockedRequest:
         return {'url': self.url}
 
     @property
-    def user(self):
+    def user(self) -> None:
         return None
 
 
@@ -40,7 +40,7 @@ class TestUploader:
     class TestLoadTasks:
         @mock.patch('core.utils.io.validate_upload_url', wraps=validate_upload_url)
         @pytest.mark.parametrize('url', ('file:///etc/passwd', 'ftp://example.org'))
-        def test_raises_for_unsafe_urls(self, validate_upload_url_mock, url, project):
+        def test_raises_for_unsafe_urls(self, validate_upload_url_mock, url, project) -> None:
             request = MockedRequest(url=url)
 
             with pytest.raises(ValidationError) as e:
@@ -50,7 +50,7 @@ class TestUploader:
             validate_upload_url_mock.assert_called_once_with(url, block_local_urls=False)
 
         @mock.patch('core.utils.io.validate_upload_url', wraps=validate_upload_url)
-        def test_raises_for_local_urls_with_ssrf_protection_enabled(self, validate_upload_url_mock, project, settings):
+        def test_raises_for_local_urls_with_ssrf_protection_enabled(self, validate_upload_url_mock, project, settings) -> None:
             settings.SSRF_PROTECTION_ENABLED = True
             request = MockedRequest(url='http://0.0.0.0')
 
@@ -60,7 +60,7 @@ class TestUploader:
 
             validate_upload_url_mock.assert_called_once_with('http://0.0.0.0', block_local_urls=True)
 
-        def test_local_url_after_redirect(self, project, settings):
+        def test_local_url_after_redirect(self, project, settings) -> None:
             settings.SSRF_PROTECTION_ENABLED = True
             request = MockedRequest(url='http://validurl.com')
 
@@ -75,7 +75,7 @@ class TestUploader:
                 load_tasks(request, project)
             assert 'URL resolves to a reserved network address (block: 127.0.0.0/8)' in str(e.value)
 
-        def test_user_specified_block(self, project, settings):
+        def test_user_specified_block(self, project, settings) -> None:
             settings.SSRF_PROTECTION_ENABLED = True
             settings.USER_ADDITIONAL_BANNED_SUBNETS = ['1.2.3.4']
             request = MockedRequest(url='http://validurl.com')
@@ -98,7 +98,7 @@ class TestUploader:
                 load_tasks(request, project)
             assert 'URL resolves to a reserved network address (block: 198.51.100.0/24)' in str(e.value)
 
-        def test_user_specified_block_without_default(self, project, settings):
+        def test_user_specified_block_without_default(self, project, settings) -> None:
             settings.SSRF_PROTECTION_ENABLED = True
             settings.USER_ADDITIONAL_BANNED_SUBNETS = ['1.2.3.4']
             settings.USE_DEFAULT_BANNED_SUBNETS = False
@@ -128,10 +128,10 @@ class TestUploader:
 
 class TestTasksFileChecks:
     @pytest.mark.parametrize('value', (0, settings.TASKS_MAX_FILE_SIZE - 1))
-    def test_check_tasks_max_file_size_does_not_raise_for_correct_value(self, value):
+    def test_check_tasks_max_file_size_does_not_raise_for_correct_value(self, value) -> None:
         check_tasks_max_file_size(value)
 
-    def test_check_tasks_max_file_size_raises_for_too_big_value(self):
+    def test_check_tasks_max_file_size_raises_for_too_big_value(self) -> None:
         value = settings.TASKS_MAX_FILE_SIZE + 1
 
         with pytest.raises(ValidationError) as e:
@@ -178,7 +178,7 @@ class TestTasksFromUrl:
     @mock.patch('data_import.models.FileUpload.load_tasks_from_uploaded_files')
     def test_valid_extension_no_error(
         self, mock_load_tasks, mock_create_file_upload, mock_ssrf_safe_get, project, user
-    ):
+    ) -> None:
         """Test that valid extension doesn't raise an error"""
         # Create mock response with redirect to a file with valid extension
         mock_response = self.create_mock_response(
@@ -208,7 +208,7 @@ class TestTasksFromUrl:
         assert args[2].name == 'data.json'
 
     @mock.patch('data_import.uploader.ssrf_safe_get')  # Mock where it's used
-    def test_invalid_extension_raises_error(self, mock_ssrf_safe_get, project, user):
+    def test_invalid_extension_raises_error(self, mock_ssrf_safe_get, project, user) -> None:
         """Test that invalid extension raises ValidationError"""
         # Create mock response with redirect to a file with invalid extension
         mock_response = self.create_mock_response(
@@ -230,7 +230,7 @@ class TestTasksFromUrl:
     @mock.patch('data_import.models.FileUpload.load_tasks_from_uploaded_files')
     def test_file_size_within_limit_no_error(
         self, mock_load_tasks, mock_create_file_upload, mock_ssrf_safe_get, project, user
-    ):
+    ) -> None:
         """Test that file size within limit doesn't raise an error"""
         # Create mock response with small file size
         mock_response = self.create_mock_response(
@@ -256,7 +256,7 @@ class TestTasksFromUrl:
         assert file_upload_ids == [1]
 
     @mock.patch('data_import.uploader.ssrf_safe_get')  # Mock where it's used
-    def test_file_size_exceeds_limit_raises_error(self, mock_ssrf_safe_get, project, user):
+    def test_file_size_exceeds_limit_raises_error(self, mock_ssrf_safe_get, project, user) -> None:
         """Test that file size exceeding limit raises ValidationError"""
         # Create mock response with large file size
         mock_response = self.create_mock_response(

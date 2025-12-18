@@ -5,7 +5,7 @@ import pytest
 
 
 @pytest.mark.django_db
-def test_signup_setting(business_client, client, settings):
+def test_signup_setting(business_client, client, settings) -> None:
     settings.DISABLE_SIGNUP_WITHOUT_LINK = True
     response = client.post('/user/signup', data={'email': 'test_user@example.com', 'password': 'test_password'})
     assert response.status_code == 403
@@ -19,7 +19,7 @@ def test_signup_setting(business_client, client, settings):
 
 
 @pytest.mark.django_db
-def test_reset_token(business_client, client, settings):
+def test_reset_token(business_client, client, settings) -> None:
     settings.DISABLE_SIGNUP_WITHOUT_LINK = True
 
     # get invite_url link and check it works
@@ -42,7 +42,7 @@ def test_reset_token(business_client, client, settings):
 
 
 @pytest.mark.django_db
-def test_reset_token_not_valid(business_client, client, settings):
+def test_reset_token_not_valid(business_client, client, settings) -> None:
     settings.DISABLE_SIGNUP_WITHOUT_LINK = False
 
     # disallow if token and does not match
@@ -53,7 +53,7 @@ def test_reset_token_not_valid(business_client, client, settings):
 
 
 @pytest.mark.django_db
-def test_token_get_not_post_shows_form(business_client, client, settings):
+def test_token_get_not_post_shows_form(business_client, client, settings) -> None:
     settings.DISABLE_SIGNUP_WITHOUT_LINK = True
 
     # can't bypass post

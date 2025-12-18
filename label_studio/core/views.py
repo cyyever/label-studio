@@ -21,6 +21,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
+from typing import NoReturn
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +90,7 @@ class TriggerAPIError(APIView):
     permission_classes = ()
 
     @extend_schema(exclude=True)
-    def get(self, request):
+    def get(self, request) -> NoReturn:
         raise Exception('test')
 
 

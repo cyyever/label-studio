@@ -8,7 +8,7 @@ from django.conf import settings
 
 
 @pytest.mark.django_db
-def test_svg_upload_sanitize(setup_project_dialog):
+def test_svg_upload_sanitize(setup_project_dialog) -> None:
     """Upload malicious SVG file - remove harmful content"""
     settings.SVG_SECURITY_CLEANUP = True
 
@@ -38,7 +38,7 @@ def test_svg_upload_sanitize(setup_project_dialog):
 
 
 @pytest.mark.django_db
-def test_svg_upload_invalid_format(setup_project_dialog):
+def test_svg_upload_invalid_format(setup_project_dialog) -> None:
     """Upload invalid SVG file - still accepted"""
     settings.SVG_SECURITY_CLEANUP = True
 
@@ -62,7 +62,7 @@ def test_svg_upload_invalid_format(setup_project_dialog):
 
 
 @pytest.mark.django_db
-def test_svg_upload_do_not_sanitize(setup_project_dialog):
+def test_svg_upload_do_not_sanitize(setup_project_dialog) -> None:
     """Upload SVG file - do not sanitize file content"""
     settings.SVG_SECURITY_CLEANUP = False
 

@@ -19,7 +19,7 @@ class TestProjectSampleTask(TestCase):
     def url(self):
         return reverse('projects:api:project-sample-task', kwargs={'pk': self.project.id})
 
-    def test_sample_task_with_happy_path(self):
+    def test_sample_task_with_happy_path(self) -> None:
         """Test that ProjectSampleTask.post successfully creates a complete sample task with annotations and predictions"""
         client = APIClient()
         client.force_authenticate(user=self.project.created_by)
@@ -86,7 +86,7 @@ class TestProjectSampleTask(TestCase):
             sample_task_with_annotator_id_set['annotations'][0]['completed_by'] = user_id
             assert response_data['sample_task'] == sample_task_with_annotator_id_set
 
-    def test_sample_task_fallback_when_generate_task_fails(self):
+    def test_sample_task_fallback_when_generate_task_fails(self) -> None:
         """Test fallback to project.get_sample_task when LabelInterface.generate_complete_sample_task fails"""
         client = APIClient()
         client.force_authenticate(user=self.project.created_by)
@@ -122,7 +122,7 @@ class TestProjectSampleTask(TestCase):
             assert 'sample_task' in response_data
             assert response_data['sample_task'] == fallback_data
 
-    def test_sample_task_fallback_when_prediction_generation_fails(self):
+    def test_sample_task_fallback_when_prediction_generation_fails(self) -> None:
         """Test fallback to project.get_sample_task when LabelInterface.generate_sample_prediction raises an exception"""
         client = APIClient()
         client.force_authenticate(user=self.project.created_by)
@@ -157,7 +157,7 @@ class TestProjectSampleTask(TestCase):
             assert 'sample_task' in response_data
             assert response_data['sample_task'] == fallback_data
 
-    def test_sample_task_with_include_annotation_and_prediction_false(self):
+    def test_sample_task_with_include_annotation_and_prediction_false(self) -> None:
         """Test that setting include_annotation_and_prediction=False bypasses LabelInterface.generate_complete_sample_task"""
         client = APIClient()
         client.force_authenticate(user=self.project.created_by)
@@ -185,7 +185,7 @@ class TestProjectSampleTask(TestCase):
             mock_get_sample_task.assert_called_once()
             mock_generate_complete.assert_not_called()
 
-    def test_sample_task_default_behavior(self):
+    def test_sample_task_default_behavior(self) -> None:
         """Test that omitting include_annotation_and_prediction defaults to False and uses simple sample task"""
         client = APIClient()
         client.force_authenticate(user=self.project.created_by)

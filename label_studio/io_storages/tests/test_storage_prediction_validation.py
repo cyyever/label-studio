@@ -33,7 +33,7 @@ class TestStoragePredictionValidation:
         """Create API client for testing."""
         return APIClient()
 
-    def test_storage_import_with_valid_prediction(self, project, api_client, set_feature_flag_envvar):
+    def test_storage_import_with_valid_prediction(self, project, api_client, set_feature_flag_envvar) -> None:
         """Test that storage import accepts valid predictions."""
         # Setup API client
         api_client.force_authenticate(user=project.created_by)
@@ -89,7 +89,7 @@ class TestStoragePredictionValidation:
             predictions = predictions_response.json()
             assert len(predictions) == 1
 
-    def test_storage_import_with_invalid_prediction(self, project, api_client, set_feature_flag_envvar):
+    def test_storage_import_with_invalid_prediction(self, project, api_client, set_feature_flag_envvar) -> None:
         """Test that storage import rejects invalid predictions."""
         # Setup API client
         api_client.force_authenticate(user=project.created_by)

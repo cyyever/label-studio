@@ -45,13 +45,13 @@ def get_result(text):
 
 
 class UserWorksWithProject(TaskSet):
-    def on_start(self):
+    def on_start(self) -> None:
         r = self.client.get('/api/annotator/projects')
         all_projects = r.json()
         self.project_id = random.choice(all_projects)
 
     @task(100)
-    def complete_task_via_api(self):
+    def complete_task_via_api(self) -> None:
         r = self.client.get('/api/projects/%i/next/' % self.project_id, name='/api/projects/<id>/next')
         task = r.json()
         task_id = task['id']
@@ -64,7 +64,7 @@ class UserWorksWithProject(TaskSet):
         )
 
     @task(1)
-    def stop(self):
+    def stop(self) -> None:
         self.interrupt()
 
 
@@ -73,10 +73,10 @@ class WebsiteUser(HttpUser):
 
     tasks = {UserWorksWithProject: 10}
 
-    def on_start(self):
+    def on_start(self) -> None:
         self.login()
 
-    def login(self):
+    def login(self) -> None:
         response = self.client.get('/')
         csrftoken = response.cookies['csrftoken']
         num_collabs = 100

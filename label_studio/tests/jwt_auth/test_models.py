@@ -24,7 +24,7 @@ def token_backend():
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
-def test_encode_returns_only_header_and_payload(token_backend):
+def test_encode_returns_only_header_and_payload(token_backend) -> None:
     payload = {
         'user_id': 123,
         'exp': 1735689600,  # 2025-01-01
@@ -40,7 +40,7 @@ def test_encode_returns_only_header_and_payload(token_backend):
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
-def test_encode_full_returns_complete_jwt(token_backend):
+def test_encode_full_returns_complete_jwt(token_backend) -> None:
     payload = {
         'user_id': 123,
         'exp': 1735689600,  # 2025-01-01
@@ -55,7 +55,7 @@ def test_encode_full_returns_complete_jwt(token_backend):
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
-def test_encode_vs_encode_full_comparison(token_backend):
+def test_encode_vs_encode_full_comparison(token_backend) -> None:
     payload = {
         'user_id': 123,
         'exp': 1735689600,  # 2025-01-01
@@ -69,7 +69,7 @@ def test_encode_vs_encode_full_comparison(token_backend):
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
-def test_token_lifecycle():
+def test_token_lifecycle() -> None:
     """Test full token lifecycle including creation, access token generation, blacklisting, and validation"""
     user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
     token = LSAPIToken.for_user(user)
@@ -87,7 +87,7 @@ def test_token_lifecycle():
 
 
 @pytest.mark.django_db
-def test_token_creation_and_storage():
+def test_token_creation_and_storage() -> None:
     """Test that tokens are created and stored correctly with truncated format"""
     user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
     token = LSAPIToken.for_user(user)

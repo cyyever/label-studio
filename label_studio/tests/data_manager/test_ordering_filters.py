@@ -44,7 +44,7 @@ from tests.utils import make_annotation, make_annotator, make_prediction, make_t
     ],
 )
 @pytest.mark.django_db
-def test_views_ordering(ordering, element_index, undefined, business_client, project_id):
+def test_views_ordering(ordering, element_index, undefined, business_client, project_id) -> None:
 
     payload = dict(
         project=project_id,
@@ -106,7 +106,7 @@ def test_views_ordering(ordering, element_index, undefined, business_client, pro
 
 
 @pytest.mark.django_db
-def test_views_ordering_task_state():
+def test_views_ordering_task_state() -> None:
     """
     This test verifies that ordering by task state orders by the state progression, and not in alphabetical order.
     """
@@ -368,7 +368,7 @@ def test_views_ordering_task_state():
     ],
 )
 @pytest.mark.django_db
-def test_views_filters(filters, ids, business_client, project_id):
+def test_views_filters(filters, ids, business_client, project_id) -> None:
     project = Project.objects.get(pk=project_id)
     ann1 = make_annotator({'email': 'ann1@testheartex.com'}, project)
     ann2 = make_annotator({'email': 'ann2@testheartex.com'}, project)

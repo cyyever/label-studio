@@ -380,7 +380,7 @@ def make_task(config, project):
     return Task.objects.create(project=project, overlap=project.maximum_annotations, **config)
 
 
-def create_business(user):
+def create_business(user) -> None:
     return None
 
 
@@ -430,7 +430,7 @@ def invite_client_to_project(client, project):
         return SimpleNamespace(status_code=200)
 
 
-def login(client, email, password):
+def login(client, email, password) -> None:
     if User.objects.filter(email=email).exists():
         r = client.post('/user/login/', data={'email': email, 'password': password})
         assert r.status_code == 302, r.status_code
@@ -451,7 +451,7 @@ def _client_is_annotator(client):
     return 'annotator' in client.user.email
 
 
-def save_response(response):
+def save_response(response) -> None:
     fp = os.path.join(settings.TEST_DATA_ROOT, 'tavern-output.json')
     with open(fp, 'w') as f:
         json.dump(response.json(), f)
@@ -473,7 +473,7 @@ def os_independent_path(_, path, add_tempdir=False):
     )
 
 
-def verify_docs(response):
+def verify_docs(response) -> None:
     for _, path in response.json()['paths'].items():
         print(path)
         for _, method in path.items():
@@ -482,7 +482,7 @@ def verify_docs(response):
                 assert 'api' not in method['tags'], f'Need docs for API method {method}'
 
 
-def empty_list(response):
+def empty_list(response) -> None:
     assert len(response.json()) == 0, f'Response should be empty, but is {response.json()}'
 
 
@@ -508,7 +508,7 @@ def save_convert_file_path(response, export_id=None):
         return Box({'convert_file_path': None})
 
 
-def file_exists_in_storage(response, exists=True, file_path=None):
+def file_exists_in_storage(response, exists=True, file_path=None) -> None:
     if not file_path:
         export_id = response.json().get('id')
         export = Export.objects.get(id=export_id)

@@ -8,7 +8,7 @@ from locust import HttpUser, TaskSet, between, task
 
 
 class UserWorksWithProject(TaskSet):
-    def on_start(self):
+    def on_start(self) -> None:
         # user creates the new project
         title = str(uuid4())
         payload = json.dumps(
@@ -32,43 +32,43 @@ class UserWorksWithProject(TaskSet):
                 print(f'Project {self.project_id} has been created by user {self.client.name}')
 
     @task(5)
-    def project_list(self):
+    def project_list(self) -> None:
         self.client.get('/projects/')
 
     @task(5)
-    def project_dashboard(self):
+    def project_dashboard(self) -> None:
         self.client.get('/projects/%i' % self.project_id, name='/projects/<id>')
 
     @task(5)
-    def project_data(self):
+    def project_data(self) -> None:
         self.client.get('/projects/%i/data' % self.project_id, name='/projects/<id>/data')
 
     @task(20)
-    def label_stream(self):
+    def label_stream(self) -> None:
         self.client.get('/projects/%i/label-stream' % self.project_id, name='/projects/<id>/label-stream')
 
     @task(5)
-    def expert_page(self):
+    def expert_page(self) -> None:
         self.client.get('/projects/%i/experts' % self.project_id, name='/projects/<id>/experts')
 
     @task(5)
-    def expert_page(self):  # noqa: F811
+    def expert_page(self) -> None:  # noqa: F811
         self.client.get('/projects/%i/experts' % self.project_id, name='/projects/<id>/experts')
 
     @task(5)
-    def stats(self):
+    def stats(self) -> None:
         self.client.get('/business/stats')
 
     @task(5)
-    def project_stats(self):
+    def project_stats(self) -> None:
         self.client.get('/projects/%i/plots' % self.project_id, name='/projects/<id>/plots')
 
     @task(5)
-    def experts(self):
+    def experts(self) -> None:
         self.client.get('/business/experts')
 
     @task(5)
-    def import_tasks(self):
+    def import_tasks(self) -> None:
         payload = json.dumps([{'text': 'example positive review'}, {'text': 'example negative review'}])
         headers = {'content-type': 'application/json', 'Authorization': f'Token {self.client.token}'}
         self.client.post(
@@ -79,7 +79,7 @@ class UserWorksWithProject(TaskSet):
         )
 
     @task(20)
-    def complete_task_via_api(self):
+    def complete_task_via_api(self) -> None:
         r = self.client.get(
             '/api/projects/%i/tasks' % self.project_id,
             headers={'Authorization': f'Token {self.client.token}'},
@@ -109,7 +109,7 @@ class UserWorksWithProject(TaskSet):
             )
 
     @task(1)
-    def stop(self):
+    def stop(self) -> None:
         self.interrupt()
 
 
@@ -117,10 +117,10 @@ class WebsiteUser(HttpUser):
     wait_time = between(3, 9)
     tasks = {UserWorksWithProject: 10}
 
-    def on_start(self):
+    def on_start(self) -> None:
         self.signup()
 
-    def signup(self):
+    def signup(self) -> None:
         response = self.client.get('/')
         csrftoken = response.cookies['csrftoken']
         username = str(uuid4())

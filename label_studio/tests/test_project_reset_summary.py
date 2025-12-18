@@ -8,7 +8,7 @@ from tests.utils import make_project
 pytestmark = pytest.mark.django_db
 
 
-def test_reset_summary_empty_project(business_client):
+def test_reset_summary_empty_project(business_client) -> None:
     project = make_project(project_choices(), business_client.user, use_ml_backend=False)
     s = project.summary
 
@@ -24,7 +24,7 @@ def test_reset_summary_empty_project(business_client):
         assert getattr(s, field) == {}
 
 
-def test_reset_summary_project_has_drafts(business_client):
+def test_reset_summary_project_has_drafts(business_client) -> None:
     project = make_project(project_choices(), business_client.user, use_ml_backend=False)
 
     r = business_client.post(
@@ -60,7 +60,7 @@ def test_reset_summary_project_has_drafts(business_client):
     assert s.created_labels_drafts == {'some': {'Opossum': 1}}
 
 
-def test_reset_summary_project_has_annotations(business_client):
+def test_reset_summary_project_has_annotations(business_client) -> None:
     project = make_project(project_choices(), business_client.user, use_ml_backend=False)
 
     r = business_client.post(
@@ -95,7 +95,7 @@ def test_reset_summary_project_has_annotations(business_client):
     assert s.created_labels == {'some': {'Opossum': 1}}
 
 
-def test_delete_tasks_and_annotations_clears_created_drafts_annotations_and_labels(business_client):
+def test_delete_tasks_and_annotations_clears_created_drafts_annotations_and_labels(business_client) -> None:
     project = make_project(project_choices(), business_client.user, use_ml_backend=False)
 
     r = business_client.post(
@@ -138,7 +138,7 @@ def test_delete_tasks_and_annotations_clears_created_drafts_annotations_and_labe
         assert getattr(s, field) == {}
 
 
-def test_logged_out_user_cannot_reset_summary(business_client):
+def test_logged_out_user_cannot_reset_summary(business_client) -> None:
     project = make_project(project_choices(), business_client.user, use_ml_backend=False)
     r = business_client.get('/logout')
     assert r.status_code == 302

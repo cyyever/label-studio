@@ -12,7 +12,7 @@ class _BrokenConnection:
         raise RuntimeError('boom')
 
 
-def test_current_db_key_exception_path(monkeypatch, caplog):
+def test_current_db_key_exception_path(monkeypatch, caplog) -> None:
     # Arrange: replace connection with a broken one to trigger the except path
     monkeypatch.setattr(db_utils, 'connection', _BrokenConnection())
 
@@ -37,7 +37,7 @@ class TestBatchDelete:
     """Test suite for the batch_delete utility function"""
 
     @pytest.mark.django_db
-    def test_batch_delete_empty_queryset(self):
+    def test_batch_delete_empty_queryset(self) -> None:
         """Test batch deletion with an empty queryset.
 
         This test verifies that:
@@ -55,7 +55,7 @@ class TestBatchDelete:
         assert total_deleted == 0
 
     @pytest.mark.django_db
-    def test_batch_delete_single_batch(self):
+    def test_batch_delete_single_batch(self) -> None:
         """Test batch deletion when all items fit in a single batch.
 
         This test verifies that:
@@ -75,7 +75,7 @@ class TestBatchDelete:
         assert User.objects.count() == 0
 
     @pytest.mark.django_db
-    def test_batch_delete_multiple_batches(self):
+    def test_batch_delete_multiple_batches(self) -> None:
         """Test batch deletion when items span multiple batches.
 
         This test verifies that:
@@ -96,7 +96,7 @@ class TestBatchDelete:
         assert User.objects.count() == 0
 
     @pytest.mark.django_db
-    def test_batch_delete_with_transaction(self):
+    def test_batch_delete_with_transaction(self) -> None:
         """Test batch deletion within a transaction.
 
         This test verifies that:
@@ -118,7 +118,7 @@ class TestBatchDelete:
         assert User.objects.count() == 0
 
     @pytest.mark.django_db
-    def test_batch_delete_exact_batch_size(self):
+    def test_batch_delete_exact_batch_size(self) -> None:
         """Test batch deletion when item count matches batch size exactly.
 
         This test verifies that:

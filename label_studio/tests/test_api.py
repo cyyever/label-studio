@@ -145,7 +145,7 @@ def any_api_client(request, client_and_token, business_client):
     ],
 )
 @pytest.mark.django_db
-def test_create_project(client_and_token, payload, response, status_code, use_x_api_key):
+def test_create_project(client_and_token, payload, response, status_code, use_x_api_key) -> None:
     client, token = client_and_token
 
     if use_x_api_key:
@@ -206,7 +206,7 @@ def test_create_project(client_and_token, payload, response, status_code, use_x_
     ],
 )
 @pytest.mark.django_db
-def test_patch_project(client_and_token, configured_project, payload, response, status_code):
+def test_patch_project(client_and_token, configured_project, payload, response, status_code) -> None:
     client, token = client_and_token
     payload['organization_pk'] = client.organization_pk
     r = client.patch(
@@ -240,7 +240,7 @@ def test_creating_activating_new_ml_backend(
     current_active_ml_backend_url,
     ml_backend_call_count,
     settings,
-):
+) -> None:
     # Turn off telemetry to avoid requests mock receiving requests from it, to
     # eliminate flakes. TODO(jo): consider implementing this more broadly in test.
     settings.COLLECT_ANALYTICS = False
@@ -268,6 +268,6 @@ def test_creating_activating_new_ml_backend(
 
 
 @pytest.mark.django_db
-def test_delete_annotations(business_client, configured_project):
+def test_delete_annotations(business_client, configured_project) -> None:
     business_client.delete(f'/api/projects/{configured_project.id}/annotations/')
     assert not Annotation.objects.filter(task__project=configured_project.id).exists()
