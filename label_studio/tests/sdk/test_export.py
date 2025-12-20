@@ -16,6 +16,8 @@ def test_project(django_live_url, business_client):
     return ls, project
 
 
+# TODO: support pytest-asyncio, otherwise this test will be skipped
+@pytest.mark.skip(reason='pytest-asyncio is not supported in this version of Label Studio')
 async def test_project_async(django_live_url, business_client):
     ls = AsyncLabelStudio(base_url=django_live_url, api_key=business_client.api_key)
     project = await ls.projects.create(
