@@ -12,7 +12,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
 ]
-requires-python = ">=3.10,<4"
+requires-python = ">=3.13,<4"
 dependencies = [
     "wheel (>=0.38.1,<=0.40.0)",
     "appdirs (>=1.4.3)",
@@ -83,8 +83,8 @@ label-studio = "label_studio.server:main"
 uwsgi = ['pyuwsgi (==2.0.30)', 'uwsgitop (==0.12)']
 
 [tool.ruff]
-# Assume Python 3.10 at a minimum
-target-version = "py310"
+# Assume Python 3.13 at a minimum
+target-version = "py313"
 
 # Same as Blue.
 line-length = 119
@@ -184,7 +184,7 @@ force-exclude = '''
 )/
 '''
 
-target-version = ['py310']
+target-version = ['py313']
 
 [tool.poetry]
 
@@ -212,7 +212,7 @@ exclude = [
 requires-poetry = '>=2.0.0,<3.0.0'
 
 [tool.poetry.dependencies]
-python = ">=3.10,<4"
+python = ">=3.13,<4"
 
 [tool.poetry.group.test.dependencies]
 pytest = "7.2.2"
