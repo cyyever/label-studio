@@ -71,7 +71,7 @@ def test_encode_vs_encode_full_comparison(token_backend):
 @pytest.mark.django_db
 def test_token_lifecycle():
     """Test full token lifecycle including creation, access token generation, blacklisting, and validation"""
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     token = LSAPIToken.for_user(user)
 
     # Test that the token is valid
@@ -89,7 +89,7 @@ def test_token_lifecycle():
 @pytest.mark.django_db
 def test_token_creation_and_storage():
     """Test that tokens are created and stored correctly with truncated format"""
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     token = LSAPIToken.for_user(user)
     assert token is not None
 

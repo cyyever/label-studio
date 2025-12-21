@@ -20,7 +20,6 @@ class Migration(migrations.Migration):
                 ('organization', annoying.fields.AutoOneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, related_name='jwt', serialize=False, to='organizations.organization')),
                 ('api_tokens_enabled', models.BooleanField(default=False, help_text='Enable JWT API token authentication for this organization', verbose_name='JWT API tokens enabled')),
                 ('api_token_ttl_days', models.IntegerField(default=73000, help_text='Number of days before JWT API tokens expire', verbose_name='JWT API token time to live (days)')),
-                ('legacy_api_tokens_enabled', models.BooleanField(default=True, help_text='Enable legacy API token authentication for this organization', verbose_name='legacy API tokens enabled')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
             ],

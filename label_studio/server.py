@@ -171,7 +171,7 @@ def _create_user(input_args, config):
     org = Organization.objects.first()
     if not org:
         org = Organization.create_organization(
-            created_by=user, title='Label Studio', legacy_api_tokens_enabled=input_args.enable_legacy_api_token
+            created_by=user, title='Label Studio'
         )
     else:
         org.add_user(user)

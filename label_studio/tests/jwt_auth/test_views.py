@@ -10,7 +10,7 @@ from tests.utils import mock_feature_flag
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_blacklist_view_returns_404_with_already_blacklisted_token(client):
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     client.force_login(user)
 
     token = LSAPIToken()
@@ -23,7 +23,7 @@ def test_blacklist_view_returns_404_with_already_blacklisted_token(client):
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_blacklist_view_returns_204_with_valid_token(client):
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     client.force_login(user)
 
     token = LSAPIToken()
@@ -37,7 +37,7 @@ def test_blacklist_view_returns_204_with_valid_token(client):
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_create_token_when_no_existing_token():
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     client = APIClient()
     refresh = LSAPIToken()
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
@@ -52,7 +52,7 @@ def test_create_token_when_no_existing_token():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_create_token_when_existing_valid_token():
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     client = APIClient()
     refresh = LSAPIToken()
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
@@ -72,7 +72,7 @@ def test_create_token_when_existing_valid_token():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_create_token_after_blacklisting_previous():
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     client = APIClient()
     refresh = LSAPIToken()
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
@@ -96,7 +96,7 @@ def test_create_token_after_blacklisting_previous():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_rotate_token_success():
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     client = APIClient()
     refresh = LSAPIToken()
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
@@ -127,7 +127,7 @@ def test_rotate_token_success():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_rotate_token_requires_authentication():
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    user = create_user_with_token_settings(api_tokens_enabled=True)
     refresh = LSAPIToken.for_user(user)
     refresh_token = refresh.get_full_jwt()
 

@@ -25,11 +25,6 @@ class JWTSettings(models.Model):
         default=(200 * 365),  # "eternity", 200 years
         help_text='Number of days before JWT API tokens expire',
     )
-    legacy_api_tokens_enabled = models.BooleanField(
-        _('legacy API tokens enabled'),
-        default=False,
-        help_text='Enable legacy API token authentication for this organization',
-    )
 
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)

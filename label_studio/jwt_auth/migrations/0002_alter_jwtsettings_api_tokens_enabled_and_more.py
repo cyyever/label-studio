@@ -19,13 +19,4 @@ class Migration(migrations.Migration):
                 verbose_name="JWT API tokens enabled",
             ),
         ),
-        migrations.AlterField(
-            model_name="jwtsettings",
-            name="legacy_api_tokens_enabled",
-            field=models.BooleanField(
-                default=False,
-                help_text="Enable legacy API token authentication for this organization",
-                verbose_name="legacy API tokens enabled",
-            ),
-        ),
     ]
