@@ -36,7 +36,7 @@ class SkipMissedManifestStaticFilesStorage(ManifestStaticFilesStorage):
                 return ''
             try:
                 content = self.open(filename)
-            except IOError:
+            except OSError:
                 # Handle directory paths and fragments
                 return name
         try:
@@ -48,7 +48,7 @@ class SkipMissedManifestStaticFilesStorage(ManifestStaticFilesStorage):
         root, ext = os.path.splitext(filename)
         if file_hash is not None:
             file_hash = '.%s' % file_hash
-        hashed_name = os.path.join(path, '%s%s%s' % (root, file_hash, ext))
+        hashed_name = os.path.join(path, '{}{}{}'.format(root, file_hash, ext))
         unparsed_name = list(parsed_name)
         unparsed_name[2] = hashed_name
         # Special casing for a @font-face hack, like url(myfont.eot?#iefix")

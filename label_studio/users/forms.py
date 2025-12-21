@@ -38,7 +38,7 @@ class LoginForm(forms.Form):
     persist_session = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
 
     def clean(self, *args, **kwargs):
-        cleaned = super(LoginForm, self).clean()
+        cleaned = super().clean()
         email = cleaned.get('email', '').lower()
         password = cleaned.get('password', '')
         if len(email) >= EMAIL_MAX_LENGTH:

@@ -1,7 +1,6 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import logging
-from typing import List
 
 from django.conf import settings
 from django.db import models
@@ -140,7 +139,7 @@ class ModelProviderConnection(models.Model):
             user.is_administrator or user.is_owner or user.is_manager
         ) and user.active_organization_id == self.organization_id
 
-    def update_budget_total_spent_from_predictions_meta(self, predictions_meta: List[PredictionMeta]):
+    def update_budget_total_spent_from_predictions_meta(self, predictions_meta: list[PredictionMeta]):
         total_cost = sum(meta.total_cost or 0 for meta in predictions_meta)
         # opting for the goofy "self.budget_total_spent or 0" to avoid a db migration
         self.budget_total_spent = (self.budget_total_spent or 0) + total_cost

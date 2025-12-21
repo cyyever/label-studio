@@ -7,7 +7,6 @@ from datetime import timedelta
 from enum import Enum
 from functools import lru_cache
 from json import JSONDecodeError
-from typing import Optional, Union
 from urllib.parse import urlparse
 
 import google.auth
@@ -22,7 +21,7 @@ logger = logging.getLogger(__name__)
 Base64 = bytes
 
 
-class GCS(object):
+class GCS:
     _client_cache = {}
     _credentials_cache = None
     DEFAULT_GOOGLE_PROJECT_ID = gcs.client._marker
@@ -38,9 +37,9 @@ class GCS(object):
     def get_bucket(
         cls,
         ttl_hash: int,
-        google_project_id: Optional[str] = None,
-        google_application_credentials: Optional[Union[str, dict]] = None,
-        bucket_name: Optional[str] = None,
+        google_project_id: str | None = None,
+        google_application_credentials: str | dict | None = None,
+        bucket_name: str | None = None,
     ) -> gcs.Bucket:
 
         client = cls.get_client(
@@ -51,7 +50,7 @@ class GCS(object):
 
     @classmethod
     def get_client(
-        cls, google_project_id: str = None, google_application_credentials: Union[str, dict] = None
+        cls, google_project_id: str = None, google_application_credentials: str | dict = None
     ) -> gcs.Client:
         """
         :param google_project_id:
@@ -85,7 +84,7 @@ class GCS(object):
         cls,
         bucket_name: str,
         google_project_id: str = None,
-        google_application_credentials: Union[str, dict] = None,
+        google_application_credentials: str | dict = None,
         prefix: str = None,
         use_glob_syntax: bool = False,
     ):
@@ -184,7 +183,7 @@ class GCS(object):
         cls,
         url: str,
         presign: bool,
-        google_application_credentials: Union[str, dict] = None,
+        google_application_credentials: str | dict = None,
         google_project_id: str = None,
         presign_ttl: int = 1,
     ) -> str:
@@ -278,7 +277,7 @@ class GCS(object):
     def get_blob_metadata(
         cls,
         url: str,
-        google_application_credentials: Union[str, dict] = None,
+        google_application_credentials: str | dict = None,
         google_project_id: str = None,
         properties_name: list = [],
     ) -> dict:

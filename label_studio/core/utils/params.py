@@ -1,5 +1,6 @@
 import os
-from typing import Callable, Optional, Sequence, TypeVar
+from collections.abc import Callable, Sequence
+from typing import TypeVar
 
 from rest_framework.exceptions import ValidationError
 
@@ -135,7 +136,7 @@ T = TypeVar('T')
 
 
 def get_env_list(
-    key: str, default: Optional[Sequence[T]] = None, value_transform: Callable[[str], T] = str
+    key: str, default: Sequence[T] | None = None, value_transform: Callable[[str], T] = str
 ) -> Sequence[T]:
     """
     "foo,bar,baz" in env variable => ["foo", "bar", "baz"] in python.

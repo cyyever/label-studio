@@ -23,7 +23,7 @@ class AzureBlobImportStorageSerializer(ImportStorageSerializer):
         return result
 
     def validate(self, data):
-        data = super(AzureBlobImportStorageSerializer, self).validate(data)
+        data = super().validate(data)
         storage = self.instance
         if storage:
             for key, value in data.items():

@@ -1,7 +1,7 @@
-from typing import Sequence, Tuple
+from collections.abc import Sequence
 
 
-def sdk_logs(caplog) -> Sequence[Tuple[str, str, str]]:
+def sdk_logs(caplog) -> Sequence[tuple[str, str, str]]:
     """
     Get the SDK logs from the passed caplog fixture. Useful for asserting on SDK log output.
     """

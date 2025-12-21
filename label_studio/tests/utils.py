@@ -66,13 +66,13 @@ def import_from_url_mock(**kwargs):
         with requests_mock.Mocker(real_http=True) as m:
 
             with open('./tests/test_suites/samples/test_1.csv', 'rb') as f:
-                matcher = re.compile('data\.heartextest\.net/test_1\.csv')
+                matcher = re.compile(r'data\.heartextest\.net/test_1\.csv')
 
                 m.get(matcher, body=f, headers={'Content-Length': '100'})
                 yield m
 
 
-class _TestJob(object):
+class _TestJob:
     def __init__(self, job_id):
         self.id = job_id
 

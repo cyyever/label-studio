@@ -5,7 +5,7 @@ This module defines declarative transitions for the Annotation entity.
 Annotation transitions can update related task states via post_transition_hooks.
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 from fsm.registry import register_state_transition
 from fsm.state_choices import AnnotationStateChoices
@@ -22,14 +22,14 @@ class AnnotationSubmittedTransition(ModelChangeTransition):
     Trigger: Automatically on creation only (triggers_on_create=True, triggers_on_update=False)
     """
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return AnnotationStateChoices.SUBMITTED
 
     def get_reason(self, context: TransitionContext) -> str:
         """Return detailed reason for annotation submission."""
         return 'Annotation submitted for review'
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         """Execute annotation submission transition."""
         annotation = context.entity
 
@@ -87,14 +87,14 @@ class AnnotationUpdatedTransition(ModelChangeTransition):
     Trigger: On update (triggers_on_create=False, triggers_on_update=True, force_state_record=True)
     """
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return AnnotationStateChoices.SUBMITTED
 
     def get_reason(self, context: TransitionContext) -> str:
         """Return detailed reason for annotation update."""
         return 'Annotation updated'
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         """Execute annotation update transition."""
         annotation = context.entity
 

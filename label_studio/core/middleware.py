@@ -71,7 +71,7 @@ class CommonMiddlewareAppendSlashWithoutRedirect(CommonMiddleware):
         self.handler.load_middleware()
 
         settings.MIDDLEWARE = old
-        super(CommonMiddlewareAppendSlashWithoutRedirect, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def get_full_path_with_slash(self, request):
         """Return the full path of the request with a trailing slash appended
@@ -83,7 +83,7 @@ class CommonMiddlewareAppendSlashWithoutRedirect(CommonMiddleware):
         return new_path
 
     def process_response(self, request, response):
-        response = super(CommonMiddlewareAppendSlashWithoutRedirect, self).process_response(request, response)
+        response = super().process_response(request, response)
 
         request.editor_keymap = settings.EDITOR_KEYMAP
 

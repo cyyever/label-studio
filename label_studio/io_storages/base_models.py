@@ -8,10 +8,11 @@ import logging
 import os
 import sys
 import traceback as tb
+from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from datetime import datetime
-from typing import Any, Iterator, Union
+from typing import Any
 from urllib.parse import urljoin
 
 import django_rq
@@ -348,10 +349,10 @@ class ImportStorage(Storage):
         """
         raise NotImplementedError
 
-    def can_resolve_url(self, url: Union[str, None]) -> bool:
+    def can_resolve_url(self, url: str | None) -> bool:
         return self.can_resolve_scheme(url)
 
-    def can_resolve_scheme(self, url: Union[str, None]) -> bool:
+    def can_resolve_scheme(self, url: str | None) -> bool:
         if not url:
             return False
         # TODO: Search for occurrences inside string, e.g. for cases like "gs://bucket/file.pdf" or "<embed src='gs://bucket/file.pdf'/>"

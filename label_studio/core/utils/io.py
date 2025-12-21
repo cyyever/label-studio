@@ -50,7 +50,7 @@ def find_node(package_name, node_path, node_type):
         elif node_path in nodes:
             return os.path.join(path, node_path)
     else:
-        raise IOError('Could not find "%s" at package "%s"' % (node_path, basedir))
+        raise OSError('Could not find "{}" at package "{}"'.format(node_path, basedir))
 
 
 def find_file(file):
@@ -125,7 +125,7 @@ def iter_files(root_dir, ext):
 
 
 def json_load(file, int_keys=False):
-    with io.open(file, encoding='utf8') as f:
+    with open(file, encoding='utf8') as f:
         data = json.load(f)
         if int_keys:
             return {int(k): v for k, v in data.items()}
@@ -136,7 +136,7 @@ def json_load(file, int_keys=False):
 def read_yaml(filepath):
     if not os.path.exists(filepath):
         filepath = find_file(filepath)
-    with io.open(filepath, encoding='utf-8') as f:
+    with open(filepath, encoding='utf-8') as f:
         data = yaml.load(f, Loader=yaml.FullLoader)  # nosec
     return data
 
@@ -193,7 +193,7 @@ def validate_upload_url(url, block_local_urls=True):
     domain = parsed_url.host
     try:
         ip = socket.gethostbyname(domain)
-    except socket.error:
+    except OSError:
         from core.utils.exceptions import LabelStudioAPIException
 
         raise LabelStudioAPIException(f"Can't resolve hostname {domain}")

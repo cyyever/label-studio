@@ -211,10 +211,10 @@ def test_export(
 
     # test whether "id" or full task included in results
     if return_task == '0':
-        task_with_annotation = next((t for t in exports if t['id'] == task.id))
+        task_with_annotation = next(t for t in exports if t['id'] == task.id)
         assert task_with_annotation['id'] == task.id
     elif return_task == '1':
-        task_with_annotation = next((t for t in exports if t['id'] == task.id))
+        task_with_annotation = next(t for t in exports if t['id'] == task.id)
         assert task_with_annotation['data'] == task.data
     else:
         raise Exception('Incorrect return_task param in test: ' + str(return_task))

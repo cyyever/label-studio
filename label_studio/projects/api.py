@@ -196,7 +196,7 @@ class ProjectListAPI(generics.ListCreateAPIView):
         return projects.prefetch_related('members', 'created_by')
 
     def get_serializer_context(self):
-        context = super(ProjectListAPI, self).get_serializer_context()
+        context = super().get_serializer_context()
         context['created_by'] = self.request.user
         return context
 
@@ -211,11 +211,11 @@ class ProjectListAPI(generics.ListCreateAPIView):
             raise LabelStudioDatabaseException('Database error during project creation. Try again.')
 
     def get(self, request, *args, **kwargs):
-        return super(ProjectListAPI, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     @api_webhook(WebhookAction.PROJECT_CREATED)
     def post(self, request, *args, **kwargs):
-        return super(ProjectListAPI, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 @method_decorator(
@@ -394,11 +394,11 @@ class ProjectAPI(generics.RetrieveUpdateDestroyAPIView):
         return projects
 
     def get(self, request, *args, **kwargs):
-        return super(ProjectAPI, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     @api_webhook_for_delete(WebhookAction.PROJECT_DELETED)
     def delete(self, request, *args, **kwargs):
-        return super(ProjectAPI, self).delete(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)
 
     @api_webhook(WebhookAction.PROJECT_UPDATED)
     def patch(self, request, *args, **kwargs):
@@ -412,7 +412,7 @@ class ProjectAPI(generics.RetrieveUpdateDestroyAPIView):
             except KeyError:
                 pass
 
-        return super(ProjectAPI, self).patch(request, *args, **kwargs)
+        return super().patch(request, *args, **kwargs)
 
     def perform_destroy(self, instance):
         # we don't need to relaculate counters if we delete whole project
@@ -422,7 +422,7 @@ class ProjectAPI(generics.RetrieveUpdateDestroyAPIView):
     @extend_schema(exclude=True)
     @api_webhook(WebhookAction.PROJECT_UPDATED)
     def put(self, request, *args, **kwargs):
-        return super(ProjectAPI, self).put(request, *args, **kwargs)
+        return super().put(request, *args, **kwargs)
 
 
 # @method_decorator(
@@ -500,7 +500,7 @@ class LabelConfigValidateAPI(generics.CreateAPIView):
     serializer_class = ProjectLabelConfigSerializer
 
     def post(self, request, *args, **kwargs):
-        return super(LabelConfigValidateAPI, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -559,7 +559,7 @@ class ProjectLabelConfigValidateAPI(generics.RetrieveAPIView):
 
     @extend_schema(exclude=True)
     def get(self, request, *args, **kwargs):
-        return super(ProjectLabelConfigValidateAPI, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 class ProjectSummaryAPI(generics.RetrieveAPIView):
@@ -570,7 +570,7 @@ class ProjectSummaryAPI(generics.RetrieveAPIView):
 
     @extend_schema(exclude=True)
     def get(self, *args, **kwargs):
-        return super(ProjectSummaryAPI, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
 
 
 class ProjectSummaryResetAPI(GetParentObjectMixin, generics.CreateAPIView):
@@ -764,14 +764,14 @@ class ProjectTaskListAPI(GetParentObjectMixin, generics.ListCreateAPIView, gener
         return Response(status=204)
 
     def get(self, *args, **kwargs):
-        return super(ProjectTaskListAPI, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
 
     @extend_schema(exclude=True)
     def post(self, *args, **kwargs):
-        return super(ProjectTaskListAPI, self).post(*args, **kwargs)
+        return super().post(*args, **kwargs)
 
     def get_serializer_context(self):
-        context = super(ProjectTaskListAPI, self).get_serializer_context()
+        context = super().get_serializer_context()
         context['project'] = self.parent_object
         return context
 

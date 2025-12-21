@@ -7,7 +7,6 @@ with batch synchronization to the database to reduce database load.
 
 import logging
 from datetime import datetime
-from typing import List, Optional, Set
 
 from core.redis import _redis, redis_connected, start_job_async_or_sync
 from django.conf import settings
@@ -35,7 +34,7 @@ def _get_user_activity_key(user_id: int) -> str:
     return f'{USER_ACTIVITY_KEY_PREFIX}:{user_id}'
 
 
-def set_user_last_activity(user_id: int, timestamp: Optional[datetime] = None) -> bool:
+def set_user_last_activity(user_id: int, timestamp: datetime | None = None) -> bool:
     """
     Set user last activity timestamp in Redis.
 
@@ -79,7 +78,7 @@ def set_user_last_activity(user_id: int, timestamp: Optional[datetime] = None) -
         return False
 
 
-def get_user_last_activity(user_id: int) -> Optional[datetime]:
+def get_user_last_activity(user_id: int) -> datetime | None:
     """
     Get user last activity timestamp from Redis with database fallback.
 
@@ -174,7 +173,7 @@ def reset_activity_counter() -> bool:
         return False
 
 
-def get_batch_user_ids() -> Set[int]:
+def get_batch_user_ids() -> set[int]:
     """
     Get all user IDs from batch set.
 
@@ -194,7 +193,7 @@ def get_batch_user_ids() -> Set[int]:
         return set()
 
 
-def clear_batch_user_ids(user_ids: Optional[Set[int]] = None) -> bool:
+def clear_batch_user_ids(user_ids: set[int] | None = None) -> bool:
     """
     Clear user IDs from batch set.
 
@@ -242,7 +241,7 @@ def should_sync_activities() -> bool:
     return should_sync
 
 
-def get_user_activities_for_sync(user_ids: Set[int]) -> List[dict]:
+def get_user_activities_for_sync(user_ids: set[int]) -> list[dict]:
     """
     Get user activities from Redis for database synchronization.
 
@@ -269,7 +268,7 @@ def get_user_activities_for_sync(user_ids: Set[int]) -> List[dict]:
     return activities
 
 
-def cleanup_redis_activity_data(user_ids: Set[int]) -> bool:
+def cleanup_redis_activity_data(user_ids: set[int]) -> bool:
     """
     Clean up Redis activity data for given user IDs.
 
@@ -362,7 +361,7 @@ def sync_user_activities_to_db(max_users: int = None) -> dict:
         return {'success': False, 'processed': 0, 'errors': 1, 'message': f'Sync failed: {str(e)}'}
 
 
-def _bulk_update_user_activities(activities: List[dict]) -> dict:
+def _bulk_update_user_activities(activities: list[dict]) -> dict:
     """
     Bulk update user activities in database.
 

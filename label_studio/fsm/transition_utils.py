@@ -6,7 +6,7 @@ the new Pydantic-based transition system with existing Label Studio code.
 """
 
 import logging
-from typing import Any, Dict, List, Type
+from typing import Any
 
 from django.db.models import Model
 from fsm.registry import transition_registry
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 StateManager = get_state_manager()
 
 
-def get_available_transitions(entity: Model, user=None, validate: bool = False) -> Dict[str, Type[BaseTransition]]:
+def get_available_transitions(entity: Model, user=None, validate: bool = False) -> dict[str, type[BaseTransition]]:
     """
     Get available transitions for an entity.
 
@@ -104,7 +104,7 @@ def get_available_transitions(entity: Model, user=None, validate: bool = False) 
     return valid_transitions
 
 
-def create_transition_from_dict(transition_class: Type[BaseTransition], data: Dict[str, Any]) -> BaseTransition:
+def create_transition_from_dict(transition_class: type[BaseTransition], data: dict[str, Any]) -> BaseTransition:
     """
     Create a transition instance from a dictionary of data.
 
@@ -126,7 +126,7 @@ def create_transition_from_dict(transition_class: Type[BaseTransition], data: Di
         raise ValueError(f'Failed to create {transition_class.__name__}: {e}')
 
 
-def get_transition_schema(transition_class: Type[BaseTransition]) -> Dict[str, Any]:
+def get_transition_schema(transition_class: type[BaseTransition]) -> dict[str, Any]:
     """
     Get the JSON schema for a transition class.
 
@@ -141,7 +141,7 @@ def get_transition_schema(transition_class: Type[BaseTransition]) -> Dict[str, A
     return transition_class.model_json_schema()
 
 
-def validate_transition_data(transition_class: Type[BaseTransition], data: Dict[str, Any]) -> Dict[str, List[str]]:
+def validate_transition_data(transition_class: type[BaseTransition], data: dict[str, Any]) -> dict[str, list[str]]:
     """
     Validate transition data without creating an instance.
 
@@ -169,7 +169,7 @@ def validate_transition_data(transition_class: Type[BaseTransition], data: Dict[
         return errors
 
 
-def get_entity_state_flow(entity: Model) -> List[Dict[str, Any]]:
+def get_entity_state_flow(entity: Model) -> list[dict[str, Any]]:
     """
     Get a summary of the state flow for an entity type.
 

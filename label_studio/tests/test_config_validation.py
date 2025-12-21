@@ -1,7 +1,6 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import glob
-import io
 import json
 import logging
 import os
@@ -121,7 +120,7 @@ def test_parse_all_configs():
     result = [y for x in os.walk(folder_wildcard) for y in glob.glob(os.path.join(x[0], '*.xml'))]
     for file in result:
         print(f'Parsing config: {file}')
-        with open(file, mode='r') as f:
+        with open(file) as f:
             config = f.read()
             assert parse_config(config)
             assert parse_config_to_json(config)
@@ -209,7 +208,7 @@ def test_parse_wrong_xml(business_client, project_id):
 
 @pytest.mark.django_db
 def test_label_config_versions(business_client, project_id):
-    with io.open(os.path.join(os.path.dirname(__file__), 'test_data/data_for_test_label_config_matrix.yml')) as f:
+    with open(os.path.join(os.path.dirname(__file__), 'test_data/data_for_test_label_config_matrix.yml')) as f:
         test_suites = yaml.safe_load(f)
     for test_name, test_content in test_suites.items():
         payload = {'label_config': test_content['label_config']}

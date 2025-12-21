@@ -57,7 +57,7 @@ class ImportStorageDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(exclude=True)
     def put(self, request, *args, **kwargs):
-        return super(ImportStorageDetailAPI, self).put(request, *args, **kwargs)
+        return super().put(request, *args, **kwargs)
 
 
 class ExportStorageListAPI(generics.ListCreateAPIView):
@@ -111,7 +111,7 @@ class ExportStorageDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
     @extend_schema(exclude=True)
     def put(self, request, *args, **kwargs):
-        return super(ExportStorageDetailAPI, self).put(request, *args, **kwargs)
+        return super().put(request, *args, **kwargs)
 
 
 class ImportStorageSyncAPI(generics.GenericAPIView):

@@ -201,28 +201,28 @@ class UserAPI(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def get_serializer_context(self):
-        context = super(UserAPI, self).get_serializer_context()
+        context = super().get_serializer_context()
         context['user'] = self.request.user
         return context
 
     def update(self, request, *args, **kwargs):
-        return super(UserAPI, self).update(request, *args, **kwargs)
+        return super().update(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        return super(UserAPI, self).list(request, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
-        return super(UserAPI, self).create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         instance = serializer.save()
         self.request.user.active_organization.add_user(instance)
 
     def retrieve(self, request, *args, **kwargs):
-        return super(UserAPI, self).retrieve(request, *args, **kwargs)
+        return super().retrieve(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
-        result = super(UserAPI, self).partial_update(request, *args, **kwargs)
+        result = super().partial_update(request, *args, **kwargs)
 
         # throw MethodNotAllowed if read-only fields are attempted to be updated
         read_only_fields = self.get_serializer_class().Meta.read_only_fields
@@ -242,7 +242,7 @@ class UserAPI(viewsets.ModelViewSet):
         return result
 
     def destroy(self, request, *args, **kwargs):
-        return super(UserAPI, self).destroy(request, *args, **kwargs)
+        return super().destroy(request, *args, **kwargs)
 
 
 @method_decorator(
@@ -338,7 +338,7 @@ class UserWhoAmIAPI(generics.RetrieveAPIView):
         return self.request.user
 
     def get(self, request, *args, **kwargs):
-        return super(UserWhoAmIAPI, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 @method_decorator(

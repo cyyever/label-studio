@@ -62,11 +62,11 @@ def resolve_s3_url(url, client, presign=True, expires_in=3600):
         logger.warning(f"Can't generate presigned URL. Reason: {exc}")
         return url
     else:
-        logger.debug('Presigned URL {presigned_url} generated for {url}'.format(presigned_url=presigned_url, url=url))
+        logger.debug(f'Presigned URL {presigned_url} generated for {url}')
         return presigned_url
 
 
-class AWS(object):
+class AWS:
     @classmethod
     def get_blob_metadata(
         cls,

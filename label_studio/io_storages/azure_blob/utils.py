@@ -11,7 +11,7 @@ from io_storages.utils import parse_range
 logger = logging.getLogger(__name__)
 
 
-class AZURE(object):
+class AZURE:
     @staticmethod
     def download_stream_response(blob_client, total_size, content_type, range_header, properties, max_range_size=None):
         """Prepare Azure blob streaming response with unified range handling.

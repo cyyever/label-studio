@@ -4,7 +4,6 @@
 import json
 import logging
 import re
-from typing import Union
 from urllib.parse import urlparse
 
 import boto3
@@ -247,7 +246,7 @@ class S3ImportStorageBase(S3StorageMixin, ImportStorage):
         return resolve_s3_url(url, self.get_client(), self.presign, expires_in=self.presign_ttl * 60)
 
     @catch_and_reraise_from_none
-    def can_resolve_url(self, url: Union[str, None]) -> bool:
+    def can_resolve_url(self, url: str | None) -> bool:
         return storage_can_resolve_bucket_url(self, url)
 
     @catch_and_reraise_from_none
@@ -347,7 +346,7 @@ class S3ImportStorageLink(ImportStorageLink):
 
     @classmethod
     def exists(cls, keys, storage) -> set[str]:
-        super_exists = super(S3ImportStorageLink, cls).exists
+        super_exists = super().exists
         # TODO: this is a workaround to be compatible with old keys version - remove it later
         prefix = str(storage.prefix) or ''
         if prefix:

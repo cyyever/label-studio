@@ -11,7 +11,7 @@ imported and registered, allowing LSE to register its own extended versions.
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from django.conf import settings
 from django.db import models
@@ -145,7 +145,7 @@ class BaseState(models.Model):
         return cls.objects.filter(**{entity_field: entity}).order_by('-id').first()
 
     @classmethod
-    def get_current_state_value(cls, entity) -> Optional[str]:
+    def get_current_state_value(cls, entity) -> str | None:
         """
         Get current state value as string using UUID7 natural ordering.
 
@@ -182,7 +182,7 @@ class BaseState(models.Model):
         return UUID7Field.filter_since_time(queryset, since).order_by('id')
 
     @classmethod
-    def get_denormalized_fields(cls, entity) -> Dict[str, Any]:
+    def get_denormalized_fields(cls, entity) -> dict[str, Any]:
         """
         Get denormalized fields to include in the state record.
 

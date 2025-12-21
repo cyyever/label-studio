@@ -10,7 +10,7 @@ import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 from unittest.mock import Mock
 
 from django.test import TestCase, TransactionTestCase
@@ -25,7 +25,7 @@ class PerformanceTestTransition(BaseTransition):
     operation_id: int = Field(..., description='Operation identifier')
     data_size: int = Field(1, description='Size of data to process')
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return 'PROCESSED'
 
     @classmethod
@@ -38,7 +38,7 @@ class PerformanceTestTransition(BaseTransition):
             raise TransitionValidationError('Invalid data size')
         return True
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         # Simulate processing work
         return {
             'operation_id': self.operation_id,
@@ -56,7 +56,7 @@ class ConcurrencyTestTransition(BaseTransition):
     sleep_duration: float = Field(0.0, description='Simulate processing delay')
     execution_order: list = Field(default_factory=list, description='Track execution order')
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return f'PROCESSED_BY_THREAD_{self.thread_id}'
 
     @classmethod
@@ -68,7 +68,7 @@ class ConcurrencyTestTransition(BaseTransition):
         self.execution_order.append(f'validate_{self.thread_id}_{time.time()}')
         return True
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         # Record transition timing
         self.execution_order.append(f'transition_{self.thread_id}_{time.time()}')
 

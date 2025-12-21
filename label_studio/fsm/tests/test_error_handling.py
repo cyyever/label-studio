@@ -10,7 +10,7 @@ import gc
 import threading
 import weakref
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
@@ -25,14 +25,14 @@ class EdgeCaseTransition(BaseTransition):
 
     edge_case_data: Any = Field(None, description='Data for edge case testing')
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return 'EDGE_CASE_PROCESSED'
 
     def validate_transition(self, context: TransitionContext) -> bool:
         # Deliberately minimal validation for edge case testing
         return True
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         return {'edge_case_data': self.edge_case_data, 'processed_at': context.timestamp.isoformat()}
 
 
@@ -42,7 +42,7 @@ class ErrorProneTransition(BaseTransition):
     should_fail: str = Field('no', description='Controls failure behavior')
     failure_stage: str = Field('none', description='Stage at which to fail')
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return 'ERROR_TESTED'
 
     def validate_transition(self, context: TransitionContext) -> bool:
@@ -50,7 +50,7 @@ class ErrorProneTransition(BaseTransition):
             raise TransitionValidationError('Intentional validation failure')
         return True
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         if self.failure_stage == 'transition' and self.should_fail == 'yes':
             raise RuntimeError('Intentional transition failure')
 
@@ -346,7 +346,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         class ValidationErrorTransition(BaseTransition):
             error_type: str = Field(..., description='Type of error to raise')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'ERROR_STATE'
 
             @classmethod
@@ -428,10 +428,10 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
         # Test duplicate registration (should overwrite)
 
         class NewEdgeCaseTransition(BaseTransition):
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'NEW_EDGE_CASE'
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {'type': 'new_implementation'}
 
         # Register with same name
@@ -618,7 +618,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
             resources_allocated: list = Field(default_factory=list, description='Track allocated resources')
             resources_cleaned: list = Field(default_factory=list, description='Track cleaned resources')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'RESOURCE_PROCESSED'
 
             @classmethod
@@ -636,7 +636,7 @@ class EdgeCasesAndErrorHandlingTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {'resource_name': self.resource_name}
 
             def __del__(self):

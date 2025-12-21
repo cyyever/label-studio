@@ -17,7 +17,7 @@ def async_index_creation(db_alias):
 
 def forwards(apps, schema_editor):
     if not schema_editor.connection.vendor.startswith('postgres'):
-        logger.info('Database vendor: {}'.format(schema_editor.connection.vendor))
+        logger.info(f'Database vendor: {schema_editor.connection.vendor}')
         logger.info('Skipping dropping tasks_annotations_result_idx index')
         return
 

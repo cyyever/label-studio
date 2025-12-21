@@ -8,7 +8,7 @@ JSON serialization, generate schemas, and implement real-world patterns.
 
 import json
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
@@ -67,7 +67,7 @@ class APIIntegrationExampleTests(TestCase):
 
             assignee_id: int = Field(..., description='ID of user to assign task to')
             priority: str = Field('normal', description='Task priority level')
-            deadline: Optional[datetime] = Field(None, description='Assignment deadline')
+            deadline: datetime | None = Field(None, description='Assignment deadline')
             assignment_notes: str = Field('', description='Notes about the assignment')
             notify_assignee: bool = Field(True, description='Whether to notify the assignee')
 
@@ -84,7 +84,7 @@ class APIIntegrationExampleTests(TestCase):
                     raise ValueError('Deadline must be in the future')
                 return v
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'ASSIGNED'
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -101,7 +101,7 @@ class APIIntegrationExampleTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'assignee_id': self.assignee_id,
                     'priority': self.priority,
@@ -210,15 +210,15 @@ class APIIntegrationExampleTests(TestCase):
             time_spent_seconds: int = Field(..., ge=1, description='Time spent on annotation in seconds')
             difficulty_level: str = Field('medium', description='Perceived difficulty of the annotation task')
             review_requested: bool = Field(False, description='Whether the annotator requests manual review')
-            tags: List[str] = Field(default_factory=list, description='Optional tags for categorization')
-            metadata: Dict[str, Any] = Field(
+            tags: list[str] = Field(default_factory=list, description='Optional tags for categorization')
+            metadata: dict[str, Any] = Field(
                 default_factory=dict, description='Additional metadata about the annotation process'
             )
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'SUBMITTED'
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'confidence_score': self.confidence_score,
                     'annotation_quality': self.annotation_quality,
@@ -309,7 +309,7 @@ class APIIntegrationExampleTests(TestCase):
             batch_id: str = Field(..., description='Unique identifier for this batch')
             force_update: bool = Field(False, description='Force update even if invalid states')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return self.new_status
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -324,7 +324,7 @@ class APIIntegrationExampleTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'new_status': self.new_status,
                     'update_reason': self.update_reason,
@@ -419,13 +419,13 @@ class APIIntegrationExampleTests(TestCase):
 
             completion_quality: float = Field(..., ge=0.0, le=1.0)
             completion_notes: str = Field('', description='Completion notes')
-            webhook_urls: List[str] = Field(default_factory=list, description='Webhook URLs to notify')
-            notification_data: Dict[str, Any] = Field(default_factory=dict, description='Data to send in webhooks')
-            webhook_responses: List[Dict[str, Any]] = Field(
+            webhook_urls: list[str] = Field(default_factory=list, description='Webhook URLs to notify')
+            notification_data: dict[str, Any] = Field(default_factory=dict, description='Data to send in webhooks')
+            webhook_responses: list[dict[str, Any]] = Field(
                 default_factory=list, description='Webhook response tracking'
             )
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'COMPLETED'
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -433,7 +433,7 @@ class APIIntegrationExampleTests(TestCase):
                     raise TransitionValidationError('Can only complete in-progress tasks')
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'completion_quality': self.completion_quality,
                     'completion_notes': self.completion_notes,
@@ -531,7 +531,7 @@ class APIIntegrationExampleTests(TestCase):
             authorization_token: str = Field(..., description='Authorization token for critical updates')
             backup_required: bool = Field(True, description='Whether backup is required before update')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'CRITICALLY_UPDATED'
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -574,7 +574,7 @@ class APIIntegrationExampleTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'update_type': self.update_type,
                     'severity_level': self.severity_level,
@@ -711,10 +711,10 @@ class APIIntegrationExampleTests(TestCase):
             status: str = Field(..., description='New task status')
             notes: str = Field('', description='Update notes')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return self.status
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'status': self.status,
                     'notes': self.notes,
@@ -727,12 +727,12 @@ class APIIntegrationExampleTests(TestCase):
         class UpdateTaskV2Transition(UpdateTaskV1Transition):
             """Version 2 task update API with enhanced features"""
 
-            priority: Optional[str] = Field(None, description='Task priority')
-            tags: List[str] = Field(default_factory=list, description='Task tags')
-            estimated_hours: Optional[float] = Field(None, ge=0, description='Estimated hours')
-            metadata: Dict[str, Any] = Field(default_factory=dict, description='Additional metadata')
+            priority: str | None = Field(None, description='Task priority')
+            tags: list[str] = Field(default_factory=list, description='Task tags')
+            estimated_hours: float | None = Field(None, ge=0, description='Estimated hours')
+            metadata: dict[str, Any] = Field(default_factory=dict, description='Additional metadata')
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 # Call parent method for base functionality
                 base_data = super().transition(context)
 

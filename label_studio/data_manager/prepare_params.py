@@ -1,14 +1,14 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 from enum import Enum
-from typing import Any, List, Optional, Union
+from typing import Any, Optional
 
 from pydantic import BaseModel, StrictBool, StrictFloat, StrictInt, StrictStr
 
 
 class FilterIn(BaseModel):
-    min: Union[StrictInt, StrictFloat, StrictStr]
-    max: Union[StrictInt, StrictFloat, StrictStr]
+    min: StrictInt | StrictFloat | StrictStr
+    max: StrictInt | StrictFloat | StrictStr
 
 
 class Filter(BaseModel):
@@ -17,7 +17,7 @@ class Filter(BaseModel):
     filter: str
     operator: str
     type: str
-    value: Union[StrictInt, StrictFloat, StrictBool, StrictStr, FilterIn, list]
+    value: StrictInt | StrictFloat | StrictBool | StrictStr | FilterIn | list
 
 
 class ConjunctionEnum(Enum):
@@ -27,25 +27,25 @@ class ConjunctionEnum(Enum):
 
 class Filters(BaseModel):
     conjunction: ConjunctionEnum
-    items: List[Filter]
+    items: list[Filter]
 
 
 class SelectedItems(BaseModel):
     all: bool
-    included: List[int] = []
-    excluded: List[int] = []
+    included: list[int] = []
+    excluded: list[int] = []
 
 
 class PrepareParams(BaseModel):
-    project: Union[int, List[int]]  # Support both single project and multiple projects
-    ordering: List[str] = []
-    selectedItems: Optional[SelectedItems] = None
-    filters: Optional[Filters] = None
-    data: Optional[dict] = None
-    request: Optional[Any] = None
+    project: int | list[int]  # Support both single project and multiple projects
+    ordering: list[str] = []
+    selectedItems: SelectedItems | None = None
+    filters: Filters | None = None
+    data: dict | None = None
+    request: Any | None = None
 
     @property
-    def projects(self) -> List[int]:
+    def projects(self) -> list[int]:
         """Get project IDs as a list, whether single or multiple were provided."""
         if isinstance(self.project, list):
             return self.project
@@ -167,7 +167,7 @@ class Type(CustomEnum):
     Datetime = 'Datetime', "Datetime string in `strftime('%Y-%m-%dT%H:%M:%S.%fZ')` format"
     Boolean = 'Boolean', 'Boolean'
     String = 'String', 'String'
-    List = 'List', 'List of items'
+    list = 'List', 'List of items'
     Unknown = 'Unknown', 'Unknown is explicitly converted to string format'
 
 

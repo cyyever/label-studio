@@ -2,7 +2,8 @@
 """
 import logging
 from collections import OrderedDict
-from typing import Any, Iterable, Tuple
+from collections.abc import Iterable
+from typing import Any
 from urllib.parse import unquote
 
 import ujson as json
@@ -361,7 +362,7 @@ def preprocess_filter(_filter, *_):
     return _filter
 
 
-def preprocess_field_name(raw_field_name, project) -> Tuple[str, bool]:
+def preprocess_field_name(raw_field_name, project) -> tuple[str, bool]:
     """Transform a field name (as specified in the datamanager views endpoint) to
     a django ORM field name. Also handle dotted accesses to task.data.
 

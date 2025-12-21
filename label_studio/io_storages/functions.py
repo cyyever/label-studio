@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Iterable, List, Union
+from collections.abc import Iterable
 
 from django.shortcuts import get_object_or_404
 from io_storages.base_models import ImportStorage
@@ -93,7 +93,7 @@ def get_storage_list():
     ]
 
 
-def get_storage_by_url(url: Union[str, List, Dict], storage_objects: Iterable[ImportStorage]) -> ImportStorage:
+def get_storage_by_url(url: str | list | dict, storage_objects: Iterable[ImportStorage]) -> ImportStorage:
     """Find the first compatible storage and returns storage that can emit pre-signed URL"""
 
     for storage_object in storage_objects:

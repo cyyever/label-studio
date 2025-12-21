@@ -1,7 +1,6 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import logging   # noqa: I001
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -65,11 +64,11 @@ all_permissions = AllPermissions()
 
 
 class ViewClassPermission(BaseModel):
-    GET: Optional[str] = None
-    PATCH: Optional[str] = None
-    PUT: Optional[str] = None
-    DELETE: Optional[str] = None
-    POST: Optional[str] = None
+    GET: str | None = None
+    PATCH: str | None = None
+    PUT: str | None = None
+    DELETE: str | None = None
+    POST: str | None = None
 
 
 def make_perm(name, pred, overwrite=False):

@@ -350,7 +350,7 @@ class ExportListAPI(generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def get_serializer_context(self):
-        context = super(ExportListAPI, self).get_serializer_context()
+        context = super().get_serializer_context()
         context['user'] = self.request.user
         return context
 
@@ -577,7 +577,7 @@ class ExportDownloadAPI(generics.RetrieveAPIView):
                 # below header tells NGINX to catch it and serve, see docker-config/nginx-app.conf
                 redirect = '/file_download/' + protocol + '/' + url.replace(protocol + '://', '')
                 response['X-Accel-Redirect'] = redirect
-                response['Content-Disposition'] = 'attachment; filename="{}"'.format(file.name)
+                response['Content-Disposition'] = f'attachment; filename="{file.name}"'
                 response['filename'] = os.path.basename(file.name)
                 return response
 

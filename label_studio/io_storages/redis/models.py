@@ -87,12 +87,10 @@ class RedisImportStorageBase(ImportStorage, RedisStorageMixin):
     def iter_objects(self):
         client = self.get_client()
         path = str(self.path)
-        for key in client.keys(path + '*'):
-            yield key
+        yield from client.keys(path + '*')
 
     def iter_keys(self):
-        for key in self.iter_objects():
-            yield key
+        yield from self.iter_objects()
 
     def get_unified_metadata(self, obj):
         self.get_client()

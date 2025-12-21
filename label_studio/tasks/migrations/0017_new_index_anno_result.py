@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def forwards(apps, schema_editor):
     if not schema_editor.connection.vendor.startswith('postgres'):
-        logger.info('Database vendor: {}'.format(schema_editor.connection.vendor))
+        logger.info(f'Database vendor: {schema_editor.connection.vendor}')
         logger.info('Skipping migration without attempting to CREATE INDEX')
         return
 
@@ -21,7 +21,7 @@ def forwards(apps, schema_editor):
 
 def backwards(apps, schema_editor):
     if not schema_editor.connection.vendor.startswith('postgres'):
-        logger.info('Database vendor: {}'.format(schema_editor.connection.vendor))
+        logger.info(f'Database vendor: {schema_editor.connection.vendor}')
         logger.info('Skipping migration without attempting to DROP INDEX')
         return
 

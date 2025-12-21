@@ -24,9 +24,9 @@ def test_has_lock(business_client):
             [{'from_name': 'text_class', 'to_name': 'text', 'value': {'labels': ['class_A'], 'start': 0, 'end': 1}}]
         ),
     }
-    r = business_client.post('/api/tasks/{}/annotations/'.format(task.id), data=annotation_data)
+    r = business_client.post(f'/api/tasks/{task.id}/annotations/', data=annotation_data)
     assert r.status_code == 201
-    r = business_client.post('/api/tasks/{}/annotations/'.format(task.id), data=annotation_data)
+    r = business_client.post(f'/api/tasks/{task.id}/annotations/', data=annotation_data)
     assert r.status_code == 201
 
     task.refresh_from_db()

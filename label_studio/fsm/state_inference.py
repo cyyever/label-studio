@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 from core.utils.common import load_func
 from django.conf import settings
@@ -7,7 +6,7 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
-def _get_or_infer_state(entity) -> Optional[str]:
+def _get_or_infer_state(entity) -> str | None:
     """
     Infer what the FSM state should be based on entity's current data.
 
@@ -72,6 +71,6 @@ def _get_or_infer_state(entity) -> Optional[str]:
         return None
 
 
-def get_or_infer_state(entity) -> Optional[str]:
+def get_or_infer_state(entity) -> str | None:
     func = load_func(settings.FSM_INFERENCE_FUNCTION)
     return func(entity)

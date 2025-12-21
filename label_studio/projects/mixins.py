@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Mapping, Optional
+from collections.abc import Mapping
+from typing import TYPE_CHECKING
 
 from core.redis import start_job_async_or_sync
 from django.db.models import QuerySet
@@ -33,7 +34,7 @@ class ProjectMixin:
         overlap_cohort_percentage_changed,
         tasks_number_changed,
         from_scratch=True,
-        recalculate_stats_counts: Optional[Mapping[str, int]] = None,
+        recalculate_stats_counts: Mapping[str, int] | None = None,
     ):
         """
         Async start updating tasks counters and than rearrange

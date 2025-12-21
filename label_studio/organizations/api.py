@@ -73,11 +73,11 @@ class OrganizationListAPI(generics.ListCreateAPIView):
         ).distinct()
 
     def get(self, request, *args, **kwargs):
-        return super(OrganizationListAPI, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     @extend_schema(exclude=True)
     def post(self, request, *args, **kwargs):
-        return super(OrganizationListAPI, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class OrganizationMemberListPagination(PageNumberPagination):
@@ -330,14 +330,14 @@ class OrganizationAPI(generics.RetrieveUpdateAPIView):
     redirect_kwarg = 'pk'
 
     def get(self, request, *args, **kwargs):
-        return super(OrganizationAPI, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        return super(OrganizationAPI, self).patch(request, *args, **kwargs)
+        return super().patch(request, *args, **kwargs)
 
     @extend_schema(exclude=True)
     def put(self, request, *args, **kwargs):
-        return super(OrganizationAPI, self).put(request, *args, **kwargs)
+        return super().put(request, *args, **kwargs)
 
 
 @method_decorator(

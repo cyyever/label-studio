@@ -6,7 +6,6 @@ import mimetypes
 import os
 import posixpath
 from pathlib import Path
-from typing import Optional
 
 from django.conf import settings
 from django.db.models import CharField, F, Value
@@ -26,7 +25,7 @@ Utility helpers for LocalFiles storage operations.
 """
 
 
-def _if_none_match_satisfied(header_value: Optional[str], etag: str) -> bool:
+def _if_none_match_satisfied(header_value: str | None, etag: str) -> bool:
     """Return True if the client's cached representation matches the current file."""
     if not header_value:
         return False
@@ -37,7 +36,7 @@ def _if_none_match_satisfied(header_value: Optional[str], etag: str) -> bool:
 def build_localfile_response(
     request: HttpRequest,
     full_path: str,
-    if_none_match_header: Optional[str],
+    if_none_match_header: str | None,
 ) -> HttpResponse:
     """
     Stream the requested file and attach a weak ETag so browsers can cache it.

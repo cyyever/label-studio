@@ -9,7 +9,6 @@ This module provides reusable helper functions for FSM testing, including:
 """
 
 import logging
-from typing import Optional
 
 from core.current_request import CurrentContext
 from django.core.cache import cache
@@ -68,7 +67,7 @@ def setup_fsm_context(user):
 # ============================================================================
 
 
-def assert_task_state(task_id: int, expected_state: str, msg: Optional[str] = None):
+def assert_task_state(task_id: int, expected_state: str, msg: str | None = None):
     """
     Assert that a task has the expected FSM state.
 
@@ -102,7 +101,7 @@ def assert_task_state(task_id: int, expected_state: str, msg: Optional[str] = No
     )
 
 
-def assert_annotation_state(annotation_id: int, expected_state: str, msg: Optional[str] = None):
+def assert_annotation_state(annotation_id: int, expected_state: str, msg: str | None = None):
     """
     Assert that an annotation has the expected FSM state.
 
@@ -136,7 +135,7 @@ def assert_annotation_state(annotation_id: int, expected_state: str, msg: Option
     )
 
 
-def assert_draft_state(draft_id: int, expected_state: str, msg: Optional[str] = None):
+def assert_draft_state(draft_id: int, expected_state: str, msg: str | None = None):
     """
     Assert that a draft has the expected FSM state.
 
@@ -170,7 +169,7 @@ def assert_draft_state(draft_id: int, expected_state: str, msg: Optional[str] = 
     )
 
 
-def assert_project_state(project_id: int, expected_state: str, msg: Optional[str] = None):
+def assert_project_state(project_id: int, expected_state: str, msg: str | None = None):
     """
     Assert that a project has the expected FSM state.
 

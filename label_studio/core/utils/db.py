@@ -1,7 +1,7 @@
 import itertools
 import logging
 import time
-from typing import Dict, Optional, TypeVar
+from typing import TypeVar
 
 from django.db import OperationalError, connection, models, transaction
 from django.db.models import Model, QuerySet, Subquery
@@ -20,7 +20,7 @@ class SQCount(Subquery):
 ModelType = TypeVar('ModelType', bound=Model)
 
 
-def fast_first(queryset: QuerySet[ModelType]) -> Optional[ModelType]:
+def fast_first(queryset: QuerySet[ModelType]) -> ModelType | None:
     """Replacement for queryset.first() when you don't need ordering,
     queryset.first() works slowly in some cases
     """
@@ -30,7 +30,7 @@ def fast_first(queryset: QuerySet[ModelType]) -> Optional[ModelType]:
     return None
 
 
-def fast_first_or_create(model, **model_params) -> Optional[ModelType]:
+def fast_first_or_create(model, **model_params) -> ModelType | None:
     """Like get_or_create, but using fast_first instead of first(). Additionally, unlike get_or_create, this method will not raise an exception if more than one model instance matching the given params is returned, making it a safer choice than get_or_create for models that don't have a uniqueness constraint on the fields used."""
     if instance := fast_first(model.objects.filter(**model_params)):
         return instance
@@ -127,7 +127,7 @@ def batch_delete(queryset, batch_size=500):
 # Schema helpers
 # =====================
 
-_column_presence_cache: Dict[str, Dict[str, Dict[str, bool]]] = {}
+_column_presence_cache: dict[str, dict[str, dict[str, bool]]] = {}
 
 
 def current_db_key() -> str:

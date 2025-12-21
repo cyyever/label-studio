@@ -1,7 +1,6 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import getpass
-import io
 import json
 import logging
 import os
@@ -36,7 +35,7 @@ def _setup_env():
 
 
 def _app_run(host, port):
-    http_socket = '{}:{}'.format(host, port)
+    http_socket = f'{host}:{port}'
     call_command('runserver', '--noreload', http_socket)
 
 
@@ -63,7 +62,7 @@ def _apply_database_migrations():
 
 
 def _get_config(config_path):
-    with io.open(os.path.abspath(config_path), encoding='utf-8') as c:
+    with open(os.path.abspath(config_path), encoding='utf-8') as c:
         config = json.load(c)
     return config
 
@@ -74,12 +73,12 @@ def _create_project(title, user, label_config=None, sampling=None, description=N
 
     project = Project.objects.filter(title=title).first()
     if project is not None:
-        print('Project with title "{}" already exists'.format(title))
+        print(f'Project with title "{title}" already exists')
     else:
         org = Organization.objects.first()
         org.add_user(user)
         project = Project.objects.create(title=title, created_by=user, organization=org)
-        print('Project with title "{}" successfully created'.format(title))
+        print(f'Project with title "{title}" successfully created')
 
     if label_config is not None:
         with open(os.path.abspath(label_config)) as c:
@@ -166,7 +165,7 @@ def _create_user(input_args, config):
             print(f'Token {token} is not applied to user {DEFAULT_USERNAME} ' f"because it's empty or len(token) < 5")
 
     except IntegrityError:
-        print('User {} already exists'.format(username))
+        print(f'User {username} already exists')
 
     user = User.objects.get(email=username)
     org = Organization.objects.first()
@@ -202,7 +201,7 @@ def _init(input_args, config):
             ml_backends=input_args.ml_backends,
         )
     elif input_args.project_name:
-        print('Project "{0}" already exists'.format(input_args.project_name))
+        print(f'Project "{input_args.project_name}" already exists')
 
 
 def _reset_password(input_args):
@@ -214,7 +213,7 @@ def _reset_password(input_args):
 
     user = User.objects.filter(email=username).first()
     if user is None:
-        print('User with username {} not found'.format(username))
+        print(f'User with username {username} not found')
         return
 
     password = input_args.password

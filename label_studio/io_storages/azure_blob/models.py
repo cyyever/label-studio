@@ -4,7 +4,6 @@ import json
 import logging
 import re
 from datetime import timedelta
-from typing import Union
 from urllib.parse import urlparse
 
 from azure.core.exceptions import ResourceNotFoundError
@@ -246,7 +245,7 @@ class AzureBlobImportStorageBase(AzureBlobStorageMixin, ImportStorage):
             'https://' + self.get_account_name() + '.blob.core.windows.net/' + container + '/' + blob + '?' + sas_token
         )
 
-    def can_resolve_url(self, url: Union[str, None]) -> bool:
+    def can_resolve_url(self, url: str | None) -> bool:
         return storage_can_resolve_bucket_url(self, url)
 
     def get_blob_metadata(self, key):

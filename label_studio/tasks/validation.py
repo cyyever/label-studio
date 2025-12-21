@@ -70,10 +70,10 @@ class TaskValidator:
                 try:
                     data_item = reduce(getitem, keys, data)
                 except KeyError:
-                    raise ValidationError('"{data_key}" key is expected in task data'.format(data_key=data_key))
+                    raise ValidationError(f'"{data_key}" key is expected in task data')
             else:
                 if data_key not in data:
-                    raise ValidationError('"{data_key}" key is expected in task data'.format(data_key=data_key))
+                    raise ValidationError(f'"{data_key}" key is expected in task data')
                 data_item = data[data_key]
 
             if is_array:
@@ -128,7 +128,7 @@ class TaskValidator:
                 class_def = ' or '.join([c.__name__ for c in class_def])
             else:
                 class_def = class_def.__name__
-            raise ValidationError('Task[{key}] must be {class_def}'.format(key=key, class_def=class_def))
+            raise ValidationError(f'Task[{key}] must be {class_def}')
 
     def validate(self, task):
         """Validate whole task with task['data'] and task['annotations']. task['predictions']"""
@@ -204,11 +204,11 @@ class TaskValidator:
     def format_error(i, detail, item):
         if len(detail) == 1:
             code = (str(detail[0].code + ' ')) if detail[0].code != 'invalid' else ''
-            return 'Error {code} at item {i}: {detail} :: {item}'.format(code=code, i=i, detail=detail[0], item=item)
+            return f'Error {code} at item {i}: {detail[0]} :: {item}'
         else:
             errors = ', '.join(detail)
             codes = str([d.code for d in detail])
-            return 'Errors {codes} at item {i}: {errors} :: {item}'.format(codes=codes, i=i, errors=errors, item=item)
+            return f'Errors {codes} at item {i}: {errors} :: {item}'
 
     def to_internal_value(self, data):
         """Body of run_validation for all data items"""

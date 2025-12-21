@@ -2,7 +2,8 @@
 """
 import json
 import logging
-from typing import Any, Mapping, Optional
+from collections.abc import Mapping
+from typing import Any
 
 from annoying.fields import AutoOneToOneField
 from core.current_request import CurrentContext
@@ -363,7 +364,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
     purge_at = models.DateTimeField(_('purge at'), null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
-        super(Project, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         # This check is required because deferred fields cause issues with evaluating lazy (deferred) fields if read directly, which means that any attempt to optimize a queryset involving projects
         # will result in a performance regression as it will n+1 or in some cases cause an infinite loop.
         deferred_fields = self.get_deferred_fields()
@@ -704,7 +705,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         labels_from_config, dynamic_label_from_config = get_all_labels(config_string)
         created_labels = merge_labels_counters(self.summary.created_labels, self.summary.created_labels_drafts)
 
-        def display_count(count: int, type: str) -> Optional[str]:
+        def display_count(count: int, type: str) -> str | None:
             """Helper for displaying pluralized sources of validation errors,
             eg "1 draft" or "3 annotations"
             """
@@ -737,7 +738,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
                     labels_from_config_by_tag |= set(labels_from_config[key])
             if 'Taxonomy' in tag_types:
                 custom_tags = Label.objects.filter(links__project=self).values_list('value', flat=True)
-                flat_custom_tags = set([item for sublist in custom_tags for item in sublist])
+                flat_custom_tags = {item for sublist in custom_tags for item in sublist}
                 labels_from_config_by_tag |= flat_custom_tags
             # check if labels from is subset if config labels
             if not set(labels_from_data).issubset(set(labels_from_config_by_tag)):
@@ -868,7 +869,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
             if update_fields is not None:
                 update_fields = {'is_published', 'is_draft'}.union(update_fields)
 
-        super(Project, self).save(*args, update_fields=update_fields, **kwargs)
+        super().save(*args, update_fields=update_fields, **kwargs)
 
         if label_config_has_changed:
             # save the new label config for future comparison
@@ -1162,7 +1163,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
                         values.append(object_tag.get('valueList'))
         return values
 
-    def resolve_storage_uri(self, url: str) -> Optional[Mapping[str, Any]]:
+    def resolve_storage_uri(self, url: str) -> Mapping[str, Any] | None:
         from io_storages.functions import get_storage_by_url
 
         storage_objects = self.get_all_import_storage_objects
@@ -1203,7 +1204,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         overlap_cohort_percentage_changed,
         tasks_number_changed,
         from_scratch=True,
-        recalculate_stats_counts: Optional[Mapping[str, int]] = None,
+        recalculate_stats_counts: Mapping[str, int] | None = None,
     ):
         """
         Update tasks counters and update tasks states (rearrange and/or is_labeled)
@@ -1364,7 +1365,7 @@ class ProjectOnboarding(models.Model):
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
 
     def save(self, *args, **kwargs):
-        super(ProjectOnboarding, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if ProjectOnboarding.objects.filter(project=self.project, finished=True).count() == 4:
             self.project.skip_onboarding = True
             self.project.save(recalc=False)

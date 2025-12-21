@@ -59,7 +59,7 @@ try:
     from core.utils.io import find_node
 
     find_node('label_studio', FEATURE_FLAGS_FILE, 'file')
-except IOError:
+except OSError:
     FEATURE_FLAGS_FROM_FILE = False
 
 STORAGE_PERSISTENCE = get_bool_env('STORAGE_PERSISTENCE', True)

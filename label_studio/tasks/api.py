@@ -369,15 +369,15 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
             return TaskSimpleSerializer
 
     def patch(self, request, *args, **kwargs):
-        return super(TaskAPI, self).patch(request, *args, **kwargs)
+        return super().patch(request, *args, **kwargs)
 
     @api_webhook_for_delete(WebhookAction.TASKS_DELETED)
     def delete(self, request, *args, **kwargs):
-        return super(TaskAPI, self).delete(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)
 
     @extend_schema(exclude=True)
     def put(self, request, *args, **kwargs):
-        return super(TaskAPI, self).put(request, *args, **kwargs)
+        return super().put(request, *args, **kwargs)
 
 
 @method_decorator(
@@ -469,27 +469,27 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
         task.update_is_labeled()
         task.save()  # refresh task metrics
 
-        result = super(AnnotationAPI, self).update(request, *args, **kwargs)
+        result = super().update(request, *args, **kwargs)
 
         task.update_is_labeled()
         task.save(update_fields=['updated_at'])  # refresh task metrics
         return result
 
     def get(self, request, *args, **kwargs):
-        return super(AnnotationAPI, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     @api_webhook(WebhookAction.ANNOTATION_UPDATED)
     @extend_schema(exclude=True)
     def put(self, request, *args, **kwargs):
-        return super(AnnotationAPI, self).put(request, *args, **kwargs)
+        return super().put(request, *args, **kwargs)
 
     @api_webhook(WebhookAction.ANNOTATION_UPDATED)
     def patch(self, request, *args, **kwargs):
-        return super(AnnotationAPI, self).patch(request, *args, **kwargs)
+        return super().patch(request, *args, **kwargs)
 
     @api_webhook_for_delete(WebhookAction.ANNOTATIONS_DELETED)
     def delete(self, request, *args, **kwargs):
-        return super(AnnotationAPI, self).delete(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)
 
 
 @method_decorator(
@@ -572,11 +572,11 @@ class AnnotationsListAPI(GetParentObjectMixin, generics.ListCreateAPIView):
     serializer_class = AnnotationSerializer
 
     def get(self, request, *args, **kwargs):
-        return super(AnnotationsListAPI, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     @api_webhook(WebhookAction.ANNOTATION_CREATED)
     def post(self, request, *args, **kwargs):
-        return super(AnnotationsListAPI, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
     def get_queryset(self):
         task = generics.get_object_or_404(Task.objects.for_user(self.request.user), pk=self.kwargs.get('pk', 0))

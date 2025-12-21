@@ -1,6 +1,5 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
-from __future__ import unicode_literals
 
 import calendar
 import contextlib
@@ -14,9 +13,10 @@ import time
 import traceback as tb
 import uuid
 from collections import defaultdict
+from collections.abc import Callable, Generator, Iterable, Mapping
 from copy import deepcopy
 from functools import wraps
-from typing import Any, Callable, Generator, Iterable, Mapping, Optional
+from typing import Any
 
 import pytz
 import requests
@@ -95,7 +95,7 @@ def custom_exception_handler(exc, context):
         sentry_skip = True
 
     logger.error(
-        '{} {}'.format(exception_id, exc),
+        f'{exception_id} {exc}',
         exc_info=True,
         extra={'sentry_skip': sentry_skip, 'exception_id': exception_id},
     )
@@ -321,8 +321,8 @@ def db_is_not_sqlite() -> bool:
 @contextlib.contextmanager
 def conditional_atomic(
     predicate: Callable[..., bool],
-    predicate_args: Optional[Iterable[Any]] = None,
-    predicate_kwargs: Optional[Mapping[str, Any]] = None,
+    predicate_args: Iterable[Any] | None = None,
+    predicate_kwargs: Mapping[str, Any] | None = None,
 ) -> Generator[None, None, None]:
     """Use transaction if and only if the passed predicate function returns true
 
@@ -576,7 +576,7 @@ class temporary_disconnect_signal:
         self.signal.connect(receiver=self.receiver, sender=self.sender, dispatch_uid=self.dispatch_uid)
 
 
-class temporary_disconnect_all_signals(object):
+class temporary_disconnect_all_signals:
     def __init__(self, disabled_signals=None):
         self.stashed_signals = defaultdict(list)
         self.disabled_signals = disabled_signals or [

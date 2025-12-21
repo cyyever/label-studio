@@ -1,4 +1,5 @@
-import mock
+from unittest import mock
+
 from data_manager.actions.predictions_to_annotations import predictions_to_annotations_form
 from projects.models import Project
 from users.models import User

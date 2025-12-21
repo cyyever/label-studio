@@ -40,7 +40,7 @@ class UserProductTourSerializer(serializers.ModelSerializer):
     def load_tour_config(self):
         # TODO: get product tour from yaml file. Later we move it to remote storage, e.g. S3
         filepath = PRODUCT_TOURS_CONFIGS_DIR / f'{self.context["name"]}.yml'
-        with open(filepath, 'r') as f:
+        with open(filepath) as f:
             return yaml.safe_load(f)
 
     def get_awaiting(self, obj):

@@ -1,6 +1,5 @@
 import logging
 from collections import Counter
-from typing import List, Tuple, Union
 
 from core.feature_flags import flag_set
 from core.utils.common import conditional_atomic, db_is_not_sqlite, load_func
@@ -35,17 +34,17 @@ def get_next_task_logging_level(user: User) -> int:
     return level
 
 
-def _get_random_unlocked(task_query: QuerySet[Task], user: User, upper_limit=None) -> Union[Task, None]:
+def _get_random_unlocked(task_query: QuerySet[Task], user: User, upper_limit=None) -> Task | None:
     for task in task_query.order_by('?').only('id')[: settings.RANDOM_NEXT_TASK_SAMPLE_SIZE]:
         try:
             task = Task.objects.select_for_update(skip_locked=True).get(pk=task.id)
             if not task.has_lock(user):
                 return task
         except Task.DoesNotExist:
-            logger.debug('Task with id {} locked'.format(task.id))
+            logger.debug(f'Task with id {task.id} locked')
 
 
-def _get_first_unlocked(tasks_query: QuerySet[Task], user) -> Union[Task, None]:
+def _get_first_unlocked(tasks_query: QuerySet[Task], user) -> Task | None:
     # Skip tasks that are locked due to being taken by collaborators
     for task_id in tasks_query.values_list('id', flat=True):
         try:
@@ -54,10 +53,10 @@ def _get_first_unlocked(tasks_query: QuerySet[Task], user) -> Union[Task, None]:
                 return task
 
         except Task.DoesNotExist:
-            logger.debug('Task with id {} locked'.format(task_id))
+            logger.debug(f'Task with id {task_id} locked')
 
 
-def _try_ground_truth(tasks: QuerySet[Task], project: Project, user: User) -> Union[Task, None]:
+def _try_ground_truth(tasks: QuerySet[Task], project: Project, user: User) -> Task | None:
     """Returns task from ground truth set"""
     not_solved_tasks_with_ground_truths = _annotate_has_ground_truths(tasks).filter(has_ground_truths=True)
     if not_solved_tasks_with_ground_truths.exists():
@@ -66,7 +65,7 @@ def _try_ground_truth(tasks: QuerySet[Task], project: Project, user: User) -> Un
         return _get_random_unlocked(not_solved_tasks_with_ground_truths, user)
 
 
-def _try_tasks_with_overlap(tasks: QuerySet[Task]) -> Tuple[Union[Task, None], QuerySet[Task]]:
+def _try_tasks_with_overlap(tasks: QuerySet[Task]) -> tuple[Task | None, QuerySet[Task]]:
     """Filter out tasks without overlap (doesn't return next task)"""
     tasks_with_overlap = tasks.filter(overlap__gt=1)
     if tasks_with_overlap.exists():
@@ -77,7 +76,7 @@ def _try_tasks_with_overlap(tasks: QuerySet[Task]) -> Tuple[Union[Task, None], Q
 
 def _try_breadth_first(
     tasks: QuerySet[Task], user: User, project: Project, attempt_gt_first: bool = False
-) -> Union[Task, None]:
+) -> Task | None:
     """Try to find tasks with maximum amount of annotations, since we are trying to label tasks as fast as possible"""
 
     # Exclude ground truth annotations from the count when not in onboarding window
@@ -111,10 +110,10 @@ def _try_breadth_first(
 def _try_uncertainty_sampling(
     tasks: QuerySet[Task],
     project: Project,
-    user_solved_tasks_array: List[int],
+    user_solved_tasks_array: list[int],
     user: User,
     prepared_tasks: QuerySet[Task],
-) -> Union[Task, None]:
+) -> Task | None:
     task_with_current_predictions = tasks.filter(predictions__model_version=project.model_version)
     if task_with_current_predictions.exists():
         logger.debug('Use uncertainty sampling')
@@ -166,10 +165,10 @@ def get_not_solved_tasks_qs(
     user: User,
     project: Project,
     prepared_tasks: QuerySet[Task],
-    assigned_flag: Union[bool, None],
+    assigned_flag: bool | None,
     queue_info: str,
     attempt_gt_first: bool,
-) -> Tuple[QuerySet[Task], List[int], str, bool]:
+) -> tuple[QuerySet[Task], list[int], str, bool]:
     user_solved_tasks_array = user.annotations.filter(project=project, task__isnull=False)
     user_solved_tasks_array = user_solved_tasks_array.distinct().values_list('task__pk', flat=True)
     not_solved_tasks = prepared_tasks.exclude(pk__in=user_solved_tasks_array)
@@ -248,10 +247,10 @@ def get_next_task_without_dm_queue(
     user: User,
     project: Project,
     not_solved_tasks: QuerySet,
-    assigned_flag: Union[bool, None],
+    assigned_flag: bool | None,
     prioritized_low_agreement: bool,
     attempt_gt_first: bool,
-) -> Tuple[Union[Task, None], bool, str]:
+) -> tuple[Task | None, bool, str]:
     next_task = None
     use_task_lock = True
     queue_info = ''
@@ -342,12 +341,12 @@ def postponed_queue(next_task, prepared_tasks, project, user, assigned_flag, que
 
 def get_task_from_qs_with_sampling(
     not_solved_tasks: QuerySet[Task],
-    user_solved_tasks_array: List[int],
+    user_solved_tasks_array: list[int],
     prepared_tasks: QuerySet,
     user: User,
     project: Project,
     queue_info: str,
-) -> Tuple[Union[Task, None], str]:
+) -> tuple[Task | None, str]:
     next_task = None
     if project.sampling == project.SEQUENCE:
         logger.debug(f'User={user} tries sequence sampling from prepared tasks')
@@ -374,9 +373,9 @@ def get_next_task(
     user: User,
     prepared_tasks: QuerySet,
     project: Project,
-    dm_queue: Union[bool, None],
-    assigned_flag: Union[bool, None] = None,
-) -> Tuple[Union[Task, None], str]:
+    dm_queue: bool | None,
+    assigned_flag: bool | None = None,
+) -> tuple[Task | None, str]:
     logger.debug(f'get_next_task called. user: {user}, project: {project}, dm_queue: {dm_queue}')
 
     with conditional_atomic(predicate=db_is_not_sqlite):

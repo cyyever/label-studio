@@ -9,8 +9,9 @@ import copy
 import logging
 import os
 import traceback as tb
+from collections.abc import Callable
 from importlib import import_module
-from typing import Callable, Optional, TypedDict, Union
+from typing import Optional, TypedDict, Union
 
 from core.feature_flags import flag_set
 from core.utils.common import load_func
@@ -23,14 +24,14 @@ logger = logging.getLogger(__name__)
 
 class DataManagerAction(TypedDict):
     entry_point: Callable
-    permission: Union[str, list[str]]
+    permission: str | list[str]
     title: str
     order: int
-    experimental: Optional[bool]
+    experimental: bool | None
     dialog: dict
-    hidden: Optional[bool]
-    disabled: Optional[Callable]
-    disabled_reason: Optional[str]
+    hidden: bool | None
+    disabled: Callable | None
+    disabled_reason: str | None
 
 
 def check_action_permission(user, action, project):

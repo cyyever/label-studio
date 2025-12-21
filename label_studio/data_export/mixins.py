@@ -249,8 +249,7 @@ class ExportMixin:
 
                 serializer = ExportDataSerializer(tasks, many=True, **base_export_serializer_option)
                 self.counters['task_number'] += len(tasks)
-                for task in serializer.data:
-                    yield task
+                yield from serializer.data
         duration = datetime.now() - start
         logger.info(
             f'{self.counters["task_number"]} tasks from project {self.project_id} exported in {duration.total_seconds():.2f} seconds'

@@ -70,7 +70,7 @@ class Webhook(models.Model):
 
     def validate_actions(self, actions):
         actions_meta = [WebhookAction.ACTIONS[action] for action in actions]
-        if self.project and any((meta.get('organization-only') for meta in actions_meta)):
+        if self.project and any(meta.get('organization-only') for meta in actions_meta):
             raise ValidationError("Project webhook can't contain organization-only action.")
         return actions
 

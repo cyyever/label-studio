@@ -7,7 +7,7 @@ allowing the FSM to be decoupled from concrete implementations.
 
 import logging
 import typing
-from typing import Dict, Optional, Type
+from typing import Optional
 
 from django.db.models import Model, TextChoices
 
@@ -27,9 +27,9 @@ class StateChoicesRegistry:
     """
 
     def __init__(self):
-        self._choices: Dict[str, Type[TextChoices]] = {}
+        self._choices: dict[str, type[TextChoices]] = {}
 
-    def register(self, entity_name: str, choices_class: Type[TextChoices]):
+    def register(self, entity_name: str, choices_class: type[TextChoices]):
         """
         Register state choices for an entity type.
 
@@ -39,7 +39,7 @@ class StateChoicesRegistry:
         """
         self._choices[entity_name.lower()] = choices_class
 
-    def get_choices(self, entity_name: str) -> Optional[Type[TextChoices]]:
+    def get_choices(self, entity_name: str) -> type[TextChoices] | None:
         """
         Get state choices for an entity type.
 
@@ -96,7 +96,7 @@ def register_state_choices(entity_name: str):
             COMPLETED = 'COMPLETED', _('Completed')
     """
 
-    def decorator(choices_class: Type[TextChoices]) -> Type[TextChoices]:
+    def decorator(choices_class: type[TextChoices]) -> type[TextChoices]:
         state_choices_registry.register(entity_name, choices_class)
         return choices_class
 
@@ -112,7 +112,7 @@ class StateModelRegistry:
     """
 
     def __init__(self):
-        self._models: Dict[str, 'BaseState'] = {}
+        self._models: dict[str, 'BaseState'] = {}
 
     def register_model(self, entity_name: str, state_model: 'BaseState'):
         """
@@ -169,7 +169,7 @@ class StateModelRegistry:
             extra={'event': 'fsm.registry_cleared'},
         )
 
-    def get_all_models(self) -> Dict[str, 'BaseState']:
+    def get_all_models(self) -> dict[str, 'BaseState']:
         """Get all registered models."""
         return self._models.copy()
 
@@ -242,7 +242,7 @@ class TransitionRegistry:
     """
 
     def __init__(self):
-        self._transitions: Dict[str, Dict[str, 'BaseTransition']] = {}
+        self._transitions: dict[str, dict[str, 'BaseTransition']] = {}
 
     def register(self, entity_name: str, transition_name: str, transition_class: 'BaseTransition'):
         """
@@ -271,7 +271,7 @@ class TransitionRegistry:
         """
         return self._transitions.get(entity_name, {}).get(transition_name)
 
-    def get_transitions_for_entity(self, entity_name: str) -> Dict[str, 'BaseTransition']:
+    def get_transitions_for_entity(self, entity_name: str) -> dict[str, 'BaseTransition']:
         """
         Get all registered transitions for an entity type.
 

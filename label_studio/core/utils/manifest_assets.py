@@ -11,7 +11,7 @@ try:
     if not settings.FRONTEND_HMR:
         manifest_path = Path(settings.STATIC_ROOT) / 'js/manifest.json'
         if manifest_path.exists():
-            with open(manifest_path, 'r') as f:
+            with open(manifest_path) as f:
                 _MANIFEST = json.load(f)
 except Exception:
     # If there's any error reading the manifest, we'll use the default mapping

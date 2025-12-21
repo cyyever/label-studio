@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, Tuple
+from collections.abc import Callable
 
 from core.redis import start_job_async_or_sync
 from django.conf import settings
@@ -60,7 +60,7 @@ def make_sql_migration(
     apply_on_sqlite: bool = False,
     execute_immediately: bool = False,
     migration_name: str | None = None,
-) -> Tuple[Callable, Callable]:
+) -> tuple[Callable, Callable]:
     """Return (forwards, backwards) for migrations.RunPython.
 
     - forwards: either schedules job or marks as SCHEDULED

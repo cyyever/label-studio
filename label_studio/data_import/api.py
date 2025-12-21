@@ -265,7 +265,7 @@ class ImportAPI(generics.CreateAPIView):
         return {'project': project, 'user': self.request.user}
 
     def post(self, *args, **kwargs):
-        return super(ImportAPI, self).post(*args, **kwargs)
+        return super().post(*args, **kwargs)
 
     def _save(self, tasks):
         serializer = self.get_serializer(data=tasks, many=True)
@@ -751,7 +751,7 @@ class ReImportAPI(ImportAPI):
         """,
     )
     def post(self, *args, **kwargs):
-        return super(ReImportAPI, self).post(*args, **kwargs)
+        return super().post(*args, **kwargs)
 
 
 @method_decorator(
@@ -881,17 +881,17 @@ class FileUploadAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = FileUpload.objects.all()
 
     def get(self, *args, **kwargs):
-        return super(FileUploadAPI, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
 
     def patch(self, *args, **kwargs):
-        return super(FileUploadAPI, self).patch(*args, **kwargs)
+        return super().patch(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        return super(FileUploadAPI, self).delete(*args, **kwargs)
+        return super().delete(*args, **kwargs)
 
     @extend_schema(exclude=True)
     def put(self, *args, **kwargs):
-        return super(FileUploadAPI, self).put(*args, **kwargs)
+        return super().put(*args, **kwargs)
 
 
 @method_decorator(

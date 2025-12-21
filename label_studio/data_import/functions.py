@@ -1,7 +1,7 @@
 import logging
 import time
 import traceback
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from core.feature_flags import flag_set
 from core.utils.common import load_func
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 def async_import_background(
-    import_id, user_id, recalculate_stats_func: Optional[Callable[..., None]] = None, **kwargs
+    import_id, user_id, recalculate_stats_func: Callable[..., None] | None = None, **kwargs
 ):
     with transaction.atomic():
         try:

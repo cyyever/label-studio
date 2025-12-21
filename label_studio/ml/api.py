@@ -222,7 +222,7 @@ class MLBackendDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = MLBackend.objects.all()
 
     def get_object(self):
-        ml_backend = super(MLBackendDetailAPI, self).get_object()
+        ml_backend = super().get_object()
         ml_backend.update_state()
         return ml_backend
 

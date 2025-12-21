@@ -47,7 +47,7 @@ with open(old_test) as f:
             new_stages = [{'type': 'ref', 'id': 'signup'}]
             for stage in test_data:
                 for url, stage_data in stage.items():
-                    request_data = {'url': '{{django_live_url}}{url}'.format(url=url), 'method': stage_data['method']}
+                    request_data = {'url': f'{{django_live_url}}{url}', 'method': stage_data['method']}
 
                     content_type = stage_data.get('content_type', None)
                     if 'data' in stage_data:

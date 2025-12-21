@@ -31,7 +31,7 @@ class LocalFilesImportStorageSerializer(ImportStorageSerializer):
 
     def validate(self, data):
         # Validate local file path
-        data = super(LocalFilesImportStorageSerializer, self).validate(data)
+        data = super().validate(data)
         if 'path' in data:
             data['path'] = normalize_storage_path(data['path'])
         storage = LocalFilesImportStorage(**data)
@@ -54,7 +54,7 @@ class LocalFilesExportStorageSerializer(ExportStorageSerializer):
 
     def validate(self, data):
         # Validate local file path
-        data = super(LocalFilesExportStorageSerializer, self).validate(data)
+        data = super().validate(data)
         if 'path' in data:
             data['path'] = normalize_storage_path(data['path'])
         storage = LocalFilesExportStorage(**data)

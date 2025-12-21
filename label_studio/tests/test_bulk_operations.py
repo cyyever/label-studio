@@ -47,7 +47,7 @@ def test_load_tasks_and_annotations(business_client, annotator_client, configure
     filepath = os.path.join(settings.TEST_DATA_ROOT, filename)
 
     data = {filename: (open(filepath, 'rb'), filename)}
-    url = '/api/projects/{}/tasks/bulk/'.format(project_id)
+    url = f'/api/projects/{project_id}/tasks/bulk/'
     r = business_client.post(url, data=data, format='multipart')
     assert r.status_code == 201, r.content
 

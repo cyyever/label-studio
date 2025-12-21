@@ -8,7 +8,7 @@ functionality for enhanced declarative state management.
 
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Dict, Generic, Optional, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 from django.db.models import Model
 from pydantic import BaseModel, ConfigDict, Field
@@ -36,38 +36,38 @@ class TransitionContext(BaseModel, Generic[EntityType, StateModelType]):
 
     # Core context information
     entity: Any = Field(..., description='The entity being transitioned')
-    current_user: Optional[Any] = Field(None, description='User triggering the transition (request user)')
-    current_state_object: Optional[Any] = Field(None, description='Full current state object')
-    current_state: Optional[str] = Field(None, description='Current state as string')
-    target_state: Optional[str] = Field(
+    current_user: Any | None = Field(None, description='User triggering the transition (request user)')
+    current_state_object: Any | None = Field(None, description='Full current state object')
+    current_state: str | None = Field(None, description='Current state as string')
+    target_state: str | None = Field(
         None, description='Target state for this transition (None for side-effect only transitions)'
     )
 
     # Timing and metadata
     timestamp: datetime = Field(default_factory=datetime.now, description='When transition was initiated')
-    transition_name: Optional[str] = Field(None, description='Name of the transition method')
+    transition_name: str | None = Field(None, description='Name of the transition method')
 
     # Additional context data
-    request_data: Dict[str, Any] = Field(default_factory=dict, description='Additional request/context data')
-    metadata: Dict[str, Any] = Field(default_factory=dict, description='Transition-specific metadata')
+    request_data: dict[str, Any] = Field(default_factory=dict, description='Additional request/context data')
+    metadata: dict[str, Any] = Field(default_factory=dict, description='Transition-specific metadata')
 
     # Organizational context
-    organization_id: Optional[int] = Field(None, description='Organization context for the transition')
+    organization_id: int | None = Field(None, description='Organization context for the transition')
 
     # Validation context, for cases where we want to skip validation for the transition
-    skip_validation: Optional[bool] = Field(default=False, description='Whether to skip validation for the transition')
+    skip_validation: bool | None = Field(default=False, description='Whether to skip validation for the transition')
 
     # Reason override - if provided, takes precedence over Transition.get_reason()
     # This allows callers to provide context-specific reasons for transitions
     # (e.g., "Project moved from Sandbox to FSM Testing workspace")
-    reason: Optional[str] = Field(
+    reason: str | None = Field(
         None, description='Override reason for this transition (takes precedence over get_reason)'
     )
 
     # Additional context data to be merged with transition's context_data
     # This allows callers to add extra data to be stored in the state record's JSONB context_data
     # (e.g., workspace_from_id, workspace_to_id for workspace change transitions)
-    context_data: Dict[str, Any] = Field(
+    context_data: dict[str, Any] = Field(
         default_factory=dict, description='Additional context data to store with state record'
     )
 
@@ -85,7 +85,7 @@ class TransitionContext(BaseModel, Generic[EntityType, StateModelType]):
 class TransitionValidationError(Exception):
     """Exception raised when transition validation fails"""
 
-    def __init__(self, message: str, context: Optional[Dict[str, Any]] = None):
+    def __init__(self, message: str, context: dict[str, Any] | None = None):
         super().__init__(message)
         self.context = context or {}
 
@@ -122,10 +122,10 @@ class BaseTransition(BaseModel, ABC, Generic[EntityType, StateModelType]):
 
     def __init__(self, **data):
         super().__init__(**data)
-        self.__context: Optional[TransitionContext[EntityType, StateModelType]] = None
+        self.__context: TransitionContext[EntityType, StateModelType] | None = None
 
     @property
-    def context(self) -> Optional[TransitionContext[EntityType, StateModelType]]:
+    def context(self) -> TransitionContext[EntityType, StateModelType] | None:
         """Access the current transition context"""
         return getattr(self, '_BaseTransition__context', None)
 
@@ -136,8 +136,8 @@ class BaseTransition(BaseModel, ABC, Generic[EntityType, StateModelType]):
 
     @abstractmethod
     def get_target_state(
-        self, context: Optional[TransitionContext[EntityType, StateModelType]] = None
-    ) -> Optional[str]:
+        self, context: TransitionContext[EntityType, StateModelType] | None = None
+    ) -> str | None:
         """
         Get the target state this transition leads to.
 
@@ -226,7 +226,7 @@ class BaseTransition(BaseModel, ABC, Generic[EntityType, StateModelType]):
         pass
 
     @abstractmethod
-    def transition(self, context: TransitionContext[EntityType, StateModelType]) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext[EntityType, StateModelType]) -> dict[str, Any]:
         """
         Execute the transition and return context data for the state record.
 
@@ -278,7 +278,7 @@ class BaseTransition(BaseModel, ABC, Generic[EntityType, StateModelType]):
         user_info = f'by {context.current_user}' if context.current_user else 'automatically'
         return f'{self.__class__.__name__} executed {user_info}'
 
-    def prepare_and_validate(self, context: TransitionContext[EntityType, StateModelType]) -> Dict[str, Any]:
+    def prepare_and_validate(self, context: TransitionContext[EntityType, StateModelType]) -> dict[str, Any]:
         """
         Prepare and validate the transition, returning the transition data.
 
@@ -376,7 +376,7 @@ class ModelChangeTransition(BaseTransition, Generic[EntityType, StateModelType])
     """
 
     # Additional fields specific to model changes
-    changed_fields: Dict[str, Dict[str, Any]] = Field(
+    changed_fields: dict[str, dict[str, Any]] = Field(
         default_factory=dict, description="Fields that changed: {field_name: {'old': value, 'new': value}}"
     )
     is_creating: bool = Field(default=False, description='Whether this is a new entity creation')
@@ -441,7 +441,7 @@ class ModelChangeTransition(BaseTransition, Generic[EntityType, StateModelType])
 
     @classmethod
     def from_model_change(
-        cls, is_creating: bool, changed_fields: Dict[str, tuple], **extra_data
+        cls, is_creating: bool, changed_fields: dict[str, tuple], **extra_data
     ) -> 'ModelChangeTransition':
         """
         Factory method to create a transition from model change data.

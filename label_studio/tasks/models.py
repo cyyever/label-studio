@@ -8,7 +8,8 @@ import os
 import random
 import traceback
 import uuid
-from typing import Any, Mapping, Optional, Union, cast
+from collections.abc import Mapping
+from typing import Any, Optional, cast
 from urllib.parse import urljoin
 
 import ujson as json
@@ -426,7 +427,7 @@ class Task(TaskMixin, FsmHistoryStateModel):
             return filename.replace(settings.MEDIA_URL, '')
         return filename
 
-    def resolve_storage_uri(self, url) -> Optional[Mapping[str, Any]]:
+    def resolve_storage_uri(self, url) -> Mapping[str, Any] | None:
         from io_storages.functions import get_storage_by_url
 
         # Instead of using self.storage, we check all storage objects for the project to
@@ -603,7 +604,7 @@ class AnnotationManager(models.Manager):
 
     def bulk_create(self, objs, batch_size=None):
         pre_bulk_create.send(sender=self.model, objs=objs, batch_size=batch_size)
-        res = super(AnnotationManager, self).bulk_create(objs, batch_size)
+        res = super().bulk_create(objs, batch_size)
         post_bulk_create.send(sender=self.model, objs=objs, batch_size=batch_size)
         return res
 
@@ -1103,7 +1104,7 @@ class Prediction(models.Model):
             update_fields = {'result'}.union(update_fields)
         # set updated_at field of task to now()
         self.update_task()
-        return super(Prediction, self).save(*args, update_fields=update_fields, **kwargs)
+        return super().save(*args, update_fields=update_fields, **kwargs)
 
     def delete(self, *args, **kwargs):
         result = super().delete(*args, **kwargs)
@@ -1245,7 +1246,7 @@ class PredictionMeta(models.Model):
     extra = models.JSONField(_('extra'), null=True, blank=True, help_text=_('Additional metadata in JSON format'))
 
     @classmethod
-    def create_no_commit(cls, data, prediction: Union[Prediction, FailedPrediction]) -> Optional['PredictionMeta']:
+    def create_no_commit(cls, data, prediction: Prediction | FailedPrediction) -> Optional['PredictionMeta']:
         """
         Creates a PredictionMeta object from the given result data, without committing it to the database.
         or returns None if it fails.

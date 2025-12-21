@@ -7,7 +7,7 @@ that can be extended by Label Studio Enterprise with additional features.
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Type
+from typing import Any
 
 from core.current_request import CurrentContext
 from core.feature_flags import flag_set
@@ -112,7 +112,7 @@ class StateManager:
         return f'{cls.CACHE_PREFIX}:{entity._meta.label_lower}:{entity.pk}'
 
     @classmethod
-    def get_current_state_value(cls, entity: Model) -> Optional[str]:
+    def get_current_state_value(cls, entity: Model) -> str | None:
         """
         Get current state with basic caching.
 
@@ -219,7 +219,7 @@ class StateManager:
         transition_name: str = None,
         user=None,
         organization_id=None,
-        context: Dict[str, Any] = None,
+        context: dict[str, Any] = None,
         reason: str = '',
         force_state_record: bool = False,
     ) -> bool:
@@ -447,8 +447,8 @@ class StateManager:
 
     @classmethod
     def get_states_in_time_range(
-        cls, entity: Model, start_time: datetime, end_time: Optional[datetime] = None
-    ) -> List[BaseState]:
+        cls, entity: Model, start_time: datetime, end_time: datetime | None = None
+    ) -> list[BaseState]:
         """
         Get states within a time range using UUID7 time-based queries.
 
@@ -486,7 +486,7 @@ class StateManager:
         )
 
     @classmethod
-    def warm_cache(cls, entities: List[Model]):
+    def warm_cache(cls, entities: list[Model]):
         """
         Warm cache with current states for a list of entities.
 
@@ -515,7 +515,7 @@ class StateManager:
 
     @classmethod
     def execute_transition(
-        cls, entity: Model, transition_name: str, transition_data: Dict[str, Any] = None, user=None, **context_kwargs
+        cls, entity: Model, transition_name: str, transition_data: dict[str, Any] = None, user=None, **context_kwargs
     ) -> BaseState:
         """
         Execute a registered transition by name.
@@ -554,7 +554,7 @@ DEFAULT_STATE_MANAGER = StateManager
 RESOLVED_STATE_MANAGER = None
 
 
-def get_state_manager() -> Type[StateManager]:
+def get_state_manager() -> type[StateManager]:
     """
     Get the configured state manager class.
 

@@ -107,12 +107,12 @@ def test_create_annotation_with_ground_truth(caplog, any_client, configured_proj
         m.post('http://localhost:8999/train')
 
         # ground_truth doesn't affect statistics & ML backend, webhook is called for admin accounts
-        r = any_client.post('/api/tasks/{}/annotations/'.format(task.id), data=ground_truth)
+        r = any_client.post(f'/api/tasks/{task.id}/annotations/', data=ground_truth)
         assert r.status_code == 201
         assert m.called == webhook_called
 
         # real annotation triggers uploading to ML backend and recalculating accuracy
-        r = any_client.post('/api/tasks/{}/annotations/'.format(task.id), data=annotation)
+        r = any_client.post(f'/api/tasks/{task.id}/annotations/', data=annotation)
         assert r.status_code == 201
         assert m.called
         task = Task.objects.get(id=task.id)
@@ -127,7 +127,7 @@ def test_delete_annotation(business_client, configured_project):
     task = Task.objects.first()
     annotation = Annotation.objects.create(task=task, project=configured_project, result=[])
     assert task.annotations.count() == 1
-    r = business_client.delete('/api/annotations/{}/'.format(annotation.id))
+    r = business_client.delete(f'/api/annotations/{annotation.id}/')
     assert r.status_code == 204
     assert task.annotations.count() == 0
 

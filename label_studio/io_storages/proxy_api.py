@@ -1,7 +1,6 @@
 import base64
 import logging
 import time
-from typing import Union
 from urllib.parse import unquote
 
 from core.feature_flags import flag_set
@@ -22,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class ResolveStorageUriAPIMixin:
-    def resolve(self, request: HttpRequest, fileuri: str, instance: Union[Task, Project]) -> Response:
+    def resolve(self, request: HttpRequest, fileuri: str, instance: Task | Project) -> Response:
         model_name = type(instance).__name__
 
         if not instance.has_permission(request.user):
@@ -66,7 +65,7 @@ class ResolveStorageUriAPIMixin:
         else:
             return self.proxy_data_from_storage(request, fileuri, project, storage)
 
-    def redirect_to_presign_url(self, fileuri: str, instance: Union[Task, Project], model_name: str) -> Response:
+    def redirect_to_presign_url(self, fileuri: str, instance: Task | Project, model_name: str) -> Response:
         """Generate and redirect to a presigned URL for the given file URI"""
         try:
             resolved = instance.resolve_storage_uri(fileuri)

@@ -81,7 +81,7 @@ class TestCleanupInconsistentFiltergroupMigration(TestCase):
 
         migration = AsyncMigrationStatus.objects.get(name='0013_cleanup_inconsistent_filtergroup_20250624_2119')
         assert migration.status == AsyncMigrationStatus.STATUS_FINISHED
-        assert set(migration.meta['project_ids']) == set([self.project_1.id, self.project_2.id, self.project_3.id])
+        assert set(migration.meta['project_ids']) == {self.project_1.id, self.project_2.id, self.project_3.id}
 
         # Assert final state
         assert FilterGroup.objects.count() == 6

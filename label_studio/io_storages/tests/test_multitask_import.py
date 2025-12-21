@@ -1,7 +1,7 @@
 import json
+from unittest import mock
 
 import boto3
-import mock
 import pytest
 from io_storages.models import S3ImportStorage
 from io_storages.s3.models import S3ImportStorageLink
@@ -83,7 +83,7 @@ def _test_storage_import(project, storage_class, task_data, **storage_kwargs):
 
     # Sync storage
     # Mock redis_connected to force synchronous execution in tests
-    import mock
+    from unittest import mock
 
     with mock.patch('io_storages.base_models.redis_connected', return_value=False):
         storage.sync()

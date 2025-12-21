@@ -1,7 +1,6 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import logging
-from typing import Dict, List
 
 from core.utils.common import conditional_atomic, db_is_not_sqlite, load_func
 from django.conf import settings
@@ -132,7 +131,7 @@ class MLBackend(models.Model):
         return f'{self.title} (id={self.id}, url={self.url})'
 
     def __init__(self, *args, **kwargs):
-        super(MLBackend, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__original_title = self.title
 
     def save(self, *args, **kwargs):
@@ -259,8 +258,8 @@ class MLBackend(models.Model):
         }
 
     def _get_predictions_from_ml_backend_one_by_one(
-        self, serialized_tasks: List[Dict], current_responses: List[Dict]
-    ) -> List[Dict]:
+        self, serialized_tasks: list[dict], current_responses: list[dict]
+    ) -> list[dict]:
         """
         This is helper method to get predictions from ML backend one by one
         in case when tasks length doesn't match responses length
@@ -289,7 +288,7 @@ class MLBackend(models.Model):
             )
             return []
 
-    def _get_predictions_from_ml_backend(self, serialized_tasks: List[Dict]) -> List[Dict]:
+    def _get_predictions_from_ml_backend(self, serialized_tasks: list[dict]) -> list[dict]:
         result = self.api.make_predictions(serialized_tasks, self.project)
 
         # response validation

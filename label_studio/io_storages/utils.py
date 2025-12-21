@@ -5,7 +5,6 @@ import json
 import logging
 import re
 from dataclasses import dataclass
-from typing import Optional, Union
 
 from core.feature_flags import flag_set
 from core.utils.common import load_func
@@ -24,7 +23,7 @@ class BucketURI:
     scheme: str
 
 
-def get_uri_via_regex(data, prefixes=('s3', 'gs')) -> tuple[Union[str, None], Union[str, None]]:
+def get_uri_via_regex(data, prefixes=('s3', 'gs')) -> tuple[str | None, str | None]:
     data = str(data).strip()
     middle_check = False
 
@@ -55,7 +54,7 @@ def get_uri_via_regex(data, prefixes=('s3', 'gs')) -> tuple[Union[str, None], Un
     return r_match.group('uri'), r_match.group('storage')
 
 
-def parse_bucket_uri(value: object, storage) -> Union[BucketURI, None]:
+def parse_bucket_uri(value: object, storage) -> BucketURI | None:
     if not value:
         return None
 
@@ -163,12 +162,10 @@ def _load_tasks_json_lso_list(blob: bytes, key: str) -> list[StorageObject]:
     Current implementation - returns list of StorageObjects.
     """
 
-    def _error_wrapper(exc: Optional[Exception] = None):
+    def _error_wrapper(exc: Exception | None = None):
         raise ValueError(
-            (
                 f"Can't import JSON-formatted tasks from {key}. If you're trying to import binary objects, "
                 f'perhaps you forgot to enable "Tasks" import method?'
-            )
         ) from exc
 
     try:
@@ -199,12 +196,10 @@ def _load_tasks_json_lso_generator(blob: bytes, key: str):
     Generator version - yields StorageObjects one by one to save memory.
     """
 
-    def _error_wrapper(exc: Optional[Exception] = None):
+    def _error_wrapper(exc: Exception | None = None):
         raise ValueError(
-            (
                 f"Can't import JSON-formatted tasks from {key}. If you're trying to import binary objects, "
                 f'perhaps you forgot to enable "Tasks" import method?'
-            )
         ) from exc
 
     try:

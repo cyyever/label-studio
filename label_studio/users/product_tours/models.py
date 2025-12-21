@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -14,11 +14,11 @@ class ProductTourState(models.TextChoices):
 class ProductTourInteractionData(BaseModel):
     """Pydantic model for validating tour interaction data"""
 
-    index: Optional[int] = Field(None, description='Step number where tour was completed')
-    action: Optional[str] = Field(None, description='Action taken during the tour')
-    type: Optional[str] = Field(None, description='Type of interaction')
-    status: Optional[str] = Field(None, description='Status of the interaction')
-    additional_data: Optional[Dict[str, Any]] = Field(
+    index: int | None = Field(None, description='Step number where tour was completed')
+    action: str | None = Field(None, description='Action taken during the tour')
+    type: str | None = Field(None, description='Type of interaction')
+    status: str | None = Field(None, description='Status of the interaction')
+    additional_data: dict[str, Any] | None = Field(
         default_factory=dict, description='Extensible field for additional interaction data'
     )
 

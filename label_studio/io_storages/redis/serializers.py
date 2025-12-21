@@ -21,7 +21,7 @@ class RedisImportStorageSerializer(ImportStorageSerializer):
         return result
 
     def validate(self, data):
-        data = super(RedisImportStorageSerializer, self).validate(data)
+        data = super().validate(data)
 
         storage = RedisImportStorage(**data)
         try:

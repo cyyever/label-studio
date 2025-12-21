@@ -5,7 +5,6 @@ Tests registry management, state model registration, transition registration,
 and related error handling scenarios.
 """
 
-from typing import Optional
 from unittest.mock import Mock, patch
 
 import pytest
@@ -113,7 +112,7 @@ class RegistryTests(TestCase):
         state_model_registry.register_model('testentity', mock_state_model)
 
         class TestTransition(BaseTransition):
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'TEST'
 
             def transition(self, context):
@@ -147,7 +146,7 @@ class RegistryTests(TestCase):
         # Test transition decorator
         @register_state_transition('decorated_entity', 'decorated_transition')
         class DecoratedTransition(BaseTransition):
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return 'DECORATED'
 
             def transition(self, context):

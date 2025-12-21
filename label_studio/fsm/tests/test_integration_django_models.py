@@ -5,7 +5,7 @@ Django models and the StateManager, providing realistic usage examples.
 """
 
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional
+from typing import Any
 from unittest.mock import Mock, patch
 
 from core.current_request import CurrentContext
@@ -99,7 +99,7 @@ class DjangoModelIntegrationTests(TestCase):
             created_by_id: int = Field(..., description='User creating the task')
             initial_priority: str = Field('normal', description='Initial task priority')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return TaskStateChoices.CREATED
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -108,7 +108,7 @@ class DjangoModelIntegrationTests(TestCase):
                     raise TransitionValidationError('CreateTask can only be used for initial state')
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'created_by_id': self.created_by_id,
                     'initial_priority': self.initial_priority,
@@ -125,7 +125,7 @@ class DjangoModelIntegrationTests(TestCase):
             estimated_hours: float = Field(None, ge=0.1, description='Estimated work hours')
             priority: str = Field('normal', description='Task priority')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return TaskStateChoices.IN_PROGRESS
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -147,7 +147,7 @@ class DjangoModelIntegrationTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'assignee_id': self.assignee_id,
                     'estimated_hours': self.estimated_hours,
@@ -165,7 +165,7 @@ class DjangoModelIntegrationTests(TestCase):
             completion_notes: str = Field('', description='Completion notes')
             actual_hours: float = Field(None, ge=0.0, description='Actual hours worked')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return TaskStateChoices.COMPLETED
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -188,7 +188,7 @@ class DjangoModelIntegrationTests(TestCase):
                 if hasattr(self, '_notifications'):
                     self._notifications.append(f'Task {context.entity.pk} completed with quality {self.quality_score}')
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 # Calculate metrics
                 start_data = context.current_state_object.context_data if context.current_state_object else {}
                 estimated_hours = start_data.get('estimated_hours')
@@ -299,7 +299,7 @@ class DjangoModelIntegrationTests(TestCase):
             annotation_time_seconds: int = Field(..., ge=1, description='Time spent annotating')
             review_requested: bool = Field(True, description='Whether review is requested')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return AnnotationStateChoices.SUBMITTED
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -316,7 +316,7 @@ class DjangoModelIntegrationTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'annotator_confidence': self.annotator_confidence,
                     'annotation_time_seconds': self.annotation_time_seconds,
@@ -335,7 +335,7 @@ class DjangoModelIntegrationTests(TestCase):
             review_comments: str = Field('', description='Review comments')
             corrections_made: bool = Field(False, description='Whether reviewer made corrections')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 if self.reviewer_decision == 'approve':
                     return AnnotationStateChoices.COMPLETED
                 else:
@@ -360,7 +360,7 @@ class DjangoModelIntegrationTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 # Get submission data for metrics
                 submission_data = context.current_state_object.context_data if context.current_state_object else {}
 
@@ -469,7 +469,7 @@ class DjangoModelIntegrationTests(TestCase):
             updated_by_system: bool = Field(False, description='Whether updated by automated system')
             batch_id: str = Field(None, description='Batch operation ID')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return self.new_status
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -483,7 +483,7 @@ class DjangoModelIntegrationTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'new_status': self.new_status,
                     'update_reason': self.update_reason,
@@ -553,7 +553,7 @@ class DjangoModelIntegrationTests(TestCase):
             max_concurrent_tasks: int = Field(5, description='Max concurrent tasks per user')
             skill_requirements: list = Field(default_factory=list, description='Required skills')
 
-            def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+            def get_target_state(self, context: TransitionContext | None = None) -> str:
                 return TaskStateChoices.IN_PROGRESS
 
             def validate_transition(self, context: TransitionContext) -> bool:
@@ -601,7 +601,7 @@ class DjangoModelIntegrationTests(TestCase):
 
                 return True
 
-            def transition(self, context: TransitionContext) -> Dict[str, Any]:
+            def transition(self, context: TransitionContext) -> dict[str, Any]:
                 return {
                     'assignee_id': self.assignee_id,
                     'max_concurrent_tasks': self.max_concurrent_tasks,

@@ -2,15 +2,15 @@
 Utility helpers for LocalFiles storage operations.
 """
 import os
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, Optional
 
 AUTO_ROOT_CANDIDATES: tuple[str, ...] = ('mydata', 'label-studio-data')
 
 
 def autodetect_local_files_root(
-    base_dir: Optional[str] = None, candidates: Iterable[str] = AUTO_ROOT_CANDIDATES
-) -> Optional[str]:
+    base_dir: str | None = None, candidates: Iterable[str] = AUTO_ROOT_CANDIDATES
+) -> str | None:
     """Return the first existing candidate directory relative to ``base_dir``."""
     search_root = Path(base_dir or os.getcwd())
     for candidate_name in candidates:

@@ -1,7 +1,6 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import datetime
-from typing import Optional
 
 from core.feature_flags import flag_set
 from core.utils.common import load_func
@@ -187,7 +186,7 @@ class User(UserMixin, AbstractBaseUser, PermissionsMixin, UserLastActivityMixin)
         return annotations.values_list('project').distinct().count()
 
     @cached_property
-    def own_organization(self) -> Optional[Organization]:
+    def own_organization(self) -> Organization | None:
         return fast_first(Organization.objects.filter(created_by=self))
 
     @cached_property
@@ -209,7 +208,7 @@ class User(UserMixin, AbstractBaseUser, PermissionsMixin, UserLastActivityMixin)
         """
         Return the first_name and the last_name for a given user with a space in between.
         """
-        full_name = '%s %s' % (self.first_name, self.last_name)
+        full_name = '{} {}'.format(self.first_name, self.last_name)
         return full_name.strip()
 
     def get_short_name(self):

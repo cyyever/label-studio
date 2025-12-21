@@ -2,7 +2,7 @@
 Utility functions to translate Django REST Framework serializers into OpenAPI parameter objects.
 """
 
-from typing import Any, List, Optional
+from typing import Any
 
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter
@@ -12,9 +12,9 @@ from rest_framework import serializers
 def serializer_to_openapi_params(
     serializer_class: type[serializers.Serializer],
     location: str = 'query',
-    exclude_fields: Optional[List[str]] = None,
-    field_overrides: Optional[dict] = None,
-) -> List[OpenApiParameter]:
+    exclude_fields: list[str] | None = None,
+    field_overrides: dict | None = None,
+) -> list[OpenApiParameter]:
     """
     Convert a Django REST Framework serializer into a list of OpenAPI parameter objects.
 

@@ -5,7 +5,7 @@ This module provides functions to convert django-filter FilterSet classes into O
 for use with extend_schema decorators.
 """
 
-from typing import Any, List, Optional, Type
+from typing import Any
 
 from django_filters import FilterSet
 from django_filters.filters import (
@@ -37,11 +37,11 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 
 
 def filterset_to_openapi_params(
-    filterset_class: Type[FilterSet],
+    filterset_class: type[FilterSet],
     location: str = 'query',
-    exclude_fields: Optional[List[str]] = None,
-    field_overrides: Optional[dict] = None,
-) -> List[OpenApiParameter]:
+    exclude_fields: list[str] | None = None,
+    field_overrides: dict | None = None,
+) -> list[OpenApiParameter]:
     """
     Convert a Django FilterSet class into a list of OpenAPI parameter objects.
 
@@ -279,7 +279,7 @@ def _get_filter_description(filter_field: Any) -> str:
     return f'Filter by {field_name}'
 
 
-def _get_choice_enum(filter_field: Any) -> List[str]:
+def _get_choice_enum(filter_field: Any) -> list[str]:
     """
     Extract enum values from a choice filter field.
 

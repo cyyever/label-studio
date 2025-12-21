@@ -122,7 +122,7 @@ class FileUpload(models.Model):
         Returns:
             list: List of tasks in the format [{'data': {...}}, ...]
         """
-        logger.debug('Read tasks list from CSV file {}'.format(self.filepath))
+        logger.debug(f'Read tasks list from CSV file {self.filepath}')
         separator = self._detect_csv_separator()
         tasks = pd.read_csv(self.file.open(), sep=separator).fillna('').to_dict('records')
         tasks = [{'data': task} for task in tasks]
@@ -135,19 +135,19 @@ class FileUpload(models.Model):
         Returns:
             list: List of tasks in the format [{'data': {...}}, ...]
         """
-        logger.debug('Read tasks list from TSV file {}'.format(self.filepath))
+        logger.debug(f'Read tasks list from TSV file {self.filepath}')
         tasks = pd.read_csv(self.file.open(), sep='\t').fillna('').to_dict('records')
         tasks = [{'data': task} for task in tasks]
         return tasks
 
     def read_tasks_list_from_txt(self):
-        logger.debug('Read tasks list from text file {}'.format(self.filepath))
+        logger.debug(f'Read tasks list from text file {self.filepath}')
         lines = self.content.splitlines()
         tasks = [{'data': {settings.DATA_UNDEFINED_NAME: line}} for line in lines]
         return tasks
 
     def read_tasks_list_from_json(self):
-        logger.debug('Read tasks list from JSON file {}'.format(self.filepath))
+        logger.debug(f'Read tasks list from JSON file {self.filepath}')
 
         raw_data = self.content
         # Python 3.5 compatibility fix https://docs.python.org/3/whatsnew/3.6.html#json
@@ -167,7 +167,7 @@ class FileUpload(models.Model):
         return tasks_formatted
 
     def read_tasks_list_from_json_streaming(self, batch_size=100):
-        logger.debug('Read tasks list from JSON file streaming {}'.format(self.filepath))
+        logger.debug(f'Read tasks list from JSON file streaming {self.filepath}')
 
         try:
             with self.file.open('rb') as file_handle:
@@ -231,13 +231,13 @@ class FileUpload(models.Model):
         return task
 
     def read_task_from_hypertext_body(self):
-        logger.debug('Read 1 task from hypertext file {}'.format(self.filepath))
+        logger.debug(f'Read 1 task from hypertext file {self.filepath}')
         body = self.content
         tasks = [{'data': {settings.DATA_UNDEFINED_NAME: body}}]
         return tasks
 
     def read_task_from_uploaded_file(self):
-        logger.debug('Read 1 task from uploaded file {}'.format(self.filepath))
+        logger.debug(f'Read 1 task from uploaded file {self.filepath}')
         if settings.CLOUD_FILE_STORAGE_ENABLED:
             tasks = [{'data': {settings.DATA_UNDEFINED_NAME: self.filepath}}]
         else:
@@ -427,18 +427,18 @@ def _old_vs_new_data_keys_inconsistency_message(new_data_keys, old_data_keys, cu
         return ''
     elif new_data_keys_list == settings.DATA_UNDEFINED_NAME:
         return (
-            common_prefix + 'uploading a single file {0} '
-            'clashes with data key(s) found from other files:\n"{1}"'.format(current_file, old_data_keys_list)
+            common_prefix + 'uploading a single file {} '
+            'clashes with data key(s) found from other files:\n"{}"'.format(current_file, old_data_keys_list)
         )
     elif old_data_keys_list == settings.DATA_UNDEFINED_NAME:
         return (
-            common_prefix + 'uploading tabular data from {0} with data key(s) {1}, '
+            common_prefix + 'uploading tabular data from {} with data key(s) {}, '
             'clashes with other raw binary files (images, audios, etc.)'.format(current_file, new_data_keys_list)
         )
     else:
         return (
-            common_prefix + 'uploading tabular data from "{0}" with data key(s) "{1}", '
-            'clashes with data key(s) found from other files:\n"{2}"'.format(
+            common_prefix + 'uploading tabular data from "{}" with data key(s) "{}", '
+            'clashes with data key(s) found from other files:\n"{}"'.format(
                 current_file, new_data_keys_list, old_data_keys_list
             )
         )

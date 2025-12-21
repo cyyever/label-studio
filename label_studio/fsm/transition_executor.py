@@ -7,7 +7,7 @@ StateManager imports from this module and provides its methods as parameters.
 """
 
 import logging
-from typing import Any, Dict, Type
+from typing import Any
 
 from django.db.models import Model
 from fsm.registry import get_state_model_for_entity, transition_registry
@@ -20,9 +20,9 @@ logger = logging.getLogger(__name__)
 def execute_transition_with_state_manager(
     entity: Model,
     transition_name: str,
-    transition_data: Dict[str, Any],
+    transition_data: dict[str, Any],
     user,
-    state_manager_class: Type,
+    state_manager_class: type,
     **context_kwargs,
 ) -> BaseState:
     """

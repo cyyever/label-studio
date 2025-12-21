@@ -1,6 +1,5 @@
 import contextlib
 import datetime
-import io
 import json
 import os
 import pathlib
@@ -39,15 +38,15 @@ def suppress_autotime(model, fields):
 def _migrate_tasks(project_path, project):
     """Migrate tasks from json file to database objects"""
     tasks_path = project_path / 'tasks.json'
-    with io.open(os.path.abspath(tasks_path), encoding='utf-8') as t:
+    with open(os.path.abspath(tasks_path), encoding='utf-8') as t:
         tasks_data = json.load(t)
         for task_id, task_data in tasks_data.items():
             task = Task.objects.create(data=task_data.get('data', {}), project=project)
 
             # migrate annotations
-            annotations_path = project_path / 'completions' / '{}.json'.format(task_id)
+            annotations_path = project_path / 'completions' / f'{task_id}.json'
             if annotations_path.exists():
-                with io.open(os.path.abspath(annotations_path), encoding='utf-8') as c:
+                with open(os.path.abspath(annotations_path), encoding='utf-8') as c:
                     annotations_data = json.load(c)
                     for annotation in annotations_data['completions']:
                         task_annotation = Annotation(
@@ -83,7 +82,7 @@ def _migrate_tabs(project_path, project):
     """Migrate tabs from tabs.json to Views table"""
     tabs_path = project_path / 'tabs.json'
     if tabs_path.exists():
-        with io.open(os.path.abspath(tabs_path), encoding='utf-8') as t:
+        with open(os.path.abspath(tabs_path), encoding='utf-8') as t:
             tabs_data = json.load(t)
             for tab in tabs_data['tabs']:
                 view = View.objects.create(project=project)

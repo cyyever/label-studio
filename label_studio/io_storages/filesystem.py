@@ -17,7 +17,7 @@ class JSONStorage(BaseStorage):
     description = 'JSON task file'
 
     def __init__(self, **kwargs):
-        super(JSONStorage, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         tasks = {}
         if os.path.exists(self.path):
             tasks = json_load(self.path, int_keys=True)
@@ -81,7 +81,7 @@ class JSONStorage(BaseStorage):
 
 def already_exists_error(what, path):
     raise RuntimeError(
-        '{path} {what} already exists. Use "--force" option to recreate it.'.format(path=path, what=what)
+        f'{path} {what} already exists. Use "--force" option to recreate it.'
     )
 
 
@@ -90,7 +90,7 @@ class DirJSONsStorage(BaseStorage):
     description = 'Directory with JSON task files'
 
     def __init__(self, **kwargs):
-        super(DirJSONsStorage, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         os.makedirs(self.path, exist_ok=True)
         self.cache = {}
 
@@ -165,7 +165,7 @@ class TasksJSONStorage(JSONStorage):
     description = 'Local [loading tasks from "tasks.json" file]'
 
     def __init__(self, path, project_path, **kwargs):
-        super(TasksJSONStorage, self).__init__(
+        super().__init__(
             project_path=project_path, path=os.path.join(project_path, 'tasks.json')
         )
 
@@ -176,7 +176,7 @@ class ExternalTasksJSONStorage(CloudStorage):
     description = 'Local [loading tasks from "tasks.json" file]'
 
     def __init__(self, name, path, project_path, prefix=None, create_local_copy=False, regex='.*', **kwargs):
-        super(ExternalTasksJSONStorage, self).__init__(
+        super().__init__(
             name=name,
             project_path=project_path,
             path=os.path.join(project_path, 'tasks.json'),
@@ -216,13 +216,13 @@ class ExternalTasksJSONStorage(CloudStorage):
 
     def set(self, id, value):
         with self.thread_lock:
-            super(ExternalTasksJSONStorage, self).set(id, value)
+            super().set(id, value)
             self._save()
 
     def set_many(self, ids, values):
         with self.thread_lock:
             for id, value in zip(ids, values):
-                super(ExternalTasksJSONStorage, self)._pre_set(id, value)
+                super()._pre_set(id, value)
             self._save_ids()
             self._save()
 
@@ -281,6 +281,6 @@ class AnnotationsDirStorage(DirJSONsStorage):
     description = 'Local [annotations are in "annotations" directory]'
 
     def __init__(self, name, path, project_path, **kwargs):
-        super(AnnotationsDirStorage, self).__init__(
+        super().__init__(
             name=name, project_path=project_path, path=os.path.join(project_path, 'annotations')
         )

@@ -91,7 +91,7 @@ def set_export_default_name(sender, instance, created, **kwargs):
         instance.save()
 
 
-class DataExport(object):
+class DataExport:
     # TODO: deprecated
     @staticmethod
     def save_export_files(project, now, get_args, data, md5, name):

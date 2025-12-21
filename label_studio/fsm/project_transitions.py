@@ -5,7 +5,7 @@ This module defines declarative transitions for the Project entity,
 replacing the previous signal-based approach with explicit, testable transitions.
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 from core.utils.common import load_func
 from django.conf import settings
@@ -28,7 +28,7 @@ class ProjectCreatedTransition(ModelChangeTransition):
     Trigger: Automatically on creation (triggers_on_create=True, triggers_on_update=False)
     """
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return ProjectStateChoices.CREATED
 
     def should_execute(self, context: TransitionContext) -> bool:
@@ -39,7 +39,7 @@ class ProjectCreatedTransition(ModelChangeTransition):
         """Return detailed reason for project creation."""
         return 'Project created'
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         """
         Execute project creation transition.
 
@@ -72,13 +72,13 @@ class ProjectInProgressTransition(ModelChangeTransition):
     From: CREATED -> IN_PROGRESS
     """
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return ProjectStateChoices.IN_PROGRESS
 
     def get_reason(self, context: TransitionContext) -> str:
         return 'Project moved to in progress - first annotation submitted'
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         project = context.entity
         return {
             'organization_id': project.organization_id,
@@ -95,13 +95,13 @@ class ProjectCompletedTransition(ModelChangeTransition):
     From: IN_PROGRESS -> COMPLETED
     """
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return ProjectStateChoices.COMPLETED
 
     def get_reason(self, context: TransitionContext) -> str:
         return 'Project completed - all tasks completed'
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         project = context.entity
         return {
             'organization_id': project.organization_id,
@@ -120,13 +120,13 @@ class ProjectInProgressFromCompletedTransition(ModelChangeTransition):
     From: COMPLETED -> IN_PROGRESS
     """
 
-    def get_target_state(self, context: Optional[TransitionContext] = None) -> str:
+    def get_target_state(self, context: TransitionContext | None = None) -> str:
         return ProjectStateChoices.IN_PROGRESS
 
     def get_reason(self, context: TransitionContext) -> str:
         return 'Project moved back to in progress - task became incomplete'
 
-    def transition(self, context: TransitionContext) -> Dict[str, Any]:
+    def transition(self, context: TransitionContext) -> dict[str, Any]:
         project = context.entity
         return {
             'organization_id': project.organization_id,

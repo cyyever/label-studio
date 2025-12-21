@@ -12,7 +12,6 @@ for INSERT-only architectures with millions of records.
 import logging
 import uuid
 from datetime import datetime, timezone
-from typing import Optional, Tuple
 
 import uuid_utils
 from core.current_request import CurrentContext
@@ -64,7 +63,7 @@ def timestamp_from_uuid7(uuid7_id: uuid.UUID) -> datetime:
     return datetime.fromtimestamp(timestamp_ms / 1000, tz=timezone.utc)
 
 
-def uuid7_time_range(start_time: datetime, end_time: Optional[datetime] = None) -> Tuple[uuid.UUID, uuid.UUID]:
+def uuid7_time_range(start_time: datetime, end_time: datetime | None = None) -> tuple[uuid.UUID, uuid.UUID]:
     """
     Generate UUID7 range for time-based queries.
 
@@ -152,7 +151,7 @@ class UUID7Field:
         return queryset.order_by('-id').first()
 
     @staticmethod
-    def filter_by_time_range(queryset, start_time: datetime, end_time: Optional[datetime] = None):
+    def filter_by_time_range(queryset, start_time: datetime, end_time: datetime | None = None):
         """Filter queryset by time range using UUID7 embedded timestamps"""
         start_uuid, end_uuid = uuid7_time_range(start_time, end_time)
         return queryset.filter(id__gte=start_uuid, id__lte=end_uuid)
@@ -171,7 +170,7 @@ class UUID7Generator:
     Useful for testing or when you need to generate UUIDs with specific timestamps.
     """
 
-    def __init__(self, base_timestamp: Optional[datetime] = None):
+    def __init__(self, base_timestamp: datetime | None = None):
         """
         Initialize generator with optional base timestamp.
 
@@ -276,7 +275,7 @@ def is_fsm_enabled(user=None) -> bool:
     return CurrentContext.is_fsm_enabled()
 
 
-def get_current_state_safe(entity, user=None) -> Optional[str]:
+def get_current_state_safe(entity, user=None) -> str | None:
     """
     Safely get current state with error handling.
     Args:
@@ -307,7 +306,7 @@ def get_current_state_safe(entity, user=None) -> Optional[str]:
         return None
 
 
-def get_or_initialize_state(entity, user, inferred_state: str, reason=None, context_data=None) -> Optional[str]:
+def get_or_initialize_state(entity, user, inferred_state: str, reason=None, context_data=None) -> str | None:
     """
     Get current state, or initialize it if it doesn't exist.
 
@@ -415,7 +414,7 @@ def get_or_initialize_state(entity, user, inferred_state: str, reason=None, cont
         return None
 
 
-def _get_initialization_transition_name(entity_type: str, target_state: str) -> Optional[str]:
+def _get_initialization_transition_name(entity_type: str, target_state: str) -> str | None:
     """
     Get the appropriate transition name for initializing an entity to a target state.
 

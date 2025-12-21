@@ -182,7 +182,7 @@ def static_file_with_host_resolver(path_on_disk, content_type):
     path_on_disk = os.path.join(settings.STATIC_ROOT, path_on_disk)
 
     def serve_file(request):
-        with open(path_on_disk, 'r') as f:
+        with open(path_on_disk) as f:
             body = f.read()
             body = body.replace('{{HOSTNAME}}', settings.HOSTNAME)
 

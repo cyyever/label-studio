@@ -175,7 +175,7 @@ def bulk_update(
         n_pks = len(pks)
         del pks
 
-        dbtable = '"{}"'.format(meta.db_table)
+        dbtable = f'"{meta.db_table}"'
 
         in_clause = '"{pk_column}" in ({pks})'.format(
             pk_column=pk_field.column,

@@ -17,7 +17,7 @@ class ImportStorageSerializer(serializers.ModelSerializer):
     synchronizable = serializers.BooleanField(required=False, default=True)
 
     def validate(self, data):
-        data = super(ImportStorageSerializer, self).validate(data)
+        data = super().validate(data)
         if settings.IMPORT_STORAGE_SERIALIZER_VALIDATE:
             validate_func = load_func(settings.IMPORT_STORAGE_SERIALIZER_VALIDATE)
             data = validate_func(self, data)

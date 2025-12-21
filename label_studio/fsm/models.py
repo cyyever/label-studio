@@ -7,7 +7,7 @@ to avoid registration issues in LSE.
 """
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from django.db import models
 
@@ -103,7 +103,7 @@ class FsmHistoryStateModel(models.Model):
 
         return reduction
 
-    def _get_changed_fields(self) -> Dict[str, tuple]:
+    def _get_changed_fields(self) -> dict[str, tuple]:
         """
         Get fields that changed since the last load/save.
 
@@ -307,7 +307,7 @@ class FsmHistoryStateModel(models.Model):
 
         return transitions_to_execute
 
-    def _get_fsm_transition_data(self) -> Dict[str, Any]:
+    def _get_fsm_transition_data(self) -> dict[str, Any]:
         """
         Get data to pass to the FSM transition.
 
@@ -455,7 +455,7 @@ class FsmHistoryStateModel(models.Model):
 
         return result
 
-    def _execute_fsm_transition(self, transition_name: str, is_creating: bool, changed_fields: Dict[str, tuple]):
+    def _execute_fsm_transition(self, transition_name: str, is_creating: bool, changed_fields: dict[str, tuple]):
         """
         Execute an FSM transition.
 

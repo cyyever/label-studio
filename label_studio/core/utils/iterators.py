@@ -10,8 +10,7 @@ def iterate_queryset(queryset, chunk_size=None):
         raise ValueError(f'chunk_size must be positive, got {chunk_size}')
 
     if not flag_set('fflag_fix_back_plt_863_remove_iterator_27082025_short', user='auto'):
-        for obj in queryset.iterator(chunk_size=chunk_size):
-            yield obj
+        yield from queryset.iterator(chunk_size=chunk_size)
         return
 
     model = queryset.model
@@ -29,5 +28,4 @@ def iterate_queryset(queryset, chunk_size=None):
         # annotations, select_related, prefetch_related, only/defer
         chunk_qs = queryset.filter(**{f'{pk_field}__in': chunk_ids})
 
-        for obj in chunk_qs:
-            yield obj
+        yield from chunk_qs

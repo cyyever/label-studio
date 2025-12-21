@@ -49,7 +49,7 @@ class S3StorageSerializerMixin:
         try:
             storage.validate_connection()
         except ParamValidationError:
-            raise ValidationError('Wrong credentials for S3 {bucket_name}'.format(bucket_name=storage.bucket))
+            raise ValidationError(f'Wrong credentials for S3 {storage.bucket}')
         except ClientError as e:
             if (
                 e.response.get('Error').get('Code') in ['SignatureDoesNotMatch', '403']
@@ -64,7 +64,7 @@ class S3StorageSerializerMixin:
                 e.response.get('Error').get('Code') in ['NoSuchBucket', '404']
                 or e.response.get('ResponseMetadata').get('HTTPStatusCode') == 404
             ):
-                raise ValidationError('Cannot find bucket {bucket_name} in S3'.format(bucket_name=storage.bucket))
+                raise ValidationError(f'Cannot find bucket {storage.bucket} in S3')
         except TypeError as e:
             logger.info(f'It seems access keys are incorrect: {e}', exc_info=True)
             raise ValidationError('It seems access keys are incorrect')

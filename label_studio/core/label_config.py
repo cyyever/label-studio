@@ -4,7 +4,6 @@ import json
 import logging
 import re
 from collections import OrderedDict, defaultdict
-from typing import Tuple, Union
 from urllib.parse import urlencode
 
 import defusedxml.ElementTree as etree
@@ -75,7 +74,7 @@ def _fix_choices(config):
     return config
 
 
-def parse_config_to_xml(config_string: Union[str, None], raise_on_empty: bool = False) -> Union[OrderedDict, None]:
+def parse_config_to_xml(config_string: str | None, raise_on_empty: bool = False) -> OrderedDict | None:
     if config_string is None:
         if raise_on_empty:
             raise TypeError('config_string is None')
@@ -90,7 +89,7 @@ def parse_config_to_xml(config_string: Union[str, None], raise_on_empty: bool = 
     return xml
 
 
-def parse_config_to_json(config_string: Union[str, None]) -> Tuple[Union[OrderedDict, None], Union[str, None]]:
+def parse_config_to_json(config_string: str | None) -> tuple[OrderedDict | None, str | None]:
     try:
         xml = parse_config_to_xml(config_string, raise_on_empty=True)
     except TypeError:
@@ -102,7 +101,7 @@ def parse_config_to_json(config_string: Union[str, None]) -> Tuple[Union[Ordered
     return config, etree.tostring(xml, encoding='unicode')
 
 
-def validate_label_config(config_string: Union[str, None]) -> None:
+def validate_label_config(config_string: str | None) -> None:
     # xml and schema
     try:
         config, cleaned_config_string = parse_config_to_json(config_string)

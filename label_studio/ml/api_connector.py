@@ -43,7 +43,7 @@ JOB_STATUS_URL = 'job_status'
 VERSIONS_URL = 'versions'
 
 
-class BaseHTTPAPI(object):
+class BaseHTTPAPI:
     MAX_RETRIES = 2
     HEADERS = {
         'User-Agent': 'heartex/' + (version or ''),
@@ -136,7 +136,7 @@ class MLApi(BaseHTTPAPI):
     """
 
     def __init__(self, **kwargs):
-        super(MLApi, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self._validate_request_timeout = 10
 
     def _get_url(self, url_suffix):

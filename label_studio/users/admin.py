@@ -16,7 +16,7 @@ class UserAdminShort(UserAdmin):
     add_fieldsets = ((None, {'fields': ('email', 'password1', 'password2')}),)
 
     def __init__(self, *args, **kwargs):
-        super(UserAdminShort, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.list_display = (
             'email',
@@ -56,7 +56,7 @@ class UserAdminShort(UserAdmin):
 
 class AsyncMigrationStatusAdmin(admin.ModelAdmin):
     def __init__(self, *args, **kwargs):
-        super(AsyncMigrationStatusAdmin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.list_display = ('id', 'name', 'project', 'status', 'created_at', 'updated_at', 'meta')
         self.list_filter = ('name', 'status')
@@ -150,7 +150,7 @@ class AsyncMigrationStatusAdmin(admin.ModelAdmin):
 
 class OrganizationMemberAdmin(admin.ModelAdmin):
     def __init__(self, *args, **kwargs):
-        super(OrganizationMemberAdmin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.list_display = ('id', 'user', 'organization', 'created_at', 'updated_at')
         self.search_fields = ('user__email', 'organization__title')
