@@ -208,7 +208,7 @@ class User(UserMixin, AbstractBaseUser, PermissionsMixin, UserLastActivityMixin)
         """
         Return the first_name and the last_name for a given user with a space in between.
         """
-        full_name = '{} {}'.format(self.first_name, self.last_name)
+        full_name = f'{self.first_name} {self.last_name}'
         return full_name.strip()
 
     def get_short_name(self):

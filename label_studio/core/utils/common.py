@@ -323,7 +323,7 @@ def conditional_atomic(
     predicate: Callable[..., bool],
     predicate_args: Iterable[Any] | None = None,
     predicate_kwargs: Mapping[str, Any] | None = None,
-) -> Generator[None, None, None]:
+) -> Generator[None]:
     """Use transaction if and only if the passed predicate function returns true
 
     Params:

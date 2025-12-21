@@ -32,7 +32,7 @@ def check_avatar(files):
     # validate dimensions
     max_width = max_height = 1200
     if w > max_width or h > max_height:
-        raise forms.ValidationError('Please use an image that is {} x {} pixels or smaller.'.format(max_width, max_height))
+        raise forms.ValidationError(f'Please use an image that is {max_width} x {max_height} pixels or smaller.')
 
     valid_extensions = ['jpeg', 'jpg', 'gif', 'png']
 
