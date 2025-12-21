@@ -916,7 +916,7 @@ class UploadedFileResponse(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
 
     @override_report_only_csp
-    @csp(SANDBOX=[])
+    @csp(dict(SANDBOX=[]))
     def get(self, *args, **kwargs):
         request = self.request
         filename = kwargs['filename']

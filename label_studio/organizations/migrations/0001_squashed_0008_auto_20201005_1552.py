@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='organization',
             name='token',
-            field=models.CharField(blank=True, default=core.utils.common.create_hash, max_length=256, null=True, unique=True, verbose_name='token'),
+            field=models.CharField(blank=True, default=core.utils.common.create_hash, max_length=256, unique=True, verbose_name='token'),
         ),
         migrations.AlterField(
             model_name='organizationmember',

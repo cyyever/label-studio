@@ -66,13 +66,12 @@ class BaseState(models.Model):
     # Core State Fields
     state = models.CharField(max_length=50, db_index=True, help_text='Current state of the entity')
     previous_state = models.CharField(
-        max_length=50, null=True, blank=True, help_text='Previous state before this transition'
+        max_length=50, blank=True, help_text='Previous state before this transition'
     )
 
     # Transition Metadata
     transition_name = models.CharField(
         max_length=100,
-        null=True,
         blank=True,
         help_text='Name of the transition method that triggered this state change',
     )

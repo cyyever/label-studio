@@ -65,6 +65,8 @@ class Webhook(models.Model):
     created_at = models.DateTimeField(_('created at'), auto_now_add=True, help_text=_('Creation time'), db_index=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True, help_text=_('Last update time'), db_index=True)
 
+    class Meta:
+        db_table = 'webhook'
     def get_actions(self):
         return WebhookAction.objects.filter(webhook=self).values_list('action', flat=True)
 
@@ -89,8 +91,6 @@ class Webhook(models.Model):
         user.project = self.project  # link for activity log
         return self.organization.has_user(user)
 
-    class Meta:
-        db_table = 'webhook'
 
 
 class WebhookAction(models.Model):

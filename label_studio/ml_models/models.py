@@ -32,7 +32,7 @@ def validate_string_list(value):
 class ModelInterface(models.Model):
     title = models.CharField(_('title'), max_length=500, null=False, blank=False, help_text='Model name')
 
-    description = models.TextField(_('description'), null=True, blank=True, help_text='Model description')
+    description = models.TextField(_('description'), blank=True, help_text='Model description')
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='created_models', on_delete=models.SET_NULL, null=True
@@ -46,7 +46,7 @@ class ModelInterface(models.Model):
         'organizations.Organization', on_delete=models.CASCADE, related_name='model_interfaces', null=True
     )
 
-    skill_name = models.CharField(max_length=255, choices=SkillNames.choices, null=True)
+    skill_name = models.CharField(max_length=255, choices=SkillNames.choices, default="")
 
     input_fields = models.JSONField(default=list, validators=[validate_string_list])
 
@@ -165,7 +165,6 @@ class ModelRun(models.Model):
 
     job_id = models.CharField(
         max_length=255,
-        null=True,
         blank=True,
         default=None,
         help_text='Job ID for inference job for a ModelRun e.g. Adala job ID',

@@ -20,6 +20,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='prediction',
             name='model_version',
-            field=models.TextField(blank=True, default='', help_text='A string value that for model version that produced the prediction. Used in both live models and when uploading offline predictions.', null=True, verbose_name='model version'),
+            field=models.TextField(blank=True, default='', help_text='A string value that for model version that produced the prediction. Used in both live models and when uploading offline predictions.', verbose_name='model version'),
         ),
     ]

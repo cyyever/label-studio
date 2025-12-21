@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='description',
-            field=models.TextField(blank=True, default='', help_text='Project description', null=True, verbose_name='description'),
+            field=models.TextField(blank=True, default='', help_text='Project description', verbose_name='description'),
         ),
         migrations.AlterField(
             model_name='project',
@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='expert_instruction',
-            field=models.TextField(blank=True, default='', help_text='Labeling instructions in HTML format', null=True, verbose_name='expert instruction'),
+            field=models.TextField(blank=True, default='', help_text='Labeling instructions in HTML format', verbose_name='expert instruction'),
         ),
         migrations.AlterField(
             model_name='project',
@@ -98,7 +98,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='title',
-            field=models.CharField(blank=True, default='', help_text='Project name. Must be between 3 to 50 characters long.', max_length=50, null=True, validators=[django.core.validators.MinLengthValidator(3), django.core.validators.MaxLengthValidator(50)], verbose_name='title'),
+            field=models.CharField(blank=True, default='', help_text='Project name. Must be between 3 to 50 characters long.', max_length=50, validators=[django.core.validators.MinLengthValidator(3), django.core.validators.MaxLengthValidator(50)], verbose_name='title'),
         ),
         migrations.AlterField(
             model_name='projectsummary',

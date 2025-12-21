@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='color',
-            field=models.CharField(blank=True, default='#FFFFFF', max_length=16, null=True, verbose_name='color'),
+            field=models.CharField(blank=True, default='#FFFFFF', max_length=16, verbose_name='color'),
         ),
     ]

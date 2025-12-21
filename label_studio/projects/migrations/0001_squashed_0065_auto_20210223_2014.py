@@ -28,11 +28,11 @@ class Migration(migrations.Migration):
             name='MLBackend',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('url', models.TextField(blank=True, default='http://localhost:8999', null=True, verbose_name='url')),
-                ('name', models.TextField(blank=True, default='default', null=True, verbose_name='name')),
-                ('title', models.TextField(blank=True, default='Default ML backend', null=True, verbose_name='title')),
-                ('type', models.CharField(choices=[('IN', 'Internal'), ('EX', 'External')], default='IN', max_length=100, null=True, verbose_name='type')),
-                ('description', models.TextField(blank=True, default='', null=True, verbose_name='description')),
+                ('url', models.TextField(blank=True, default='http://localhost:8999', verbose_name='url')),
+                ('name', models.TextField(blank=True, default='default', verbose_name='name')),
+                ('title', models.TextField(blank=True, default='Default ML backend', verbose_name='title')),
+                ('type', models.CharField(choices=[('IN', 'Internal'), ('EX', 'External')], default='IN', max_length=100, verbose_name='type')),
+                ('description', models.TextField(blank=True, default='', verbose_name='description')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
                 ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='custom_models', to=settings.AUTH_USER_MODEL, verbose_name='custom models')),
@@ -43,13 +43,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=1000, verbose_name='name')),
-                ('label_config', models.TextField(blank=True, null=True, verbose_name='label config')),
-                ('expert_instruction', models.TextField(blank=True, default='', null=True, verbose_name='expert instruction')),
+                ('label_config', models.TextField(blank=True, default="", verbose_name='label config')),
+                ('expert_instruction', models.TextField(blank=True, default='', verbose_name='expert instruction')),
                 ('show_instruction', models.BooleanField(default=False, verbose_name='show instruction')),
                 ('skip_onboarding', models.BooleanField(default=False)),
                 ('active_learning_enabled', models.BooleanField(default=True, verbose_name='active learning enabled')),
                 ('maximum_completions', models.IntegerField(default=1, verbose_name='maximum completion number')),
-                ('model_version', models.TextField(blank=True, default='', null=True, verbose_name='model version')),
+                ('model_version', models.TextField(blank=True, default='', verbose_name='model version')),
                 ('data_types', models.JSONField(default=dict, null=True, verbose_name='data_types')),
                 ('has_finished', models.BooleanField(default=False, verbose_name='has finished')),
                 ('is_published', models.BooleanField(default=False, verbose_name='published')),
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
             name='ProjectOnboardingSteps',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(choices=[('DU', 'Upload your data'), ('CF', 'Configure settings'), ('PB', 'Publish project'), ('IE', 'Invite annotators')], max_length=2, null=True)),
+                ('code', models.CharField(choices=[('DU', 'Upload your data'), ('CF', 'Configure settings'), ('PB', 'Publish project'), ('IE', 'Invite annotators')], max_length=2, default="")),
                 ('title', models.CharField(max_length=1000, verbose_name='title')),
                 ('description', models.TextField(verbose_name='descrition')),
                 ('order', models.IntegerField(default=0)),
@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('data', models.JSONField(default=dict)),
-                ('model_version', models.TextField(blank=True, default='', null=True, verbose_name='model version')),
+                ('model_version', models.TextField(blank=True, default='', verbose_name='model version')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
                 ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stats', to='projects.project')),
@@ -212,27 +212,27 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mlbackend',
             name='description',
-            field=models.TextField(blank=True, default='', help_text='Model description', null=True, verbose_name='description'),
+            field=models.TextField(blank=True, default='', help_text='Model description', verbose_name='description'),
         ),
         migrations.AlterField(
             model_name='mlbackend',
             name='name',
-            field=models.TextField(blank=True, default='default', help_text='Model name', null=True, verbose_name='name'),
+            field=models.TextField(blank=True, default='default', help_text='Model name', verbose_name='name'),
         ),
         migrations.AlterField(
             model_name='mlbackend',
             name='title',
-            field=models.TextField(blank=True, default='Default ML backend', help_text='Model title', null=True, verbose_name='title'),
+            field=models.TextField(blank=True, default='Default ML backend', help_text='Model title', verbose_name='title'),
         ),
         migrations.AlterField(
             model_name='mlbackend',
             name='type',
-            field=models.CharField(choices=[('IN', 'Internal'), ('EX', 'External')], default='IN', help_text='Backend type', max_length=100, null=True, verbose_name='type'),
+            field=models.CharField(choices=[('IN', 'Internal'), ('EX', 'External')], default='IN', help_text='Backend type', max_length=100, verbose_name='type'),
         ),
         migrations.AlterField(
             model_name='mlbackend',
             name='url',
-            field=models.TextField(blank=True, default='http://localhost:8999', help_text='Model server URL', null=True, verbose_name='url'),
+            field=models.TextField(blank=True, default='http://localhost:8999', help_text='Model server URL', verbose_name='url'),
         ),
         migrations.AlterField(
             model_name='project',
@@ -242,7 +242,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='expert_instruction',
-            field=models.TextField(blank=True, default='', help_text='Expert instruction in HTML format', null=True, verbose_name='expert instruction'),
+            field=models.TextField(blank=True, default='', help_text='Expert instruction in HTML format', verbose_name='expert instruction'),
         ),
         migrations.AlterField(
             model_name='project',
@@ -252,7 +252,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='label_config',
-            field=models.TextField(blank=True, help_text='Label config in XML format. More about it in <a href="https://labelstud.io/guide/setup.html">documentation</a>', null=True, verbose_name='label config'),
+            field=models.TextField(blank=True, help_text='Label config in XML format. More about it in <a href="https://labelstud.io/guide/setup.html">documentation</a>', default="", verbose_name='label config'),
         ),
         migrations.AlterField(
             model_name='project',
@@ -262,7 +262,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='model_version',
-            field=models.TextField(blank=True, default='', help_text='Machine learning model version', null=True, verbose_name='model version'),
+            field=models.TextField(blank=True, default='', help_text='Machine learning model version', verbose_name='model version'),
         ),
         migrations.AlterField(
             model_name='project',
@@ -287,7 +287,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectonboardingsteps',
             name='code',
-            field=models.CharField(choices=[('DU', 'Upload your data'), ('CF', 'Configure settings'), ('PB', 'Publish project'), ('IE', 'Invite collaborators')], max_length=2, null=True),
+            field=models.CharField(choices=[('DU', 'Upload your data'), ('CF', 'Configure settings'), ('PB', 'Publish project'), ('IE', 'Invite collaborators')], max_length=2, default=""),
         ),
         migrations.AlterField(
             model_name='project',
@@ -347,7 +347,7 @@ class Migration(migrations.Migration):
                 ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ml_backend_train_jobs', to='projects.project')),
                 ('completed_tasks_count', models.IntegerField(default=0, help_text='Number of completed tasks at the moment when this job is created', verbose_name='completed_tasks_count')),
                 ('is_finished', models.BooleanField(default=False, help_text='Whether this job is finished.', verbose_name='is_finished')),
-                ('model_version', models.TextField(blank=True, default='', help_text='Model version returned when job is finished', null=True, verbose_name='model version')),
+                ('model_version', models.TextField(blank=True, default='', help_text='Model version returned when job is finished', verbose_name='model version')),
             ],
         ),
         migrations.AlterField(
@@ -363,7 +363,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='label_config',
-            field=models.TextField(blank=True, help_text='Label config in XML format. See more about it in documentation', null=True, verbose_name='label config'),
+            field=models.TextField(blank=True, help_text='Label config in XML format. See more about it in documentation', default="", verbose_name='label config'),
         ),
         migrations.RemoveField(
             model_name='project',
@@ -377,17 +377,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='sampling',
-            field=models.CharField(choices=[('Sequential sampling', 'Tasks are ordered by their IDs'), ('Uniform sampling', 'Tasks are chosen randomly'), ('Uncertainty sampling', 'Tasks are chosen according to model uncertainty scores (active learning mode)')], default='Uniform sampling', max_length=100, null=True),
+            field=models.CharField(choices=[('Sequential sampling', 'Tasks are ordered by their IDs'), ('Uniform sampling', 'Tasks are chosen randomly'), ('Uncertainty sampling', 'Tasks are chosen according to model uncertainty scores (active learning mode)')], default='Uniform sampling', max_length=100),
         ),
         migrations.AddField(
             model_name='project',
             name='task_data_login',
-            field=models.CharField(blank=True, help_text='Task data credentials: login', max_length=100, null=True, verbose_name='task_data_login'),
+            field=models.CharField(blank=True, help_text='Task data credentials: login', max_length=100, default="", verbose_name='task_data_login'),
         ),
         migrations.AddField(
             model_name='project',
             name='task_data_password',
-            field=models.CharField(blank=True, help_text='Task data credentials: password', max_length=100, null=True, verbose_name='task_data_password'),
+            field=models.CharField(blank=True, help_text='Task data credentials: password', max_length=100, default="", verbose_name='task_data_password'),
         ),
         migrations.AddField(
             model_name='project',
@@ -397,7 +397,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='metric_name',
-            field=models.TextField(blank=True, default='', help_text='Evaluation metric chosen for this project', null=True, verbose_name='metric_name'),
+            field=models.TextField(blank=True, default='', help_text='Evaluation metric chosen for this project', verbose_name='metric_name'),
         ),
         migrations.AddField(
             model_name='project',
@@ -417,7 +417,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectonboardingsteps',
             name='code',
-            field=models.CharField(choices=[('DU', 'Import your data'), ('CF', 'Configure settings'), ('PB', 'Publish project'), ('IE', 'Invite collaborators')], max_length=2, null=True),
+            field=models.CharField(choices=[('DU', 'Import your data'), ('CF', 'Configure settings'), ('PB', 'Publish project'), ('IE', 'Invite collaborators')], max_length=2, default=""),
         ),
         migrations.AddField(
             model_name='project',
@@ -442,7 +442,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='agreement_method',
-            field=models.CharField(choices=[('Single linkage', 'Threshold based completions grouping using single linkage method'), ('Complete linkage', 'Threshold based completions grouping using complete linkage method'), ('No grouping', 'Compute agreement without grouping (just averaging the distances between labeling results)')], default='Single linkage', max_length=100, null=True),
+            field=models.CharField(choices=[('Single linkage', 'Threshold based completions grouping using single linkage method'), ('Complete linkage', 'Threshold based completions grouping using complete linkage method'), ('No grouping', 'Compute agreement without grouping (just averaging the distances between labeling results)')], default='Single linkage', max_length=100),
         ),
         migrations.AddField(
             model_name='projecttemplate',
@@ -462,12 +462,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projecttemplate',
             name='cover_image_url',
-            field=models.CharField(blank=True, default='', max_length=1000, null=True, verbose_name='cover image'),
+            field=models.CharField(blank=True, default='', max_length=1000, verbose_name='cover image'),
         ),
         migrations.AlterField(
             model_name='projecttemplate',
             name='description',
-            field=models.TextField(default='', null=True, verbose_name='description'),
+            field=models.TextField(default='', verbose_name='description'),
         ),
         migrations.AlterField(
             model_name='projecttemplate',
@@ -514,7 +514,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='token',
-            field=models.CharField(blank=True, default=core.utils.common.create_hash, max_length=256, null=True, verbose_name='token'),
+            field=models.CharField(blank=True, default=core.utils.common.create_hash, max_length=256, verbose_name='token'),
         ),
         migrations.AddField(
             model_name='projectmember',
@@ -535,13 +535,13 @@ class Migration(migrations.Migration):
             name='Storage',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(help_text='Cloud storage title', max_length=256, null=True, verbose_name='title')),
-                ('description', models.TextField(blank=True, help_text='Cloud storage description', null=True, verbose_name='description')),
+                ('title', models.CharField(help_text='Cloud storage title', max_length=256, default="", verbose_name='title')),
+                ('description', models.TextField(blank=True, help_text='Cloud storage description', default="", verbose_name='description')),
                 ('type', models.CharField(choices=[('s3', 'AWS S3 storage')], default='s3', max_length=32)),
-                ('path', models.TextField(blank=True, help_text='Cloud storage path (e.g. bucket name)', null=True, verbose_name='path')),
-                ('prefix', models.TextField(blank=True, help_text='Cloud storage prefix (e.g. container path)', null=True, verbose_name='prefix')),
-                ('regex', models.TextField(blank=True, help_text='Cloud storage regex for filtering objects', null=True, verbose_name='regex')),
-                ('data_key', models.TextField(blank=True, help_text='Data key to connect BLOBs with object tags', null=True, verbose_name='data_key')),
+                ('path', models.TextField(blank=True, help_text='Cloud storage path (e.g. bucket name)', default="", verbose_name='path')),
+                ('prefix', models.TextField(blank=True, help_text='Cloud storage prefix (e.g. container path)', default="", verbose_name='prefix')),
+                ('regex', models.TextField(blank=True, help_text='Cloud storage regex for filtering objects', default="", verbose_name='regex')),
+                ('data_key', models.TextField(blank=True, help_text='Data key to connect BLOBs with object tags', default="", verbose_name='data_key')),
                 ('use_blob_urls', models.BooleanField(default=False, help_text='Interpret objects as BLOBs and generate URLs', verbose_name='use BLOB URLs')),
                 ('params', models.JSONField(blank=True, default=dict, help_text='Cloud storage specific parameters (e.g. credentials stored in key: value format', null=True, verbose_name='params')),
                 ('created_at', models.DateTimeField(auto_now_add=True, help_text='Creation time', verbose_name='created at')),
@@ -551,12 +551,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='task_data_login',
-            field=models.CharField(blank=True, help_text='Task data credentials: login', max_length=256, null=True, verbose_name='task_data_login'),
+            field=models.CharField(blank=True, help_text='Task data credentials: login', max_length=256, default="", verbose_name='task_data_login'),
         ),
         migrations.AlterField(
             model_name='project',
             name='task_data_password',
-            field=models.CharField(blank=True, help_text='Task data credentials: password', max_length=256, null=True, verbose_name='task_data_password'),
+            field=models.CharField(blank=True, help_text='Task data credentials: password', max_length=256, default="", verbose_name='task_data_password'),
         ),
         migrations.AddField(
             model_name='project',
@@ -588,12 +588,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='label_config',
-            field=models.TextField(blank=True, default='<View></View>', help_text='Label config in XML format. See more about it in documentation', null=True, verbose_name='label config'),
+            field=models.TextField(blank=True, default='<View></View>', help_text='Label config in XML format. See more about it in documentation', verbose_name='label config'),
         ),
         migrations.AlterField(
             model_name='project',
             name='title',
-            field=models.CharField(blank=True, help_text='Project name, length is from 3 to 50 chars', max_length=50, null=True, validators=[django.core.validators.MinLengthValidator(3), django.core.validators.MaxLengthValidator(50)], verbose_name='name'),
+            field=models.CharField(blank=True, help_text='Project name, length is from 3 to 50 chars', max_length=50, default="", validators=[django.core.validators.MinLengthValidator(3), django.core.validators.MaxLengthValidator(50)], verbose_name='name'),
         ),
         migrations.RemoveField(
             model_name='project',
@@ -618,7 +618,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='description',
-            field=models.TextField(blank=True, default='', help_text='Expert instruction in HTML format', null=True, verbose_name='expert instruction'),
+            field=models.TextField(blank=True, default='', help_text='Expert instruction in HTML format', verbose_name='expert instruction'),
         ),
         migrations.RemoveField(
             model_name='mlbackendconnection',
@@ -666,6 +666,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='title',
-            field=models.CharField(blank=True, default='', help_text='Project name, length is from 3 to 50 chars', max_length=50, null=True, validators=[django.core.validators.MinLengthValidator(3), django.core.validators.MaxLengthValidator(50)], verbose_name='title'),
+            field=models.CharField(blank=True, default='', help_text='Project name, length is from 3 to 50 chars', max_length=50, validators=[django.core.validators.MinLengthValidator(3), django.core.validators.MaxLengthValidator(50)], verbose_name='title'),
         ),
     ]

@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ("model", models.CharField(max_length=1024)),
                 ("row_id", models.IntegerField(null=True)),
                 ("data", models.JSONField(blank=True, null=True)),
-                ("reason", models.TextField(blank=True, null=True)),
+                ("reason", models.TextField(blank=True, default="")),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 ("organization_id", models.IntegerField(blank=True, null=True)),

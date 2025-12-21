@@ -66,7 +66,7 @@ class StorageInfo(models.Model):
         _('last sync count'), null=True, blank=True, help_text='Count of tasks synced last time'
     )
     last_sync_job = models.CharField(
-        _('last_sync_job'), null=True, blank=True, max_length=256, help_text='Last sync job ID'
+        _('last_sync_job'), blank=True, max_length=256, help_text='Last sync job ID'
     )
 
     status = models.CharField(
@@ -74,7 +74,7 @@ class StorageInfo(models.Model):
         choices=Status.choices,
         default=Status.INITIALIZED,
     )
-    traceback = models.TextField(null=True, blank=True, help_text='Traceback report for the last failed sync')
+    traceback = models.TextField(blank=True, help_text='Traceback report for the last failed sync')
     meta = JSONField('meta', null=True, default=dict, help_text='Meta and debug information about storage processes')
 
     def info_set_job(self, job_id):
@@ -294,8 +294,8 @@ class StorageInfo(models.Model):
 class Storage(StorageInfo):
     url_scheme = ''
 
-    title = models.CharField(_('title'), null=True, blank=True, max_length=256, help_text='Cloud storage title')
-    description = models.TextField(_('description'), null=True, blank=True, help_text='Cloud storage description')
+    title = models.CharField(_('title'), blank=True, max_length=256, help_text='Cloud storage title')
+    description = models.TextField(_('description'), blank=True, help_text='Cloud storage description')
     created_at = models.DateTimeField(_('created at'), auto_now_add=True, help_text='Creation time')
 
     synchronizable = models.BooleanField(_('synchronizable'), default=True, help_text='If storage can be synced')

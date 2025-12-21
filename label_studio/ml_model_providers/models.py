@@ -30,31 +30,30 @@ class ModelProviderConnection(models.Model):
 
     provider = models.CharField(max_length=255, choices=ModelProviders.choices, default=ModelProviders.OPENAI)
 
-    api_key = models.TextField(_('api_key'), null=True, blank=True, help_text='Model provider API key')
+    api_key = models.TextField(_('api_key'), blank=True, help_text='Model provider API key')
 
-    auth_token = models.TextField(_('auth_token'), null=True, blank=True, help_text='Model provider Auth token')
+    auth_token = models.TextField(_('auth_token'), blank=True, help_text='Model provider Auth token')
 
-    deployment_name = models.CharField(max_length=512, null=True, blank=True, help_text='Azure OpenAI deployment name')
+    deployment_name = models.CharField(max_length=512, blank=True, help_text='Azure OpenAI deployment name')
 
-    endpoint = models.CharField(max_length=512, null=True, blank=True, help_text='Azure OpenAI endpoint')
+    endpoint = models.CharField(max_length=512, blank=True, help_text='Azure OpenAI endpoint')
 
     google_application_credentials = models.TextField(
         _('google application credentials'),
-        null=True,
         blank=True,
         help_text='The content of GOOGLE_APPLICATION_CREDENTIALS json file',
     )
 
     google_project_id = models.CharField(
-        _('google project id'), max_length=255, null=True, blank=True, help_text='Google project ID'
+        _('google project id'), max_length=255, blank=True, help_text='Google project ID'
     )
 
     google_location = models.CharField(
-        _('google location'), max_length=255, null=True, blank=True, help_text='Google project location'
+        _('google location'), max_length=255, blank=True, help_text='Google project location'
     )
 
     cached_available_models = models.CharField(
-        max_length=4096, null=True, blank=True, help_text='List of available models from the provider'
+        max_length=4096, blank=True, help_text='List of available models from the provider'
     )
 
     scope = models.CharField(
@@ -109,7 +108,6 @@ class ModelProviderConnection(models.Model):
             ('Monthly', 'Monthly'),
             ('Yearly', 'Yearly'),
         ],
-        null=True,
         blank=True,
         default=None,
         help_text='Budget reset period for the model provider connection (null if not reset)',

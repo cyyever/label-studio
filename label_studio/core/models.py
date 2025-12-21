@@ -39,7 +39,7 @@ class AsyncMigrationStatus(models.Model):
         (STATUS_FINISHED, 'Migration completed successfully.'),
         (STATUS_ERROR, 'Migration completed with errors. Check meta for more info.'),
     )
-    status = models.CharField(max_length=100, choices=STATUS_CHOICES, null=True, default=None)
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="")
 
     created_at = models.DateTimeField(_('created at'), auto_now_add=True, help_text='Creation time')
     updated_at = models.DateTimeField(_('updated at'), auto_now=True, help_text='Last updated time')
@@ -57,7 +57,7 @@ class DeletedRow(models.Model):
     model = models.CharField(max_length=1024)   # tasks.task, projects.project, etc.
     row_id = models.IntegerField(null=True)   # primary key of the deleted row. task.id, project.id, etc.
     data = JSONField(null=True, blank=True)   # serialized json of the deleted row.
-    reason = models.TextField(null=True, blank=True)   # reason for deletion.
+    reason = models.TextField(default="", blank=True)   # reason for deletion.
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

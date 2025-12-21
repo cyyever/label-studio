@@ -178,7 +178,6 @@ class Project(ProjectMixin, FsmHistoryStateModel):
 
     title = models.CharField(
         _('title'),
-        null=True,
         blank=True,
         default='',
         max_length=settings.PROJECT_TITLE_MAX_LEN,
@@ -189,7 +188,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         ],
     )
     description = models.TextField(
-        _('description'), blank=True, null=True, default='', help_text='Project description'
+        _('description'), blank=True, default='', help_text='Project description'
     )
 
     organization = models.ForeignKey(
@@ -198,7 +197,6 @@ class Project(ProjectMixin, FsmHistoryStateModel):
     label_config = models.TextField(
         _('label config'),
         blank=True,
-        null=True,
         default='<View></View>',
         help_text='Label config in XML format. See more about it in documentation',
     )
@@ -211,7 +209,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
     )
     label_config_hash = models.BigIntegerField(null=True, default=None)
     expert_instruction = models.TextField(
-        _('expert instruction'), blank=True, null=True, default='', help_text='Labeling instructions in HTML format'
+        _('expert instruction'), blank=True, default='', help_text='Labeling instructions in HTML format'
     )
     show_instruction = models.BooleanField(
         _('show instruction'), default=False, help_text='Show instructions to the annotator before they start'
@@ -243,11 +241,11 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         default=False,
         help_text='Retrieve and display predictions when loading a task',
     )
-    token = models.CharField(_('token'), max_length=256, default=create_hash, null=True, blank=True)
+    token = models.CharField(_('token'), max_length=256, default=create_hash, blank=True)
     result_count = models.IntegerField(
         _('result count'), default=0, help_text='Total results inside of annotations counter'
     )
-    color = models.CharField(_('color'), max_length=16, default='#FFFFFF', null=True, blank=True)
+    color = models.CharField(_('color'), max_length=16, default='#FFFFFF', blank=True)
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -288,7 +286,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
     # be the best approach we currently have for improving the
     # experience while maintaining backward compatibility.
     model_version = models.TextField(
-        _('model version'), blank=True, null=True, default='', help_text='Machine learning model version'
+        _('model version'), blank=True, default='', help_text='Machine learning model version'
     )
 
     data_types = JSONField(_('data_types'), default=dict, null=True)
@@ -312,9 +310,9 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         (UNCERTAINTY, 'Tasks are chosen according to model uncertainty scores (active learning mode)'),
     )
 
-    sampling = models.CharField(max_length=100, choices=SAMPLING_CHOICES, null=True, default=SEQUENCE)
+    sampling = models.CharField(max_length=100, choices=SAMPLING_CHOICES, default=SEQUENCE)
     skip_queue = models.CharField(
-        max_length=100, choices=SkipQueue.choices, null=True, default=SkipQueue.REQUEUE_FOR_OTHERS
+        max_length=100, choices=SkipQueue.choices, default=SkipQueue.REQUEUE_FOR_OTHERS
     )
 
     # Deprecated in favor of annotator_evaluation_enabled
@@ -335,10 +333,10 @@ class Project(ProjectMixin, FsmHistoryStateModel):
     overlap_cohort_percentage = models.IntegerField(_('overlap_cohort_percentage'), default=100)
 
     task_data_login = models.CharField(
-        _('task_data_login'), max_length=256, blank=True, null=True, help_text='Task data credentials: login'
+        _('task_data_login'), max_length=256, blank=True, default="", help_text='Task data credentials: login'
     )
     task_data_password = models.CharField(
-        _('task_data_password'), max_length=256, blank=True, null=True, help_text='Task data credentials: password'
+        _('task_data_password'), max_length=256, blank=True, default="", help_text='Task data credentials: password'
     )
 
     pinned_at = models.DateTimeField(_('pinned at'), null=True, default=None, help_text='Pinned date and time')
@@ -1314,7 +1312,7 @@ class Project(ProjectMixin, FsmHistoryStateModel):
             db_persist=True,
         )
     else:
-        search_vector = models.TextField(null=True, blank=True)
+        search_vector = models.TextField(default="", blank=True)
 
     class Meta:
         db_table = 'project'
@@ -1340,7 +1338,7 @@ class ProjectOnboardingSteps(models.Model):
         (INVITE_EXPERTS, 'Invite collaborators'),
     )
 
-    code = models.CharField(max_length=2, choices=STEPS_CHOICES, null=True)
+    code = models.CharField(max_length=2, choices=STEPS_CHOICES, default="")
 
     title = models.CharField(_('title'), max_length=1000, null=False)
     description = models.TextField(_('description'), null=False)
@@ -1649,9 +1647,9 @@ class ProjectImport(models.Model):
     commit_to_project = models.BooleanField(default=False)
     return_task_ids = models.BooleanField(default=False)
     status = models.CharField(max_length=64, choices=Status.choices, default=Status.CREATED)
-    url = models.CharField(max_length=2048, null=True, blank=True)
-    traceback = models.TextField(null=True, blank=True)
-    error = models.TextField(null=True, blank=True)
+    url = models.CharField(max_length=2048, default="", blank=True)
+    traceback = models.TextField(default="", blank=True)
+    error = models.TextField(default="", blank=True)
     created_at = models.DateTimeField(_('created at'), null=True, auto_now_add=True, help_text='Creation time')
     updated_at = models.DateTimeField(_('updated at'), null=True, auto_now_add=True, help_text='Updated time')
     finished_at = models.DateTimeField(_('finished at'), help_text='Complete or fail time', null=True, default=None)
@@ -1679,7 +1677,7 @@ class ProjectReimport(models.Model):
 
     project = models.ForeignKey('projects.Project', null=True, related_name='reimports', on_delete=models.CASCADE)
     status = models.CharField(max_length=64, choices=Status.choices, default=Status.CREATED)
-    error = models.TextField(null=True, blank=True)
+    error = models.TextField(default="", blank=True)
     task_count = models.IntegerField(default=0)
     annotation_count = models.IntegerField(default=0)
     prediction_count = models.IntegerField(default=0)
@@ -1688,7 +1686,7 @@ class ProjectReimport(models.Model):
     files_as_tasks_list = models.BooleanField(default=False)
     found_formats = models.JSONField(default=list)
     data_columns = models.JSONField(default=list)
-    traceback = models.TextField(null=True, blank=True)
+    traceback = models.TextField(default="", blank=True)
 
     def has_permission(self, user):
         return self.project.has_permission(user)

@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='convertedformat',
             name='traceback',
-            field=models.TextField(blank=True, help_text='Traceback report in case of errors', null=True),
+            field=models.TextField(blank=True, help_text='Traceback report in case of errors', default=""),
         ),
     ]

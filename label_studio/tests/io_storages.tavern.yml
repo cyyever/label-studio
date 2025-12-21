@@ -173,7 +173,7 @@ stages:
     status_code: 200
     json:
       status: "completed"
-      traceback: null
+      traceback: ""
 
 - name: Validate storage
   request:
@@ -225,7 +225,7 @@ stages:
     status_code: 200
     json:
       status: "completed"
-      traceback: null
+      traceback: ""
 
 - name: Patch storage with synchronizable false
   request:
@@ -239,7 +239,7 @@ stages:
     status_code: 200
     json:
       status: "completed"
-      traceback: null
+      traceback: ""
 
 - name: Try to Sync S3 storage with synchronizable false
   request:
@@ -473,7 +473,7 @@ stages:
     status_code: 200
     json:
       status: "completed"
-      traceback: null
+      traceback: ""
 
 - name: Try to Sync GCS storage with synchronizable false
   request:
@@ -816,7 +816,7 @@ stages:
     status_code: 200
     json:
       status: "completed"
-      traceback: null
+      traceback: ""
 
 - name: Try to Sync S3 storage with synchronizable false
   request:
@@ -922,7 +922,7 @@ marks:
 - usefixtures:
   - django_live_url
   - fflag_feat_back_lsdv_3958_server_side_encryption_for_target_storage_short_on
-  - mock_s3_resource_kms
+  - mock_aws_resource_kms
 
 stages:
 - id: signup
@@ -1115,7 +1115,7 @@ stages:
     status_code: 200
     json:
       status: "completed"
-      traceback: null
+      traceback: ""
 
 - name: Try to Sync GCS storage with synchronizable false
   request:
@@ -1297,7 +1297,7 @@ stages:
     status_code: 200
     json:
       status: "completed"
-      traceback: null
+      traceback: ""
 
 - name: Try to Sync Azure storage with synchronizable false
   request:
@@ -1399,7 +1399,7 @@ stages:
     status_code: 200
     json:
       status: "completed"
-      traceback: null
+      traceback: ""
 
 - name: Try to Sync Azure storage with synchronizable false
   request:

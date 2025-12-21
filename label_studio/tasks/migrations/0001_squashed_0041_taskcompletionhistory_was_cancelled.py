@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('result', models.JSONField(default=dict, null=True, verbose_name='result')),
                 ('score', models.FloatField(default=0.0, verbose_name='score')),
-                ('model_version', models.TextField(blank=True, default='', null=True, verbose_name='model version')),
+                ('model_version', models.TextField(blank=True, default='', verbose_name='model version')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
                 ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='predictions', to='tasks.task')),

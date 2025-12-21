@@ -65,7 +65,7 @@ def any_api_client(request, client_and_token, business_client):
             400,
         ),
         # empty label config
-        ({'title': '111', 'label_config': None}, {'label_config': ['can only parse strings']}, 400),
+        ({'title': '111', 'label_config': None}, {'label_config': ['This field may not be null.']}, 400),
         # <Choices> surrounded by <View> -> OK
         (
             {

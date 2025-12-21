@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='annotation',
             name='last_action',
-            field=models.CharField(choices=[('prediction', 'Created from prediction'), ('propagated_annotation', 'Created from another annotation'), ('imported', 'Imported'), ('submitted', 'Submitted'), ('updated', 'Updated'), ('skipped', 'Skipped'), ('accepted', 'Accepted'), ('rejected', 'Rejected'), ('fixed_and_accepted', 'Fixed and accepted'), ('deleted_review', 'Deleted review')], default=None, help_text='Action which was performed in the last annotation history item', max_length=128, null=True, verbose_name='last action'),
+            field=models.CharField(choices=[('prediction', 'Created from prediction'), ('propagated_annotation', 'Created from another annotation'), ('imported', 'Imported'), ('submitted', 'Submitted'), ('updated', 'Updated'), ('skipped', 'Skipped'), ('accepted', 'Accepted'), ('rejected', 'Rejected'), ('fixed_and_accepted', 'Fixed and accepted'), ('deleted_review', 'Deleted review')], default=None, help_text='Action which was performed in the last annotation history item', max_length=128, verbose_name='last action'),
         ),
         migrations.AlterField(
             model_name='task',

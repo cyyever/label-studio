@@ -34,6 +34,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='predictionmeta',
-            constraint=models.CheckConstraint(check=models.Q(models.Q(('prediction__isnull', False), ('failed_prediction__isnull', True)), models.Q(('prediction__isnull', True), ('failed_prediction__isnull', False)), _connector='OR'), name='prediction_or_failed_prediction_not_null'),
+            constraint=models.CheckConstraint(condition=models.Q(models.Q(('prediction__isnull', False), ('failed_prediction__isnull', True)), models.Q(('prediction__isnull', True), ('failed_prediction__isnull', False)), _connector='OR'), name='prediction_or_failed_prediction_not_null'),
         ),
     ]

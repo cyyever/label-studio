@@ -54,13 +54,11 @@ class MLBackend(models.Model):
     error_message = models.TextField(
         _('error_message'),
         blank=True,
-        null=True,
         help_text='Error message in error state',
     )
     title = models.TextField(
         _('title'),
         blank=True,
-        null=True,
         default='default',
         help_text='Name of the machine learning backend',
     )
@@ -74,7 +72,6 @@ class MLBackend(models.Model):
     basic_auth_user = models.TextField(
         _('basic auth user'),
         blank=True,
-        null=True,
         default='',
         help_text='HTTP Basic Auth user',
     )
@@ -82,7 +79,6 @@ class MLBackend(models.Model):
     basic_auth_pass = models.TextField(
         _('basic auth password'),
         blank=True,
-        null=True,
         default='',
         help_text='HTTP Basic Auth password',
     )
@@ -90,7 +86,6 @@ class MLBackend(models.Model):
     description = models.TextField(
         _('description'),
         blank=True,
-        null=True,
         default='',
         help_text='Description for the machine learning backend',
     )
@@ -104,7 +99,6 @@ class MLBackend(models.Model):
     model_version = models.TextField(
         _('model version'),
         blank=True,
-        null=True,
         default='',
         help_text='Current model version associated with this machine learning backend',
     )
@@ -430,7 +424,7 @@ class MLBackendPredictionJob(models.Model):
     job_id = models.CharField(max_length=128)
     ml_backend = models.ForeignKey(MLBackend, related_name='prediction_jobs', on_delete=models.CASCADE)
     model_version = models.TextField(
-        _('model version'), blank=True, null=True, help_text='Model version this job is associated with'
+        _('model version'), blank=True, help_text='Model version this job is associated with'
     )
     batch_size = models.PositiveSmallIntegerField(
         _('batch size'), default=100, help_text='Number of tasks processed per batch'
@@ -447,7 +441,6 @@ class MLBackendTrainJob(models.Model):
     model_version = models.TextField(
         _('model version'),
         blank=True,
-        null=True,
         help_text='Model version this job is associated with',
     )
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)

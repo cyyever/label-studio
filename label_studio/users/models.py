@@ -64,6 +64,8 @@ class UserManager(BaseUserManager):
 
 class UserLastActivityMixin(models.Model):
     last_activity = models.DateTimeField(_('last activity'), default=timezone.now, editable=False)
+    class Meta:
+        abstract = True
 
     def update_last_activity(self):
         """Update user's last activity timestamp using Redis caching."""
@@ -97,8 +99,6 @@ class UserLastActivityMixin(models.Model):
         """Property for accessing cached last activity."""
         return self.get_last_activity()
 
-    class Meta:
-        abstract = True
 
 
 UserMixin = load_func(settings.USER_MIXIN)

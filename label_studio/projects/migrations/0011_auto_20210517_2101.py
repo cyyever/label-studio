@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='sampling',
-            field=models.CharField(choices=[('Sequential sampling', 'Tasks are ordered by Data manager ordering'), ('Uniform sampling', 'Tasks are chosen randomly'), ('Uncertainty sampling', 'Tasks are chosen according to model uncertainty scores (active learning mode)')], default='Sequential sampling', max_length=100, null=True),
+            field=models.CharField(choices=[('Sequential sampling', 'Tasks are ordered by Data manager ordering'), ('Uniform sampling', 'Tasks are chosen randomly'), ('Uncertainty sampling', 'Tasks are chosen according to model uncertainty scores (active learning mode)')], default='Sequential sampling', max_length=100),
         ),
     ]

@@ -706,8 +706,7 @@ class Annotation(AnnotationMixin, FsmHistoryStateModel):
         max_length=128,
         choices=ActionType.choices,
         help_text='Action which was performed in the last annotation history item',
-        default=None,
-        null=True,
+        default="",
     )
     last_created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -987,7 +986,6 @@ class Prediction(models.Model):
         _('model version'),
         default='',
         blank=True,
-        null=True,
         help_text='A string value that for model version that produced the prediction. Used in both live models and when uploading offline predictions.',
     )
 
@@ -1023,6 +1021,9 @@ class Prediction(models.Model):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE, related_name='predictions', null=True)
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
+
+    class Meta:
+        db_table = 'prediction'
 
     def created_ago(self):
         """Humanize date"""
@@ -1158,9 +1159,6 @@ class Prediction(models.Model):
                 f'Traceback: {traceback.format_exc()}'
             )
 
-    class Meta:
-        db_table = 'prediction'
-
 
 class FailedPrediction(models.Model):
     """
@@ -1169,16 +1167,14 @@ class FailedPrediction(models.Model):
 
     message = models.TextField(
         _('message'),
-        default=None,
+        default="",
         blank=True,
-        null=True,
         help_text='The message explaining why generating this prediction failed',
     )
     error_type = models.CharField(
         _('error_type'),
         max_length=512,
-        default=None,
-        null=True,
+        default="",
         help_text='The type of error that caused prediction to fail',
     )
     ml_backend_model = models.ForeignKey(
@@ -1190,9 +1186,8 @@ class FailedPrediction(models.Model):
     )
     model_version = models.TextField(
         _('model version'),
-        default=None,
+        default="",
         blank=True,
-        null=True,
         help_text='A string value that for model version that produced the failed prediction. Used in both live models and when uploading offline predictions.',
     )
     model_run = models.ForeignKey(
@@ -1296,7 +1291,7 @@ class PredictionMeta(models.Model):
         constraints = [
             CheckConstraint(
                 # either prediction or failed_prediction should be not null
-                check=(
+                condition=(
                     (Q(prediction__isnull=False) & Q(failed_prediction__isnull=True))
                     | (Q(prediction__isnull=True) & Q(failed_prediction__isnull=False))
                 ),

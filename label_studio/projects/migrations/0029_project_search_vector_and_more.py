@@ -35,6 +35,6 @@ class Migration(migrations.Migration):
             migrations.AddField(
                 model_name='project',
                 name='search_vector',
-                field=models.TextField(blank=True, null=True),
+                field=models.TextField(blank=True, default=""),
             ),
         ]

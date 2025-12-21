@@ -81,7 +81,7 @@ class Organization(OrganizationMixin, models.Model):
 
     title = models.CharField(_('organization title'), max_length=1000, null=False)
 
-    token = models.CharField(_('token'), max_length=256, default=create_hash, unique=True, null=True, blank=True)
+    token = models.CharField(_('token'), max_length=256, default=create_hash, unique=True, blank=True)
 
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='organizations', through=OrganizationMember)
 
@@ -96,8 +96,10 @@ class Organization(OrganizationMixin, models.Model):
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
 
-    contact_info = models.EmailField(_('contact info'), blank=True, null=True)
+    contact_info = models.EmailField(_('contact info'), blank=True)
 
+    class Meta:
+        db_table = 'organization'
     def __str__(self):
         return self.title + ', id=' + str(self.pk)
 
@@ -193,5 +195,3 @@ class Organization(OrganizationMixin, models.Model):
     def members(self):
         return OrganizationMember.objects.filter(organization=self)
 
-    class Meta:
-        db_table = 'organization'

@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('meta', models.JSONField(default=dict, help_text='Meta is for any params for migrations, e.g.: project, filter or error message.', null=True, verbose_name='meta')),
                 ('name', models.TextField(help_text='Migration name', verbose_name='migration_name')),
-                ('status', models.CharField(choices=[('STARTED', 'Migration is started or queued.'), ('IN PROGRESS', 'Migration is in progress. Check meta for job_id or status.'), ('FINISHED', 'Migration completed successfully.'), ('ERROR', 'Migration completed with errors. Check meta for more info.')], default=None, max_length=100, null=True)),
+                ('status', models.CharField(choices=[('STARTED', 'Migration is started or queued.'), ('IN PROGRESS', 'Migration is in progress. Check meta for job_id or status.'), ('FINISHED', 'Migration completed successfully.'), ('ERROR', 'Migration completed with errors. Check meta for more info.')], default="", max_length=100)),
                 ('created_at', models.DateTimeField(auto_now_add=True, help_text='Creation time', verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, help_text='Last updated time', verbose_name='updated at')),
                 ('project', models.ForeignKey(help_text='Project ID for this migration', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='asyncmigrationstatus', to='projects.project')),

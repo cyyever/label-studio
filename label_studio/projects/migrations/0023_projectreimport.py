@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('status', models.CharField(choices=[('created', 'Created'), ('in_progress', 'In progress'), ('failed', 'Failed'), ('completed', 'Completed')], default='created', max_length=64)),
-                ('error', models.TextField(blank=True, null=True)),
+                ('error', models.TextField(blank=True, default="")),
                 ('task_count', models.IntegerField(default=0)),
                 ('annotation_count', models.IntegerField(default=0)),
                 ('prediction_count', models.IntegerField(default=0)),
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('files_as_tasks_list', models.BooleanField(default=False)),
                 ('found_formats', models.JSONField(default=list)),
                 ('data_columns', models.JSONField(default=list)),
-                ('traceback', models.TextField(blank=True, null=True)),
+                ('traceback', models.TextField(blank=True, default="")),
                 ('project', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='reimports', to='projects.project')),
             ],
         ),

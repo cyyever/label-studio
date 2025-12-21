@@ -18,9 +18,9 @@ class Migration(migrations.Migration):
             name='FailedPrediction',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('message', models.TextField(blank=True, default=None, help_text='The message explaining why generating this prediction failed', null=True, verbose_name='message')),
-                ('error_type', models.CharField(default=None, help_text='The type of error that caused prediction to fail', max_length=512, null=True, verbose_name='error_type')),
-                ('model_version', models.TextField(blank=True, default=None, help_text='A string value that for model version that produced the failed prediction. Used in both live models and when uploading offline predictions.', null=True, verbose_name='model version')),
+                ('message', models.TextField(blank=True, default=None, help_text='The message explaining why generating this prediction failed', verbose_name='message')),
+                ('error_type', models.CharField(default=None, help_text='The type of error that caused prediction to fail', max_length=512, verbose_name='error_type')),
+                ('model_version', models.TextField(blank=True, default=None, help_text='A string value that for model version that produced the failed prediction. Used in both live models and when uploading offline predictions.', verbose_name='model version')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('ml_backend_model', models.ForeignKey(help_text='An ML Backend instance that created the failed prediction.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='failed_predictions', to='ml.mlbackend')),
                 ('model_run', models.ForeignKey(help_text='A run of a ModelVersion that created the failed prediction.', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='failed_predictions', to='ml_models.modelrun')),

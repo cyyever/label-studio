@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='annotation',
             name='last_action',
-            field=models.CharField(choices=[('prediction', 'Created from prediction'), ('imported', 'Imported'), ('submitted', 'Submitted'), ('updated', 'Updated'), ('skipped', 'Skipped'), ('accepted', 'Accepted'), ('rejected', 'Rejected'), ('fixed_and_accepted', 'Fixed and accepted')], default=None, help_text='Action which was performed in the last annotation history item', max_length=128, null=True, verbose_name='last action'),
+            field=models.CharField(choices=[('prediction', 'Created from prediction'), ('imported', 'Imported'), ('submitted', 'Submitted'), ('updated', 'Updated'), ('skipped', 'Skipped'), ('accepted', 'Accepted'), ('rejected', 'Rejected'), ('fixed_and_accepted', 'Fixed and accepted')], default=None, help_text='Action which was performed in the last annotation history item', max_length=128, verbose_name='last action'),
         ),
         migrations.AddField(
             model_name='annotation',

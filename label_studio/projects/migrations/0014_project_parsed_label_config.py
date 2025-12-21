@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='parsed_label_config',
-            field=models.TextField(blank=True, default='', help_text='Parsed label config in JSON format. See more about it in documentation', null=True, verbose_name='parsed label config'),
+            field=models.TextField(blank=True, default='', help_text='Parsed label config in JSON format. See more about it in documentation', verbose_name='parsed label config'),
         ),
     ]
