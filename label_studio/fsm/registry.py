@@ -305,7 +305,7 @@ def register_state_transition(
     transition_name: str,
     triggers_on_create: bool = False,
     triggers_on_update: bool = True,
-    triggers_on: list = None,
+    triggers_on: list | None = None,
     force_state_record: bool = False,
 ):
     """

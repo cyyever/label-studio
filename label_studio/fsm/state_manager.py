@@ -216,10 +216,10 @@ class StateManager:
         cls,
         entity: Model,
         new_state: str,
-        transition_name: str = None,
+        transition_name: str | None = None,
         user=None,
         organization_id=None,
-        context: dict[str, Any] = None,
+        context: dict[str, Any] | None = None,
         reason: str = '',
         force_state_record: bool = False,
     ) -> bool:
@@ -515,7 +515,7 @@ class StateManager:
 
     @classmethod
     def execute_transition(
-        cls, entity: Model, transition_name: str, transition_data: dict[str, Any] = None, user=None, **context_kwargs
+        cls, entity: Model, transition_name: str, transition_data: dict[str, Any] | None = None, user=None, **context_kwargs
     ) -> BaseState:
         """
         Execute a registered transition by name.

@@ -203,7 +203,7 @@ def assert_project_state(project_id: int, expected_state: str, msg: str | None =
     )
 
 
-def assert_state_exists(entity, entity_type: str = None):
+def assert_state_exists(entity, entity_type: str | None = None):
     """
     Assert that an entity has an FSM state record.
 
@@ -234,7 +234,7 @@ def assert_state_exists(entity, entity_type: str = None):
     )
 
 
-def assert_state_not_exists(entity, entity_type: str = None):
+def assert_state_not_exists(entity, entity_type: str | None = None):
     """
     Assert that an entity does NOT have an FSM state record.
 

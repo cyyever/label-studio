@@ -50,7 +50,7 @@ class GCS:
 
     @classmethod
     def get_client(
-        cls, google_project_id: str = None, google_application_credentials: str | dict = None
+        cls, google_project_id: str | None = None, google_application_credentials: str | dict | None = None
     ) -> gcs.Client:
         """
         :param google_project_id:
@@ -83,9 +83,9 @@ class GCS:
     def validate_connection(
         cls,
         bucket_name: str,
-        google_project_id: str = None,
-        google_application_credentials: str | dict = None,
-        prefix: str = None,
+        google_project_id: str | None = None,
+        google_application_credentials: str | dict | None = None,
+        prefix: str | None = None,
         use_glob_syntax: bool = False,
     ):
         logger.debug('Validating GCS connection')
@@ -110,9 +110,9 @@ class GCS:
         cls,
         client: gcs.Client,
         bucket_name: str,
-        prefix: str = None,
-        regex_filter: str = None,
-        limit: int = None,
+        prefix: str | None = None,
+        regex_filter: str | None = None,
+        limit: int | None = None,
         return_key: bool = False,
         recursive_scan: bool = True,
     ):
@@ -183,8 +183,8 @@ class GCS:
         cls,
         url: str,
         presign: bool,
-        google_application_credentials: str | dict = None,
-        google_project_id: str = None,
+        google_application_credentials: str | dict | None = None,
+        google_project_id: str | None = None,
         presign_ttl: int = 1,
     ) -> str:
         """
@@ -277,8 +277,8 @@ class GCS:
     def get_blob_metadata(
         cls,
         url: str,
-        google_application_credentials: str | dict = None,
-        google_project_id: str = None,
+        google_application_credentials: str | dict | None = None,
+        google_project_id: str | None = None,
         properties_name: list = [],
     ) -> dict:
         """

@@ -300,7 +300,7 @@ def cleanup_redis_activity_data(user_ids: set[int]) -> bool:
         return False
 
 
-def sync_user_activities_to_db(max_users: int = None) -> dict:
+def sync_user_activities_to_db(max_users: int | None = None) -> dict:
     """
     Synchronize user activities from Redis to database.
 

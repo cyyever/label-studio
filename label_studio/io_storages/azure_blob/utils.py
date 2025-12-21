@@ -129,7 +129,7 @@ class AZURE:
         return client, container
 
     @classmethod
-    def get_blob_metadata(cls, url: str, container: str, account_name: str = None, account_key: str = None) -> dict:
+    def get_blob_metadata(cls, url: str, container: str, account_name: str | None = None, account_key: str | None = None) -> dict:
         """
         Get blob metadata by url
         :param url: Object key

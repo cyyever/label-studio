@@ -141,7 +141,7 @@ class FsmHistoryStateModel(models.Model):
                 changed[field.attname] = (old_value, new_value)
         return changed
 
-    def _determine_fsm_transitions(self, is_creating: bool = None, changed_fields: dict = None) -> list:
+    def _determine_fsm_transitions(self, is_creating: bool | None = None, changed_fields: dict | None = None) -> list:
         """
         Determine which FSM transitions should be triggered based on model state.
 
