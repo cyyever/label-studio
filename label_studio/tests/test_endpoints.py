@@ -294,7 +294,7 @@ group_annotator_statuses = {
 def build_urls(project_id, task_id, annotation_id):
     """Get all the ulrs from django"""
     urls = []
-    exclude_urls = {'schema-json', 'schema-swagger-ui', 'schema-redoc'}
+    exclude_urls = {'schema-json', 'schema-swagger-ui', 'schema-redoc', 'rq_cron_scheduler_detail'}
     resolver = get_resolver(None).reverse_dict
     for url_name in resolver:
         if isinstance(url_name, str) and url_name not in exclude_urls:

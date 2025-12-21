@@ -19,7 +19,7 @@ import ujson as json
 from botocore.exceptions import ClientError
 from django.conf import settings
 from freezegun import freeze_time
-from moto import mock_s3
+from moto import mock_aws
 from organizations.models import Organization
 from projects.models import Project
 from tasks.models import Task
@@ -103,7 +103,7 @@ def azure_credentials():
 
 @pytest.fixture(scope='function')
 def s3(aws_credentials):
-    with mock_s3():
+    with mock_aws():
         yield boto3.client('s3', region_name='us-east-1')
 
 
@@ -283,33 +283,33 @@ def mock_put(*args, **kwargs):
 
 
 @pytest.fixture()
-def mock_s3_resource_aes(mocker):
+def mock_aws_resource_aes(mocker):
     mock_object = MagicMock()
     mock_object.put = mock_put
 
     mock_object_constructor = MagicMock()
     mock_object_constructor.return_value = mock_object
 
-    mock_s3_resource = MagicMock()
-    mock_s3_resource.Object = mock_object_constructor
+    mock_aws_resource = MagicMock()
+    mock_aws_resource.Object = mock_object_constructor
 
     # Patch boto3.Session.resource to return the mock s3 resource
-    mocker.patch('boto3.Session.resource', return_value=mock_s3_resource)
+    mocker.patch('boto3.Session.resource', return_value=mock_aws_resource)
 
 
 @pytest.fixture()
-def mock_s3_resource_kms(mocker):
+def mock_aws_resource_kms(mocker):
     mock_object = MagicMock()
     mock_object.put = mock_put
 
     mock_object_constructor = MagicMock()
     mock_object_constructor.return_value = mock_object
 
-    mock_s3_resource = MagicMock()
-    mock_s3_resource.Object = mock_object_constructor
+    mock_aws_resource = MagicMock()
+    mock_aws_resource.Object = mock_object_constructor
 
     # Patch boto3.Session.resource to return the mock s3 resource
-    mocker.patch('boto3.Session.resource', return_value=mock_s3_resource)
+    mocker.patch('boto3.Session.resource', return_value=mock_aws_resource)
 
 
 @pytest.fixture(autouse=True)
@@ -849,7 +849,7 @@ def pytest_collection_modifyitems(config, items):
     mock_tests = []
     other_tests = []
     for item in items:
-        if 'mock_s3_resource_kms' in item.fixturenames or 'mock_s3_resource_aes' in item.fixturenames:
+        if 'mock_aws_resource_kms' in item.fixturenames or 'mock_aws_resource_aes' in item.fixturenames:
             mock_tests.append(item)
         else:
             other_tests.append(item)

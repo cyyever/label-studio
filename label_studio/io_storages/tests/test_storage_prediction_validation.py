@@ -3,7 +3,7 @@ import json
 import boto3
 import pytest
 from io_storages.models import S3ImportStorage
-from moto import mock_s3
+from moto import mock_aws
 from projects.tests.factories import ProjectFactory
 from rest_framework.test import APIClient
 from tests.conftest import set_feature_flag_envvar  # noqa: F401
@@ -57,7 +57,7 @@ class TestStoragePredictionValidation:
             ],
         }
 
-        with mock_s3():
+        with mock_aws():
             # Setup S3 bucket and test data
             s3 = boto3.client('s3', region_name='us-east-1')
             bucket_name = 'pytest-s3-prediction-validation'
@@ -113,7 +113,7 @@ class TestStoragePredictionValidation:
             ],
         }
 
-        with mock_s3():
+        with mock_aws():
             # Setup S3 bucket and test data
             s3 = boto3.client('s3', region_name='us-east-1')
             bucket_name = 'pytest-s3-prediction-validation'

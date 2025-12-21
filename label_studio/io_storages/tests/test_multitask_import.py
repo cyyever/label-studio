@@ -12,7 +12,7 @@ from io_storages.tests.factories import (
     S3ImportStorageFactory,
 )
 from io_storages.utils import StorageObject, load_tasks_json
-from moto import mock_s3
+from moto import mock_aws
 from projects.tests.factories import ProjectFactory
 from rest_framework.test import APIClient
 from tests.utils import azure_client_mock, gcs_client_mock, mock_feature_flag, redis_client_mock
@@ -100,7 +100,7 @@ def _test_storage_import(project, storage_class, task_data, **storage_kwargs):
 
 
 def test_import_multiple_tasks_s3(project, common_task_data):
-    with mock_s3():
+    with mock_aws():
         # Setup S3 bucket and test data
         s3 = boto3.client('s3', region_name='us-east-1')
         bucket_name = 'pytest-s3-jsons'
@@ -162,7 +162,7 @@ def test_import_multiple_tasks_redis(project, common_task_data):
 
 def test_storagelink_fields(project, common_task_data):
     # use an actual storage and storagelink to test this, since factories aren't connected properly
-    with mock_s3():
+    with mock_aws():
         # Setup S3 bucket and test data
         s3 = boto3.client('s3', region_name='us-east-1')
         bucket_name = 'pytest-s3-jsons'

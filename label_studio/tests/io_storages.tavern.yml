@@ -832,7 +832,7 @@ marks:
 - usefixtures:
   - django_live_url
   - fflag_feat_back_lsdv_3958_server_side_encryption_for_target_storage_short_on
-  - mock_s3_resource_aes
+  - mock_aws_resource_aes
 
 stages:
 - id: signup
