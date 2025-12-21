@@ -39,6 +39,9 @@ class OrganizationMember(OrganizationMemberMixin, models.Model):
     )
 
     # objects = OrganizationMemberQuerySet.as_manager()
+    class Meta:
+        ordering = ['pk']
+
 
     @classmethod
     def find_by_user(cls, user_or_user_pk, organization_pk):
@@ -54,9 +57,6 @@ class OrganizationMember(OrganizationMemberMixin, models.Model):
     @cached_property
     def is_owner(self):
         return self.user.id == self.organization.created_by.id
-
-    class Meta:
-        ordering = ['pk']
 
     def soft_delete(self):
         with transaction.atomic():

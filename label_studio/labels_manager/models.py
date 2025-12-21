@@ -23,11 +23,11 @@ class Label(models.Model):
     projects = models.ManyToManyField('projects.Project', through='LabelLink')
     organization = models.ForeignKey('organizations.Organization', related_name='labels', on_delete=models.CASCADE)
 
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['title', 'organization'], name='unique_title')]
     def has_permission(self, user):
         return self.organization_id == user.active_organization_id
 
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=['title', 'organization'], name='unique_title')]
 
 
 class LabelLink(models.Model):
