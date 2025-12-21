@@ -827,8 +827,7 @@ PUBLIC_API_DOCS = get_bool_env('PUBLIC_API_DOCS', False)
 # Add to this list (either here in code, or via the env) to allow specific filters that rely on foreign keys.
 DATA_MANAGER_FILTER_ALLOWLIST = list(
     set(
-        get_env_list('DATA_MANAGER_FILTER_ALLOWLIST')
-        + ['updated_by__active_organization', 'annotations__completed_by']
+        [*get_env_list('DATA_MANAGER_FILTER_ALLOWLIST'), 'updated_by__active_organization', 'annotations__completed_by']
     )
 )
 

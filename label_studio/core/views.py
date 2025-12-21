@@ -114,7 +114,7 @@ def samples_time_series(request):
 
     # check headless or not
     header = True
-    if all(n.isdigit() for n in [time_column] + value_columns):
+    if all(n.isdigit() for n in [time_column, *value_columns]):
         header = False
 
     # generate all columns for headless csv

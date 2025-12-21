@@ -140,7 +140,7 @@ class ExportSerializer(serializers.ModelSerializer):
             'counters',
             'converted_formats',
         ]
-        fields = ['title'] + read_only
+        fields = ['title', *read_only]
 
     created_by = UserSimpleSerializer(required=False)
     converted_formats = ConvertedFormatSerializer(many=True, required=False)
@@ -221,11 +221,7 @@ class ExportConvertSerializer(serializers.Serializer):
 
 class ExportCreateSerializer(ExportSerializer):
     class Meta(ExportSerializer.Meta):
-        fields = ExportSerializer.Meta.fields + [
-            'task_filter_options',
-            'annotation_filter_options',
-            'serialization_options',
-        ]
+        fields = [*ExportSerializer.Meta.fields, 'task_filter_options', 'annotation_filter_options', 'serialization_options']
 
     task_filter_options = TaskFilterOptionsSerializer(required=False, default=None)
     annotation_filter_options = AnnotationFilterOptionsSerializer(required=False, default=None)

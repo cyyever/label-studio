@@ -81,7 +81,7 @@ def predictions_to_annotations_form(user, project):
             versions.remove(first)
         except ValueError:
             pass
-        versions = [first] + versions
+        versions = [first, *versions]
 
     return [
         {

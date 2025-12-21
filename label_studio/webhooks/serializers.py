@@ -56,4 +56,4 @@ class WebhookSerializerForUpdate(WebhookSerializer):
     Used to forbid updating project field."""
 
     class Meta(WebhookSerializer.Meta):
-        read_only_fields = WebhookSerializer.Meta.read_only_fields + ('project',)
+        read_only_fields = (*WebhookSerializer.Meta.read_only_fields, 'project')

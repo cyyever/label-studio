@@ -99,7 +99,7 @@ class FsmHistoryStateModel(models.Model):
             # Remove internal FSM fields from serialization
             state.pop('_original_values', None)
             # Return new reduction with cleaned state
-            return (reduction[0], reduction[1], state) + reduction[3:]
+            return (reduction[0], reduction[1], state, *reduction[3:])
 
         return reduction
 

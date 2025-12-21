@@ -632,7 +632,7 @@ class ProjectSummaryResetAPI(GetParentObjectMixin, generics.CreateAPIView):
 )
 class ProjectImportAPI(generics.RetrieveAPIView):
     permission_required = all_permissions.projects_change
-    permission_classes = api_settings.DEFAULT_PERMISSION_CLASSES + [ProjectImportPermission]
+    permission_classes = [*api_settings.DEFAULT_PERMISSION_CLASSES, ProjectImportPermission]
     parser_classes = (JSONParser,)
     serializer_class = ProjectImportSerializer
     queryset = ProjectImport.objects.all()
@@ -670,7 +670,7 @@ class ProjectImportAPI(generics.RetrieveAPIView):
 )
 class ProjectReimportAPI(generics.RetrieveAPIView):
     permission_required = all_permissions.projects_change
-    permission_classes = api_settings.DEFAULT_PERMISSION_CLASSES + [ProjectImportPermission]
+    permission_classes = [*api_settings.DEFAULT_PERMISSION_CLASSES, ProjectImportPermission]
     parser_classes = (JSONParser,)
     serializer_class = ProjectReimportSerializer
     queryset = ProjectReimport.objects.all()

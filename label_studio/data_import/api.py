@@ -251,7 +251,7 @@ task_create_response_scheme = {
 # Import
 class ImportAPI(generics.CreateAPIView):
     permission_required = all_permissions.projects_change
-    permission_classes = api_settings.DEFAULT_PERMISSION_CLASSES + [ProjectImportPermission]
+    permission_classes = [*api_settings.DEFAULT_PERMISSION_CLASSES, ProjectImportPermission]
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = ImportApiSerializer
     queryset = Task.objects.all()
