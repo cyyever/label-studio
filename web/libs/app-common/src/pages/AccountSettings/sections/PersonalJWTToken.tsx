@@ -85,7 +85,7 @@ const revokeTokenAtom = atomWithMutation((get) => {
       queryClient.setQueryData(ACCESS_TOKENS_QUERY_KEY, (old: Token[]) => filtered as Token[]);
       return { previousTokens };
     },
-    onError: (err, newTodo, context) => {
+    onError: (_err, _newTodo, context) => {
       // If error, reset query to its previous state (without changes from `onMutate`)
       queryClient.setQueryData(ACCESS_TOKENS_QUERY_KEY, context?.previousTokens);
     },
