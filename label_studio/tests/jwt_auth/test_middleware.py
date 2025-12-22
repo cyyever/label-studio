@@ -2,7 +2,6 @@ import pytest
 from jwt_auth.models import LSAPIToken
 from organizations.functions import create_organization
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from users.models import User
 

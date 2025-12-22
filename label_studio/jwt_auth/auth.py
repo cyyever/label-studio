@@ -2,7 +2,6 @@ import logging
 
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.exceptions import AuthenticationFailed
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +14,6 @@ class TokenAuthenticationPhaseout(TokenAuthentication):
     def authenticate(self, request):
         """Authenticate the request and log if successful."""
         from core.current_request import CurrentContext
-        from core.feature_flags import flag_set
 
         auth_result = super().authenticate(request)
 

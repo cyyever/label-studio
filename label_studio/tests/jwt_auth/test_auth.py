@@ -2,13 +2,10 @@ import logging
 
 import pytest
 from jwt_auth.models import LSAPIToken
-from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
 from ..utils import mock_feature_flag
 from .utils import create_user_with_token_settings
-
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
