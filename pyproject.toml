@@ -49,7 +49,7 @@ dependencies = [
   "ijson (>=3.4.0)",
   ## HumanSignal repo dependencies :start
   "label-studio-sdk @ https://github.com/HumanSignal/label-studio-sdk/archive/93d3b85e1162f2cb2dc5efb25c8d0a0b0f759e7c.zip",
-  "launchdarkly-server-sdk (>=9.14.1)",
+  "launchdarkly-server-sdk (==8.2.1)",
   "lxml[html-clean] (>=6.0.2)",
   "nbformat (>=5.10.4,<6.0.0)",
   "numpy (>=2.2.6,<3.0.0)",
