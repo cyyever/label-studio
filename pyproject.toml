@@ -21,7 +21,7 @@ dependencies = [
     "botocore (>=1.39.3,<2.0.0)",
     "bleach (>=6.3.0)",
     "Django (>=6.0.0)",
-    "django-storages (>=1.14.6)",
+    "django-storages (==1.12.3)",
     "django-annoying (>=0.10.8)",
     "django-debug-toolbar (>=6.1.0)",
     "django-environ (>=0.12.0)",
