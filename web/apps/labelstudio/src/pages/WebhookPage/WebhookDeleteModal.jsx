@@ -8,7 +8,6 @@ export const WebhookDeleteModal = ({ onDelete }) => {
   return modal({
     title: "Delete",
     body: () => {
-      const ctrl = useModalControls();
       const rootClass = cn("webhook-delete-modal");
       return (
         <div className={rootClass}>
@@ -20,7 +19,6 @@ export const WebhookDeleteModal = ({ onDelete }) => {
     },
     footer: () => {
       const ctrl = useModalControls();
-      const rootClass = cn("webhook-delete-modal");
       return (
         <Space align="end">
           <Button

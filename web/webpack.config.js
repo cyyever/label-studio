@@ -10,7 +10,7 @@ require("dotenv").config({
 });
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { EnvironmentPlugin, DefinePlugin, ProgressPlugin, optimize } = require("webpack");
+const { EnvironmentPlugin, DefinePlugin, _ProgressPlugin, _optimize } = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
